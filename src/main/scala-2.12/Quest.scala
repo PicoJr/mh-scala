@@ -7,4 +7,5 @@ import unit.Monster
 trait Quest {
   def getMonster: Monster
   def getLoot: Seq[Item]
+  def getMaxDuration: Int
 }

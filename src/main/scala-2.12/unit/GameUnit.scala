@@ -2,7 +2,7 @@ package unit
 
 import item.ElementType
 import item.ElementType.ElementType
-import unit.StatusType.StatusType
+import item.StatusType.StatusType
 
 /**
   * Created by nol on 05/11/17.
@@ -18,7 +18,7 @@ trait GameUnit {
 
   def getDamage: Int
 
-  def getElement: ElementType = ElementType.NONE
+  def getArmorElementType: Seq[ElementType] = Seq.empty
 
   def getAttackElementType: ElementType = ElementType.NONE
 }

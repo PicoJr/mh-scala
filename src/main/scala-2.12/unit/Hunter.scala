@@ -1,5 +1,6 @@
 package unit
 
+import item.ElementType.ElementType
 import item.Inventory
 
 /**
@@ -11,4 +12,8 @@ abstract class Hunter(name: String, life: Int) extends GameUnitDefault(name: Str
   override def getArmor: Int = getInventory.getArmorProvided
 
   override def getDamage: Int = getInventory.getDamageProvided
+
+  override def getAttackElementType: ElementType = getInventory.getAttackElementType
+
+  override def getArmorElementType: Seq[ElementType] = getInventory.getArmorElementTypes
 }
