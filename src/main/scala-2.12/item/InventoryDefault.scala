@@ -28,7 +28,7 @@ class InventoryDefault extends Inventory {
 
   override def getDamageProvided: Int = {
     val equipped : Seq[Item] = getItemsEquipped
-    equipped.foldLeft(0)((sum,i) => sum + ItemFactory.getDamage(i))
+    equipped.foldLeft(0)((sum, i) => sum + ItemFactory.getRawDamage(i))
   }
 
   override def getAttackElementType: ElementType = {

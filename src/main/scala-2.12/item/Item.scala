@@ -1,30 +1,49 @@
 package item
 
+import item.Classification.Classification
 import item.ElementType.ElementType
-import StatusType.StatusType
+import item.StatusType.StatusType
 
 /**
   * Created by nol on 04/11/17.
   */
-sealed trait Item {
-  def getName: String
+sealed class Item(name: String) {
+  var quantity: Int = 1
 
-  def getQuantity: Int = 1
+  def getName: String = name
+
+  def setQuantity(q: Int): Unit = {
+    quantity = q
+  }
+
+  def getQuantity: Int = quantity
+
+  def getClassifications: Set[Classification] = Set.empty
+
+  def isClassifiedAs(classifications: Classification*): Boolean = {
+    classifications.foldLeft(true)((found, c) => found & getClassifications.contains(c))
+  }
 }
 
-trait Damage extends Item {
-  def getRawDamage: Int
+class ItemDecorator(i: Item, c: Classification*) extends Item(i.getName) {
+  val item: Item = i
+
+  override def getClassifications: Set[Classification] = i.getClassifications ++ c
 }
 
-trait Status extends Item {
-  def getStatusType: StatusType
+case class Damage(wrapped: Item, damage: Int) extends ItemDecorator(wrapped, Classification.DAMAGE) {
+  def getRawDamage: Int = damage
 }
 
-trait Protection extends Item {
-  def getArmor: Int
+case class Status(wrapped: Item, statusType: StatusType) extends ItemDecorator(wrapped, Classification.STATUS) {
+  def getStatusType: StatusType = statusType
 }
 
-trait Equipment extends Item {
+case class Protection(wrapped: Item, armor: Int) extends ItemDecorator(wrapped, Classification.PROTECTION) {
+  def getArmor: Int = armor
+}
+
+case class Equipment(wrapped: Item) extends ItemDecorator(wrapped, Classification.EQUIPMENT) {
   var equipped: Boolean = false
 
   def unEquip(): Unit = {
@@ -38,28 +57,10 @@ trait Equipment extends Item {
   def isEquipped: Boolean = equipped
 }
 
-trait Element extends Item {
-  def getElementType: ElementType
+case class Element(wrapped: Item, elementType: ElementType) extends ItemDecorator(wrapped, Classification.ELEMENT) {
+  def getElementType: ElementType = elementType
 }
 
-trait CharmSlot extends Item {
-  def getCharmSlots: Int
-}
-
-case class Weapon(name: String, damage: Int, charmSlots: Int) extends Item with Equipment with Damage with CharmSlot {
-
-  override def getName: String = name
-
-  override def getRawDamage: Int = damage
-
-  override def getCharmSlots: Int = charmSlots
-}
-
-case class Armor(name: String, armor: Int, charmSlots: Int) extends Item with Equipment with Protection with CharmSlot {
-
-  override def getName: String = name
-
-  override def getArmor: Int = armor
-
-  override def getCharmSlots: Int = charmSlots
+case class CharmSlot(wrapped: Item, charmSlot: Int) extends ItemDecorator(wrapped, Classification.CHARM_SLOT) {
+  def getCharmSlots: Int = charmSlot
 }
