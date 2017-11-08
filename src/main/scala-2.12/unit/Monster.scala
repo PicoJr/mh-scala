@@ -1,16 +1,22 @@
 package unit
 
-import item.Item
-
 /**
   * Created by nol on 05/11/17.
   */
-class Monster(name: String, life: Int, loot: Seq[Item]) extends GameUnitDefault(name: String, life: Int){
-  val items : Seq[Item] = loot
+class Monster(name: String, life: Int) extends GameUnitDefault(name: String, life: Int) {
+}
 
-  def this(name: String, life: Int) {
-    this(name, life, Seq.empty)
+object Monster {
+
+  def generateName(): String = {
+    "not so random" // TODO let the player rename monsters
   }
 
-  def getLoot: Seq[Item] = items
+  def generateLife(level: Int): Int = {
+    42 // TODO make it random but level dependant
+  }
+
+  def generateMonster(level: Int): Monster = {
+    new Monster(generateName(), generateLife(level))
+  }
 }

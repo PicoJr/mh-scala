@@ -16,8 +16,8 @@ object GameLogic {
     val damageMonster = computeDamageDealt(quest.getMonster, hunter)
     val durationMaxHunter = hunter.getLife / damageMonster
     val durationMaxMonster = quest.getMonster.getLife / damageHunter
-    val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxMonster < quest.getMaxDuration
-    val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxHunter < quest.getMaxDuration
+    val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxMonster < Quest.MAX_DURATION
+    val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxHunter < Quest.MAX_DURATION
     new QuestResultDefault(monsterSlain, hunterDefeated)
   }
 

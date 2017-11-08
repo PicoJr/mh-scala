@@ -9,6 +9,10 @@ object ElementType extends Enumeration {
   type ElementType = Value
   val NONE, WATER, FIRE = Value
 
+  def getRandomElementType: ElementType = {
+    ElementType.NONE // TODO make it random
+  }
+
   def effectiveness(element: ElementType, other: ElementType): Effectiveness = (element, other) match {
     case (NONE, _) | (_, NONE) => Effectiveness.NORMAL
     case (e1, e2) if e1 == e2 => Effectiveness.INEFFECTIVE

@@ -7,4 +7,8 @@ object Classification extends Enumeration {
   type Classification = Value
   val CHARM_SLOT, DAMAGE, ELEMENT, EQUIPMENT, PROTECTION, STATUS = Value
 
+  def getRandomClassification: Classification = {
+    Classification.EQUIPMENT // TODO make it random
+  }
+
 }
