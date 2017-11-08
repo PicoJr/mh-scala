@@ -5,6 +5,6 @@ package item
   */
 object StatusType extends Enumeration {
   type StatusType = Value
-  val NORMAL, STUNNED, ASLEEP = Value
+  val NONE, STUNNED, ASLEEP = Value
 
 }

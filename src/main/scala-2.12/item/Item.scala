@@ -8,15 +8,11 @@ import item.StatusType.StatusType
   * Created by nol on 04/11/17.
   */
 sealed class Item(name: String) {
-  var quantity: Int = 1
+  private final val uniqueID = ItemFactory.getNewUniqueItemID
 
   def getName: String = name
 
-  def setQuantity(q: Int): Unit = {
-    quantity = q
-  }
-
-  def getQuantity: Int = quantity
+  def getUniqueID: Long = uniqueID
 
   def getClassifications: Set[Classification] = Set.empty
 
@@ -27,6 +23,9 @@ sealed class Item(name: String) {
 
 class ItemDecorator(i: Item, c: Classification*) extends Item(i.getName) {
   val item: Item = i
+  private final val uniqueDecoratorID = ItemFactory.getNewUniqueItemID
+
+  override def getUniqueID: Long = uniqueDecoratorID
 
   override def getClassifications: Set[Classification] = i.getClassifications ++ c
 }

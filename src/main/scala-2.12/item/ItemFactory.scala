@@ -1,11 +1,19 @@
 package item
 
 import item.ElementType.ElementType
+import item.StatusType.StatusType
 
 /**
   * Created by nol on 06/11/17.
   */
 object ItemFactory {
+
+  private var itemID: Long = 0
+
+  def getNewUniqueItemID: Long = {
+    itemID += 1
+    itemID
+  }
 
   def isWeapon(i: Item): Boolean = {
     i.isClassifiedAs(Classification.DAMAGE, Classification.EQUIPMENT)
@@ -37,6 +45,12 @@ object ItemFactory {
     if (i.isClassifiedAs(Classification.ELEMENT)) {
       i.asInstanceOf[Element].getElementType
     } else ElementType.NONE
+  }
+
+  def getStatusType(i: Item): StatusType = {
+    if (i.isClassifiedAs(Classification.STATUS)) {
+      i.asInstanceOf[Status].getStatusType
+    } else StatusType.NONE
   }
 
   def getCharmSlots(i: Item): Int = {

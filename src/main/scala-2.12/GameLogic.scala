@@ -1,4 +1,4 @@
-import item.{ElementType, StatusType}
+import item.ElementType
 import unit.{GameUnit, Hunter}
 
 /**
@@ -11,21 +11,26 @@ object GameLogic {
     math.max(0, attacker.getDamage * multiplier - defender.getArmor)
   }
 
-  def canUnitFight(unit: GameUnit): Boolean = {
-    unit.getStatus == StatusType.NORMAL
-  }
-
-  def simulateQuest(hunter: Hunter, quest: Quest) : FightResult = {
+  def simulateQuest(hunter: Hunter, quest: Quest): QuestResult = {
     val damageHunter = computeDamageDealt(hunter, quest.getMonster)
     val damageMonster = computeDamageDealt(quest.getMonster, hunter)
     val durationMaxHunter = hunter.getLife / damageMonster
     val durationMaxMonster = quest.getMonster.getLife / damageHunter
-    val fightResult = new FightResult
-    if (durationMaxHunter < durationMaxMonster && durationMaxMonster < quest.getMaxDuration) {
-      fightResult.hunterDefeated = true
-    } else if (durationMaxMonster < durationMaxHunter && durationMaxHunter < quest.getMaxDuration) {
-      fightResult.monsterSlain = true
-    }
-    fightResult
+    val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxMonster < quest.getMaxDuration
+    val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxHunter < quest.getMaxDuration
+    new QuestResultDefault(monsterSlain, hunterDefeated)
   }
+
+  def distributeLoot(hunter: Hunter, quest: Quest, result: QuestResult): Unit = {
+    if (result.isHunterDefeated & result.isMonsterSlain) {
+      hunter.getInventory.addItems(quest.getLoot: _*)
+    }
+  }
+
+  class QuestResultDefault(monsterSlain: Boolean, hunterDefeated: Boolean) extends QuestResult {
+    override def isMonsterSlain: Boolean = monsterSlain
+
+    override def isHunterDefeated: Boolean = hunterDefeated
+  }
+
 }

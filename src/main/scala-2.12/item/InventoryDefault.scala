@@ -1,11 +1,12 @@
 package item
 import item.ElementType.ElementType
+import item.StatusType.StatusType
 
 /**
   * Created by nol on 06/11/17.
   */
 class InventoryDefault extends Inventory {
-  val items: Seq[Item] = Seq.empty
+  var items: Seq[Item] = Seq.empty
 
   override def getItems: Seq[Item] = items
 
@@ -42,5 +43,22 @@ class InventoryDefault extends Inventory {
   override def getArmorElementTypes: Seq[ElementType] = {
     val armorPartsEquipped : Seq[Item] = items.filter(i => ItemFactory.isArmor(i) && ItemFactory.isEquipped(i))
     armorPartsEquipped.map(i => ItemFactory.getElementType(i))
+  }
+
+  override def getAttackStatusType: StatusType = {
+    if (getWeaponEquipped.nonEmpty) {
+      ItemFactory.getStatusType(getWeaponEquipped.get)
+    } else {
+      StatusType.NONE
+    }
+  }
+
+  override def getArmorStatusTypes: Seq[StatusType] = {
+    val armorPartsEquipped: Seq[Item] = items.filter(i => ItemFactory.isArmor(i) && ItemFactory.isEquipped(i))
+    armorPartsEquipped.map(i => ItemFactory.getStatusType(i))
+  }
+
+  override def addItems(items: Item*): Unit = {
+    this.items ++ items
   }
 }

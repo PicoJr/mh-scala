@@ -1,6 +1,5 @@
 package unit
 
-import item.ElementType
 import item.ElementType.ElementType
 import item.StatusType.StatusType
 
@@ -8,7 +7,6 @@ import item.StatusType.StatusType
   * Created by nol on 05/11/17.
   */
 trait GameUnit {
-  def getStatus: StatusType
 
   def getName: String
 
@@ -18,7 +16,11 @@ trait GameUnit {
 
   def getDamage: Int
 
-  def getArmorElementType: Seq[ElementType] = Seq.empty
+  def getArmorElementType: Seq[ElementType]
 
-  def getAttackElementType: ElementType = ElementType.NONE
+  def getArmorStatusTypes: Seq[StatusType]
+
+  def getAttackElementType: ElementType
+
+  def getAttackStatusType: StatusType
 }

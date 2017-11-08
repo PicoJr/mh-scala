@@ -10,10 +10,10 @@ object ElementType extends Enumeration {
   val NONE, WATER, FIRE = Value
 
   def effectiveness(element: ElementType, other: ElementType): Effectiveness = (element, other) match {
+    case (NONE, _) | (_, NONE) => Effectiveness.NORMAL
+    case (e1, e2) if e1 == e2 => Effectiveness.INEFFECTIVE
     case (WATER, FIRE) => Effectiveness.EFFECTIVE
     case (FIRE, WATER) => Effectiveness.INEFFECTIVE
-    case (WATER, WATER) => Effectiveness.INEFFECTIVE
-    case (FIRE, FIRE) => Effectiveness.INEFFECTIVE
     case _ => Effectiveness.NORMAL
   }
 
@@ -25,6 +25,5 @@ object ElementType extends Enumeration {
     case Effectiveness.NORMAL => 1.0
     case Effectiveness.INEFFECTIVE => 0.5
     case Effectiveness.EFFECTIVE => 2.0
-    case _ => 1.0 // should not happen
   }
 }
