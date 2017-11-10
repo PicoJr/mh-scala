@@ -1,4 +1,6 @@
 package item
+
+import item.ArmorPart.ArmorPart
 import item.ElementType.ElementType
 import item.StatusType.StatusType
 
@@ -6,16 +8,25 @@ import item.StatusType.StatusType
   * Created by nol on 06/11/17.
   */
 class Inventory {
+
   var items: Seq[Item] = Seq.empty
 
   def getItems: Seq[Item] = items
 
-  def getCharmSlots: Int = {
-    getItemsEquipped.foldLeft(0)((sum, i) => sum + Item.getCharmSlots(i))
+  def getCharmSlotsProvided: Int = {
+    getItemsEquipped.foldLeft(0)((sum, i) => sum + Item.getCharmSlotsProvided(i))
+  }
+
+  def getCharmSlotsUsed: Int = {
+    getItemsEquipped.foldLeft(0)((sum, i) => sum + Item.getCharmSlotsRequired(i))
   }
 
   def getWeaponEquipped: Option[Item] = {
-    items.find(i => Item.isWeapon(i) & Item.isEquipped(i))
+    items.find(i => Item.isWeapon(i) && Item.isEquipped(i))
+  }
+
+  def getArmorEquipped(armorPart: ArmorPart): Option[Item] = {
+    items.find(i => Item.isArmorPart(i, armorPart))
   }
 
   def getItemsEquipped: Seq[Item] = {
@@ -27,9 +38,8 @@ class Inventory {
     equipped.foldLeft(0)((sum, i) => sum + Item.getArmor(i))
   }
 
-  def getDamageProvided: Int = {
-    val equipped : Seq[Item] = getItemsEquipped
-    equipped.foldLeft(0)((sum, i) => sum + Item.getRawDamage(i))
+  def getRawDamageProvided: Int = {
+    getItemsEquipped.foldLeft(0)((sum, i) => sum + Item.getRawDamage(i))
   }
 
   def getAttackElementType: ElementType = {
@@ -60,5 +70,23 @@ class Inventory {
 
   def addItems(items: Item*): Unit = {
     this.items ++ items
+  }
+
+  def equipItem(item: Item): Unit = {
+    if (Item.isEquipment(item)) {
+      val equipment = item.asInstanceOf[Equipment]
+      equipment.getSlotTypeRequirement match {
+        case CHARM_SLOT(slot) => if ((getCharmSlotsUsed + slot) <= getCharmSlotsProvided) {
+          equipment.equip()
+        }
+        case WEAPON_SLOT() => if (getWeaponEquipped.isEmpty) {
+          equipment.equip()
+        }
+        case ARMOR_SLOT(part) => if (getArmorEquipped(part).isEmpty) {
+          equipment.equip()
+        }
+        case _ => equipment.equip()
+      }
+    } // else cannot be equipped
   }
 }

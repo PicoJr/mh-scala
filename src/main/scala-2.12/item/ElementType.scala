@@ -10,7 +10,7 @@ object ElementType extends Enumeration {
   val NONE, WATER, FIRE = Value
 
   def getRandomElementType: ElementType = {
-    ElementType.NONE // TODO make it random
+    ElementType.Value(util.Random.nextInt(ElementType.maxId))
   }
 
   def effectiveness(element: ElementType, other: ElementType): Effectiveness = (element, other) match {
@@ -22,12 +22,6 @@ object ElementType extends Enumeration {
   }
 
   def multiplier(element: ElementType, other: ElementType): Double = {
-    multiplier(effectiveness(element, other))
-  }
-
-  def multiplier(effectiveness: Effectiveness): Double = effectiveness match {
-    case Effectiveness.NORMAL => 1.0
-    case Effectiveness.INEFFECTIVE => 0.5
-    case Effectiveness.EFFECTIVE => 2.0
+    Effectiveness.multiplier(effectiveness(element, other))
   }
 }

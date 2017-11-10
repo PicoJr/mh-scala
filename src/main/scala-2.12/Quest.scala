@@ -1,5 +1,7 @@
+import Config.Config
+import item.ElementType.ElementType
 import item.Item
-import unit.Monster
+import unit.{GameUnit, Monster}
 
 /**
   * Created by nol on 05/11/17.
@@ -11,13 +13,15 @@ class Quest(monster: Monster, loot: Seq[Item]) {
 }
 
 object Quest {
-  val MAX_DURATION: Int = 100 // TODO load it from config
+  val MAX_DURATION: Int = Config.getQuestMaxDuration
 
-  def createLoot(level: Int): Seq[Item] = {
+  def createLoot(level: Int, elementType: ElementType): Seq[Item] = {
     Seq.empty // TODO make it random
   }
 
   def createQuest(level: Int): Quest = {
-    new Quest(Monster.generateMonster(level), createLoot(level))
+    val monster = GameUnit.generateMonster(level)
+    val loot = Quest.createLoot(level, monster.getAttackElementType)
+    new Quest(monster, loot)
   }
 }

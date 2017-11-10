@@ -1,4 +1,4 @@
-import item.{Item, ItemDecorator}
+import item._
 import org.scalatest.FlatSpec
 
 /**
@@ -11,12 +11,17 @@ class ItemTest extends FlatSpec {
     assert(item1.getUniqueID != item2.getUniqueID)
   }
 
-  "A decorated Item ID" should "be unique" in {
-    val item = new Item("1")
-    val decorated = new ItemDecorator(item)
-    val decorated2 = new ItemDecorator(item)
-    assert(item.getUniqueID != decorated.getUniqueID)
-    assert(decorated.getUniqueID != decorated2.getUniqueID)
+  "A weapon" should "be a weapon" in {
+    assert(Item.createWeapon("w", 41).getSlotTypeRequirement == WEAPON_SLOT())
+    assert(Item.isWeapon(Item.createWeapon("w", 42)))
+  }
+
+  "An armor" should "be an armor" in {
+    assert(Item.isArmor(Item.createArmor("a", 42, ArmorPart.HEAD)))
+  }
+
+  "A charm" should "be a charm" in {
+    assert(Item.isCharm(Item.createCharm("c", 42)))
   }
 
 }
