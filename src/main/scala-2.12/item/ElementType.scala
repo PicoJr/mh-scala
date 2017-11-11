@@ -10,7 +10,7 @@ object ElementType extends Enumeration {
   val NONE, WATER, FIRE = Value
 
   def getRandomElementType: ElementType = {
-    ElementType.Value(util.Random.nextInt(ElementType.maxId))
+    ElementType(util.Random.nextInt(ElementType.maxId))
   }
 
   def effectiveness(element: ElementType, other: ElementType): Effectiveness = (element, other) match {

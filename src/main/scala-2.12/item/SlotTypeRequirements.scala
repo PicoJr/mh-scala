@@ -2,6 +2,8 @@ package item
 
 import item.ArmorPart.ArmorPart
 
+import scala.util.Random
+
 /** type of slot required for an item in order to be equipped
   * Created by nol on 09/11/17.
   */
@@ -22,4 +24,8 @@ case class ARMOR_SLOT(part: ArmorPart) extends SlotTypeRequirements
 object ArmorPart extends Enumeration {
   type ArmorPart = Value
   val HEAD, BODY, ARMS, LEGS = Value
+
+  def getRandomArmorPart: ArmorPart = {
+    ArmorPart(Random.nextInt(ArmorPart.maxId))
+  }
 }

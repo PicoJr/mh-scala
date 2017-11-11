@@ -4,6 +4,8 @@ import item.ElementType.ElementType
 import item.StatusType.StatusType
 import item.{ElementType, Inventory, StatusType}
 
+import scala.util.Random
+
 /**
   * Created by nol on 05/11/17.
   */
@@ -30,24 +32,21 @@ sealed trait GameUnit {
 object GameUnit {
 
   def generateName(): String = {
-    "not so random" // TODO let the player rename monsters
+    "monster" + Random.nextInt() // TODO let the player rename monsters
   }
 
   def generateMonster(level: Int): Monster = {
     val name = generateName()
+    // TODO procedural
     val life = 100
     // TODO procedural
     val armor = 100
     // TODO procedural
     val damage = 100
-    // TODO procedural
-    val attackStatusType = StatusType.NONE
-    // TODO procedural
-    val attackElementType = ElementType.NONE
-    // TODO procedural
-    val armorStatusTypes = Seq.empty
-    // TODO procedural
-    val armorElementTypes = Seq.empty // TODO procedural
+    val attackStatusType = StatusType.getRandomStatusType
+    val attackElementType = ElementType.getRandomElementType
+    val armorStatusTypes = Seq(StatusType.getRandomStatusType)
+    val armorElementTypes = Seq(attackElementType, ElementType.getRandomElementType)
     Monster(name, armor, life, damage, attackStatusType, attackElementType, armorStatusTypes, armorElementTypes)
   }
 
@@ -80,13 +79,17 @@ case class Monster(name: String,
   override def getAttackElementType: ElementType = attackElementType
 }
 
-case class Hunter(name: String, life: Int, inventory: Inventory) extends GameUnit {
+case class Hunter(name: String, inventory: Inventory) extends GameUnit {
+
+  def this(name: String) {
+    this(name, new Inventory)
+  }
 
   def getInventory: Inventory = inventory
 
   def getName: String = name
 
-  def getLife: Int = Config.Config.getHunterLife
+  def getLife: Int = config.Config.getHunterLife
 
   def getArmor: Int = getInventory.getArmorProvided
 

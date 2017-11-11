@@ -4,7 +4,7 @@ import item.ArmorPart.ArmorPart
 import item.ElementType.ElementType
 import item.StatusType.StatusType
 
-/**
+/** Holds items
   * Created by nol on 06/11/17.
   */
 class Inventory {

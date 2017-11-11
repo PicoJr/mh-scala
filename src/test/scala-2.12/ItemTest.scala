@@ -12,7 +12,6 @@ class ItemTest extends FlatSpec {
   }
 
   "A weapon" should "be a weapon" in {
-    assert(Item.createWeapon("w", 41).getSlotTypeRequirement == WEAPON_SLOT())
     assert(Item.isWeapon(Item.createWeapon("w", 42)))
   }
 
@@ -22,6 +21,18 @@ class ItemTest extends FlatSpec {
 
   "A charm" should "be a charm" in {
     assert(Item.isCharm(Item.createCharm("c", 42)))
+  }
+
+  "A random weapon" should "be a weapon" in {
+    assert(Item.isWeapon(RandomItemFactory.getRandomDefaultWeapon(1)))
+  }
+
+  "A random armor" should "be an armor" in {
+    assert(Item.isArmor(RandomItemFactory.getRandomDefaultArmor(1)))
+  }
+
+  "A random charm" should "be a charm" in {
+    assert(Item.isCharm(RandomItemFactory.getRandomDefaultCharm(1)))
   }
 
 }

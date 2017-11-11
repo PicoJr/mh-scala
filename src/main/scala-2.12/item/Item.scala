@@ -19,6 +19,10 @@ sealed class Item(name: String) {
 
   def getRawDamage: Int = 0
 
+  /**
+    *
+    * @return StatusType, default: NONE
+    */
   def getStatusType: StatusType = StatusType.NONE
 
   def getArmor: Int = 0
@@ -37,6 +41,10 @@ sealed class Item(name: String) {
     classifications.foldLeft(true)((found, c) => found & getClassifications.contains(c))
   }
 
+  /**
+    *
+    * @return ElementType, default : NONE
+    */
   def getElementType: ElementType = ElementType.NONE
 
   def getCharmSlotsProvided: Int = 0
@@ -138,10 +146,22 @@ object Item {
   }
 }
 
-private class ItemDecorator(i: Item, c: Classification*) extends Item(i.getName) {
+/**
+  * Note: if an item is decorated twice by the same decorator class,
+  * then the last decorator takes precedence over the first one.
+  *
+  * @param i wrapped
+  * @param c classifications obtained with decorator
+  */
+abstract class ItemDecorator(i: Item, c: Classification*) extends Item(i.getName) {
   val item: Item = i
   private final val uniqueDecoratorID = Item.getNewUniqueItemID
 
+  /**
+    * Note: item.getUniqueID != decorator(item).getUniqueID
+    *
+    * @return unique ID
+    */
   override def getUniqueID: Long = uniqueDecoratorID
 
   override def getClassifications: Set[Classification] = i.getClassifications ++ c
@@ -165,19 +185,19 @@ private class ItemDecorator(i: Item, c: Classification*) extends Item(i.getName)
   override def getCharmSlotsProvided: Int = i.getCharmSlotsProvided
 }
 
-private case class Damage(wrapped: Item, damage: Int) extends ItemDecorator(wrapped, Classification.DAMAGE) {
+case class Damage(wrapped: Item, damage: Int) extends ItemDecorator(wrapped, Classification.DAMAGE) {
   override def getRawDamage: Int = damage
 }
 
-private case class Status(wrapped: Item, statusType: StatusType) extends ItemDecorator(wrapped, Classification.STATUS) {
+case class Status(wrapped: Item, statusType: StatusType) extends ItemDecorator(wrapped, Classification.STATUS) {
   override def getStatusType: StatusType = statusType
 }
 
-private case class Protection(wrapped: Item, armor: Int) extends ItemDecorator(wrapped, Classification.PROTECTION) {
+case class Protection(wrapped: Item, armor: Int) extends ItemDecorator(wrapped, Classification.PROTECTION) {
   override def getArmor: Int = armor
 }
 
-private case class Equipment(wrapped: Item, slotTypeRequirement: SlotTypeRequirements) extends ItemDecorator(wrapped, Classification.EQUIPMENT) {
+case class Equipment(wrapped: Item, slotTypeRequirement: SlotTypeRequirements) extends ItemDecorator(wrapped, Classification.EQUIPMENT) {
   var equipped: Boolean = false
 
   /**
@@ -199,7 +219,7 @@ private case class Equipment(wrapped: Item, slotTypeRequirement: SlotTypeRequire
   override def getSlotTypeRequirement: SlotTypeRequirements = slotTypeRequirement
 }
 
-private case class Element(wrapped: Item, elementType: ElementType) extends ItemDecorator(wrapped, Classification.ELEMENT) {
+case class Element(wrapped: Item, elementType: ElementType) extends ItemDecorator(wrapped, Classification.ELEMENT) {
   override def getElementType: ElementType = elementType
 }
 
@@ -208,7 +228,7 @@ private case class Element(wrapped: Item, elementType: ElementType) extends Item
   * @param wrapped            item
   * @param charmSlotsProvided >= 1
   */
-private case class CharmSlot(wrapped: Item, charmSlotsProvided: Int) extends ItemDecorator(wrapped, Classification.CHARM_SLOT) {
+case class CharmSlot(wrapped: Item, charmSlotsProvided: Int) extends ItemDecorator(wrapped, Classification.CHARM_SLOT) {
   override def getCharmSlotsProvided: Int = charmSlotsProvided
 }
 
@@ -234,4 +254,84 @@ object Classification extends Enumeration {
     }
   }
 
+}
+
+object RandomItemFactory {
+  /**
+    *
+    * @param level of weapon
+    * @return item s.t. Item.isWeapon(item)
+    */
+  def getRandomDefaultWeapon(level: Int): Item = {
+    val name = "weapon" + Random.nextInt()
+    val damage = 100 // TODO make it random(level)
+    Item.createWeapon(name, damage)
+  }
+
+  def getRandomWeapon(level: Int): Item = {
+    val w = getRandomDefaultWeapon(level)
+    decorateItemRandomly(level, w, Classification.CHARM_SLOT, Classification.ELEMENT, Classification.PROTECTION, Classification.STATUS)
+  }
+
+  /**
+    *
+    * @param level of armor
+    * @return item s.t. Item.isArmor(item)
+    */
+  def getRandomDefaultArmor(level: Int): Item = {
+    val name = "armor" + Random.nextInt()
+    val armor = 100
+    // TODO make it random(level)
+    val armorPart = ArmorPart.getRandomArmorPart
+    Item.createArmor(name, armor, armorPart)
+  }
+
+  def getRandomArmor(level: Int): Item = {
+    val a = getRandomDefaultArmor(level)
+    decorateItemRandomly(level, a, Classification.CHARM_SLOT, Classification.DAMAGE, Classification.ELEMENT, Classification.STATUS)
+  }
+
+  /**
+    *
+    * @param level of charm
+    * @return item s.t. Item.isCharm(item)
+    */
+  def getRandomDefaultCharm(level: Int): Item = {
+    val name = "charm" + Random.nextInt()
+    val slotsRequired = Random.nextInt(3) + 1 // 1,2,3
+    Item.createCharm(name, slotsRequired)
+  }
+
+  def getRandomCharm(level: Int): Item = {
+    val c = getRandomDefaultCharm(level)
+    decorateItemRandomly(level, c, Classification.DAMAGE, Classification.ELEMENT, Classification.PROTECTION, Classification.STATUS)
+  }
+
+  private def decorateItemRandomly(level: Int, item: Item, classifications: Classification*): Item = {
+    var randomlyDecorated: Item = item
+    val n = classifications.size
+    // TODO random(level), increasing, <= classifications.size
+    val randomClassifications = Classification.takeRandom(n, classifications: _*)
+    for (c <- randomClassifications) {
+      c match {
+        case Classification.CHARM_SLOT =>
+          val charmSlotsProvided = Random.nextInt(3) + 1 // 1,2,3
+          randomlyDecorated = CharmSlot(randomlyDecorated, charmSlotsProvided)
+        case Classification.DAMAGE =>
+          val damage = 10 // TODO random(level)
+          randomlyDecorated = Damage(randomlyDecorated, damage)
+        case Classification.ELEMENT =>
+          val element = ElementType.getRandomElementType
+          randomlyDecorated = Element(randomlyDecorated, element)
+        case Classification.PROTECTION =>
+          val armor = 10 // TODO random(level)
+          randomlyDecorated = Protection(randomlyDecorated, armor)
+        case Classification.STATUS =>
+          val statusType = StatusType.getRandomStatusType
+          randomlyDecorated = Status(randomlyDecorated, statusType)
+        case _ =>
+      }
+    }
+    randomlyDecorated
+  }
 }

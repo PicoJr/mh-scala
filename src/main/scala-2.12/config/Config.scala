@@ -1,4 +1,4 @@
-package Config
+package config
 
 /**
   * Created by nol on 05/11/17.

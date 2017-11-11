@@ -1,5 +1,7 @@
 package item
 
+import scala.util.Random
+
 /**
   * Created by nol on 05/11/17.
   */
@@ -8,7 +10,7 @@ object StatusType extends Enumeration {
   val NONE, STUNNED, ASLEEP = Value
 
   def getRandomStatusType: StatusType = {
-    StatusType.NONE // TODO make it random
+    StatusType(Random.nextInt(StatusType.maxId))
   }
 
 }

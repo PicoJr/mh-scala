@@ -1,4 +1,5 @@
 import item.ElementType
+import quest.{Quest, QuestResult}
 import unit.{GameUnit, Hunter}
 
 /**
@@ -32,5 +33,6 @@ object GameLogic {
 
     override def isHunterDefeated: Boolean = hunterDefeated
   }
+
 
 }

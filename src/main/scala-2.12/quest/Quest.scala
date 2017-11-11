@@ -1,6 +1,8 @@
-import Config.Config
+package quest
+
+import config.Config
 import item.ElementType.ElementType
-import item.Item
+import item.{Item, RandomItemFactory}
 import unit.{GameUnit, Monster}
 
 /**
@@ -16,7 +18,10 @@ object Quest {
   val MAX_DURATION: Int = Config.getQuestMaxDuration
 
   def createLoot(level: Int, elementType: ElementType): Seq[Item] = {
-    Seq.empty // TODO make it random
+    val w = RandomItemFactory.getRandomWeapon(level)
+    val a = RandomItemFactory.getRandomArmor(level)
+    val c = RandomItemFactory.getRandomCharm(level)
+    Seq(w, a, c)
   }
 
   def createQuest(level: Int): Quest = {
