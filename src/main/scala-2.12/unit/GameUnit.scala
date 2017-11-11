@@ -63,7 +63,7 @@ case class Monster(name: String,
                    armorStatusTypes: Seq[StatusType],
                    armorElementTypes: Seq[ElementType]
                   ) extends GameUnit {
-  var _name: String = name
+  private var _name: String = name
 
   def getUniqueID: Long = Monster.getNewUniqueMonsterID
 
@@ -99,7 +99,7 @@ object Monster {
 
 case class Hunter(name: String, inventory: Inventory) extends GameUnit {
 
-  var _name: String = name
+  private var _name: String = name
 
   def this(name: String) {
     this(name, new Inventory)

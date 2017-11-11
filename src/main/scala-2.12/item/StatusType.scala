@@ -7,7 +7,7 @@ import scala.util.Random
   */
 object StatusType extends Enumeration {
   type StatusType = Value
-  val NONE, STUNNED, ASLEEP = Value
+  val NONE, STUN, SLEEP = Value
 
   def getRandomStatusType: StatusType = {
     StatusType(Random.nextInt(StatusType.maxId))

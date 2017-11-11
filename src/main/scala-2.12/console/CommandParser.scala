@@ -15,6 +15,7 @@ class CommandParser(command: Command) {
       case List(conf.inventory) => command.listInventory(gameState)
       case List(conf.quests, conf.quests.list) => command.listQuests(gameState)
       case List(conf.quests, conf.quests.show) => command.showQuest(gameState, conf.quests.show.id.toOption.get)
+      case List(conf.quests, conf.quests.start) => command.startQuest(gameState, conf.quests.start.id.toOption.get)
       case _ => println(conf.subcommands)
     }
   }
@@ -27,8 +28,12 @@ class CommandParser(command: Command) {
       val show = new Subcommand("show") {
         val id: ScallopOption[Int] = trailArg[Int]("questID")
       }
+      val start = new Subcommand("start") {
+        val id: ScallopOption[Int] = trailArg[Int]("questID")
+      }
       addSubcommand(list)
       addSubcommand(show)
+      addSubcommand(start)
     }
     val quit = new Subcommand("quit")
     addSubcommand(hunter)

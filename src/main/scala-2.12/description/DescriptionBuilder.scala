@@ -1,8 +1,8 @@
 package description
 
 import item.{ElementType, Item, StatusType}
-import quest.QuestResult
-import unit.Hunter
+import quest.{Quest, QuestResult}
+import unit.{Hunter, Monster}
 
 /**
   * Created by nol on 11/11/17.
@@ -12,13 +12,14 @@ object DescriptionBuilder {
   def description(i: Item): String = {
     val description = new StringBuilder()
     description.append(i.getName)
+    description.append("[").append(i.getUniqueID).append("]")
     if (Item.isWeapon(i)) description.append("[W]")
     if (Item.isArmor(i)) description.append("[A]")
     if (Item.isCharm(i)) description.append("[C]")
     if (Item.isEquipped(i)) description.append("(E)") else description.append("( )")
     description.append("\n")
     if (Item.getRawDamage(i) > 0) description.append("dmg:").append(Item.getRawDamage(i))
-    if (Item.getArmor(i) > 0) description.append("armor:").append(Item.getArmor(i))
+    if (Item.getArmor(i) > 0) description.append(" armor:").append(Item.getArmor(i))
     if (Item.getCharmSlotsRequired(i) > 0) description.append("-:").append(Item.getCharmSlotsRequired(i))
     if (Item.getCharmSlotsProvided(i) > 0) description.append("+:").append(Item.getCharmSlotsProvided(i))
     if (Item.getElementType(i) != ElementType.NONE) description.append("{").append(Item.getElementType(i)).append("}")
@@ -31,7 +32,7 @@ object DescriptionBuilder {
     description.append(hunter.getName)
     description.append("\n")
     description.append("dmg:").append(hunter.getDamage)
-    description.append("armor:").append(hunter.getArmor)
+    description.append(" armor:").append(hunter.getArmor)
     description.toString()
   }
 
@@ -43,4 +44,17 @@ object DescriptionBuilder {
     description.toString()
   }
 
+  def description(monster: Monster): String = {
+    val description = new StringBuilder()
+    description.append(monster.getName)
+    description.append("[").append(monster.getUniqueID).append("]")
+    description.toString()
+  }
+
+  def description(quest: Quest): String = {
+    val description = new StringBuilder()
+    description.append("quest[").append(quest.getUniqueID).append("]")
+    if (quest.isCompleted) description.append("completed")
+    description.toString()
+  }
 }

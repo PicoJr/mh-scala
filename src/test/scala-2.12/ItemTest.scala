@@ -5,6 +5,12 @@ import org.scalatest.FlatSpec
   * Created by nol on 08/11/17.
   */
 class ItemTest extends FlatSpec {
+
+  "An Item ID" should "remain the same" in {
+    val item = new Item("1")
+    assert(item.getUniqueID == item.getUniqueID)
+  }
+
   "An Item ID" should "be unique" in {
     val item1 = new Item("1")
     val item2 = new Item("2")
