@@ -69,23 +69,22 @@ class Inventory {
   }
 
   def addItems(items: Item*): Unit = {
-    this.items ++ items
+    this.items ++= items
   }
 
   def equipItem(item: Item): Unit = {
     if (Item.isEquipment(item)) {
-      val equipment = item.asInstanceOf[Equipment]
-      equipment.getSlotTypeRequirement match {
+      item.getSlotTypeRequirement match {
         case CHARM_SLOT(slot) => if ((getCharmSlotsUsed + slot) <= getCharmSlotsProvided) {
-          equipment.equip()
+          item.equip()
         }
         case WEAPON_SLOT() => if (getWeaponEquipped.isEmpty) {
-          equipment.equip()
+          item.equip()
         }
         case ARMOR_SLOT(part) => if (getArmorEquipped(part).isEmpty) {
-          equipment.equip()
+          item.equip()
         }
-        case _ => equipment.equip()
+        case _ => item.equip()
       }
     } // else cannot be equipped
   }

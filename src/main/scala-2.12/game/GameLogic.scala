@@ -1,3 +1,5 @@
+package game
+
 import item.ElementType
 import quest.{Quest, QuestResult}
 import unit.{GameUnit, Hunter}
@@ -12,13 +14,13 @@ object GameLogic {
     math.max(0, attacker.getDamage * multiplier - defender.getArmor)
   }
 
-  def simulateQuest(hunter: Hunter, quest: Quest): QuestResult = {
+  def computeQuestResult(hunter: Hunter, quest: Quest): QuestResult = {
     val damageHunter = computeDamageDealt(hunter, quest.getMonster)
     val damageMonster = computeDamageDealt(quest.getMonster, hunter)
     val durationMaxHunter = hunter.getLife / damageMonster
     val durationMaxMonster = quest.getMonster.getLife / damageHunter
-    val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxMonster < Quest.MAX_DURATION
-    val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxHunter < Quest.MAX_DURATION
+    val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxMonster < quest.getMaxDuration
+    val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxHunter < quest.getMaxDuration
     new QuestResultDefault(monsterSlain, hunterDefeated)
   }
 

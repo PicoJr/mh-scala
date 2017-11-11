@@ -9,13 +9,31 @@ import unit.{GameUnit, Monster}
   * Created by nol on 05/11/17.
   */
 class Quest(monster: Monster, loot: Seq[Item]) {
+  var completed: Boolean = false
+
+  def isCompleted: Boolean = completed
+
+  def complete(): Unit = {
+    completed = true
+  }
+
+  def getUniqueID: Long = Quest.getNewUniqueQuestID
+
+  def getMaxDuration: Int = Config.getQuestMaxDuration
+
   def getMonster: Monster = monster
 
   def getLoot: Seq[Item] = loot
 }
 
 object Quest {
-  val MAX_DURATION: Int = Config.getQuestMaxDuration
+
+  private var questID: Long = 0
+
+  def getNewUniqueQuestID: Long = {
+    questID += 1
+    questID
+  }
 
   def createLoot(level: Int, elementType: ElementType): Seq[Item] = {
     val w = RandomItemFactory.getRandomWeapon(level)

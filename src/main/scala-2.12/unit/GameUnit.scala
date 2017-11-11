@@ -13,6 +13,8 @@ sealed trait GameUnit {
 
   def getName: String
 
+  def rename(newName: String): Unit
+
   def getLife: Int
 
   def getArmor: Int
@@ -61,8 +63,15 @@ case class Monster(name: String,
                    armorStatusTypes: Seq[StatusType],
                    armorElementTypes: Seq[ElementType]
                   ) extends GameUnit {
+  var _name: String = name
 
-  override def getName: String = name
+  def getUniqueID: Long = Monster.getNewUniqueMonsterID
+
+  override def getName: String = _name
+
+  override def rename(newName: String): Unit = {
+    _name = newName
+  }
 
   override def getLife: Int = life
 
@@ -79,7 +88,18 @@ case class Monster(name: String,
   override def getAttackElementType: ElementType = attackElementType
 }
 
+object Monster {
+  private var monsterID: Long = 0
+
+  def getNewUniqueMonsterID: Long = {
+    monsterID += 1
+    monsterID
+  }
+}
+
 case class Hunter(name: String, inventory: Inventory) extends GameUnit {
+
+  var _name: String = name
 
   def this(name: String) {
     this(name, new Inventory)
@@ -87,7 +107,11 @@ case class Hunter(name: String, inventory: Inventory) extends GameUnit {
 
   def getInventory: Inventory = inventory
 
-  def getName: String = name
+  def getName: String = _name
+
+  def rename(newName: String): Unit = {
+    _name = newName
+  }
 
   def getLife: Int = config.Config.getHunterLife
 
