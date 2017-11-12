@@ -43,11 +43,11 @@ class CommandParser(command: Command) {
       val list = new Subcommand("ls")
       addSubcommand(list)
       val show = new Subcommand("show") {
-        val id: ScallopOption[Int] = trailArg[Int]("questID")
+        val id: ScallopOption[Long] = trailArg[Long]("questID")
       }
       addSubcommand(show)
       val start = new Subcommand("start") {
-        val id: ScallopOption[Int] = trailArg[Int]("questID")
+        val id: ScallopOption[Long] = trailArg[Long]("questID")
       }
       addSubcommand(start)
     }

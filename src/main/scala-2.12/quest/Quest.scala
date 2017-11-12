@@ -9,7 +9,8 @@ import unit.{GameUnit, Monster}
   * Created by nol on 05/11/17.
   */
 class Quest(monster: Monster, loot: Seq[Item]) {
-  var completed: Boolean = false
+  private var completed: Boolean = false
+  private val uniqueID = Quest.getNewUniqueQuestID
 
   def isCompleted: Boolean = completed
 
@@ -17,7 +18,7 @@ class Quest(monster: Monster, loot: Seq[Item]) {
     completed = true
   }
 
-  def getUniqueID: Long = Quest.getNewUniqueQuestID
+  def getUniqueID: Long = uniqueID
 
   def getMaxDuration: Int = Config.getQuestMaxDuration
 

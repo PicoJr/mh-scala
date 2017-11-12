@@ -18,7 +18,10 @@ class ConsoleCommand extends Command {
   }
 
   override def showQuest(gameState: GameState, questID: Long): Unit = {
-    notImplementedYet()
+    gameState.getQuests.find(q => q.getUniqueID == questID) match {
+      case Some(q) => println(DescriptionBuilder.description(q))
+      case None => println(s"quest with id $questID not found")
+    }
   }
 
   override def showMonster(gameState: GameState, monsterID: Long): Unit = {
