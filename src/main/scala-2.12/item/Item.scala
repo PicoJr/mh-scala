@@ -99,6 +99,7 @@ object Item {
   def isArmorPart(i: Item, armorPart: ArmorPart): Boolean = {
     getSlotTypeRequirement(i) match {
       case ARMOR_SLOT(part) if part == armorPart => true
+      case _ => false
     }
   }
 

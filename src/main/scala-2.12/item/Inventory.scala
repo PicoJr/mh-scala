@@ -13,6 +13,10 @@ class Inventory {
 
   def getItems: Seq[Item] = items
 
+  def getItem(itemID: Long): Option[Item] = {
+    items.find(i => i.getUniqueID == itemID)
+  }
+
   def getCharmSlotsProvided: Int = {
     getItemsEquipped.foldLeft(0)((sum, i) => sum + Item.getCharmSlotsProvided(i))
   }
@@ -26,7 +30,7 @@ class Inventory {
   }
 
   def getArmorEquipped(armorPart: ArmorPart): Option[Item] = {
-    items.find(i => Item.isArmorPart(i, armorPart))
+    getItemsEquipped.find(i => Item.isArmorPart(i, armorPart))
   }
 
   def getItemsEquipped: Seq[Item] = {
@@ -72,7 +76,21 @@ class Inventory {
     this.items ++= items
   }
 
-  def equipItem(item: Item): Unit = {
+  def equipItem(itemID: Long): Unit = {
+    getItem(itemID) match {
+      case Some(i) => equipItem(i)
+      case None =>
+    }
+  }
+
+  def unEquipItem(itemId: Long): Unit = {
+    getItem(itemId) match {
+      case Some(i) => i.unEquip()
+      case None =>
+    }
+  }
+
+  private def equipItem(item: Item): Unit = {
     if (Item.isEquipment(item)) {
       item.getSlotTypeRequirement match {
         case CHARM_SLOT(slot) => if ((getCharmSlotsUsed + slot) <= getCharmSlotsProvided) {

@@ -18,8 +18,8 @@ class InventoryTest extends FlatSpec {
   it should "provide damage when a weapon is equipped" in {
     val inventory = new Inventory
     val weapon = Item.createWeapon("weapon", 42)
-    weapon.equip()
     inventory.addItems(weapon)
+    inventory.equipItem(weapon.getUniqueID)
     assert(inventory.getRawDamageProvided > 0)
   }
 

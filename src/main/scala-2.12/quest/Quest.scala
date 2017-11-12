@@ -3,14 +3,14 @@ package quest
 import config.Config
 import item.ElementType.ElementType
 import item.{Item, RandomItemFactory}
-import unit.{GameUnit, Monster}
+import unit.Monster
 
 /**
   * Created by nol on 05/11/17.
   */
 class Quest(monster: Monster, loot: Seq[Item]) {
   private var completed: Boolean = false
-  private final val uniqueID = Quest.getNewUniqueQuestID
+  private final val uniqueID: Long = Quest.getNewUniqueQuestID
 
   def isCompleted: Boolean = completed
 
@@ -44,7 +44,7 @@ object Quest {
   }
 
   def createQuest(level: Int): Quest = {
-    val monster = GameUnit.generateMonster(level)
+    val monster = Monster.generateMonster(level)
     val loot = Quest.createLoot(level, monster.getAttackElementType)
     new Quest(monster, loot)
   }

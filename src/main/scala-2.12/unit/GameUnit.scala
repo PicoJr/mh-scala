@@ -31,29 +31,6 @@ sealed trait GameUnit {
 
 }
 
-object GameUnit {
-
-  def generateName(): String = {
-    "monster" + Random.nextInt() // TODO let the player rename monsters
-  }
-
-  def generateMonster(level: Int): Monster = {
-    val name = generateName()
-    // TODO procedural
-    val life = 100
-    // TODO procedural
-    val armor = 100
-    // TODO procedural
-    val damage = 100
-    val attackStatusType = StatusType.getRandomStatusType
-    val attackElementType = ElementType.getRandomElementType
-    val armorStatusTypes = Seq(StatusType.getRandomStatusType)
-    val armorElementTypes = Seq(attackElementType, ElementType.getRandomElementType)
-    Monster(name, armor, life, damage, attackStatusType, attackElementType, armorStatusTypes, armorElementTypes)
-  }
-
-}
-
 case class Monster(name: String,
                    life: Int,
                    armor: Int,
@@ -95,6 +72,25 @@ object Monster {
   def getNewUniqueMonsterID: Long = {
     monsterID += 1
     monsterID
+  }
+
+  def generateName(): String = {
+    "m" + Random.nextInt() // TODO let the player rename monsters
+  }
+
+  def generateMonster(level: Int): Monster = {
+    val name = generateName()
+    // TODO procedural
+    val life = 100
+    // TODO procedural
+    val armor = 100
+    // TODO procedural
+    val damage = 100
+    val attackStatusType = StatusType.getRandomStatusType
+    val attackElementType = ElementType.getRandomElementType
+    val armorStatusTypes = Seq(StatusType.getRandomStatusType)
+    val armorElementTypes = Seq(attackElementType, ElementType.getRandomElementType)
+    Monster(name, armor, life, damage, attackStatusType, attackElementType, armorStatusTypes, armorElementTypes)
   }
 }
 

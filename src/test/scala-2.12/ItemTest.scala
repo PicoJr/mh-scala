@@ -22,7 +22,9 @@ class ItemTest extends FlatSpec {
   }
 
   "An armor" should "be an armor" in {
-    assert(Item.isArmor(Item.createArmor("a", 42, ArmorPart.HEAD)))
+    val armor = Item.createArmor("a", 42, ArmorPart.HEAD)
+    assert(Item.isArmor(armor))
+    assert(Item.isArmorPart(armor, ArmorPart.HEAD))
   }
 
   "A charm" should "be a charm" in {

@@ -1,5 +1,7 @@
 package game
 
+import config.Config
+import item.Item
 import quest.Quest
 import unit.Hunter
 
@@ -21,8 +23,26 @@ private class DefaultGameState(hunter: Hunter, quests: Seq[Quest]) extends GameS
 
 object GameState {
   def createNewGameState: GameState = {
-    val hunter = new Hunter("unnamed")
-    val quests = Seq(Quest.createQuest(1))
+    val hunter = createHunter
+    val quests = createQuests
     new DefaultGameState(hunter, quests)
+  }
+
+  private def createHunter: Hunter = {
+    val hunter = new Hunter("unnamed")
+    val weapon = Item.createWeapon("fists", 500)
+    hunter.getInventory.addItems(weapon)
+    hunter.getInventory.equipItem(weapon.getUniqueID)
+    hunter
+  }
+
+  private def createQuests: Seq[Quest] = {
+    var quests: Seq[Quest] = Seq.empty
+    for (level <- 1 to Config.getLevelMax) {
+      for (_ <- 1 to Config.getQuestsAtLevel(level)) {
+        quests = quests :+ Quest.createQuest(level)
+      }
+    }
+    quests
   }
 }

@@ -1,6 +1,6 @@
 package description
 
-import item.{ElementType, Item, StatusType}
+import item._
 import quest.{Quest, QuestResult}
 import unit.{Hunter, Monster}
 
@@ -10,51 +10,74 @@ import unit.{Hunter, Monster}
 object DescriptionBuilder {
 
   def description(i: Item): String = {
-    val description = new StringBuilder()
-    description.append(i.getName)
-    description.append("[").append(i.getUniqueID).append("]")
-    if (Item.isWeapon(i)) description.append("[W]")
-    if (Item.isArmor(i)) description.append("[A]")
-    if (Item.isCharm(i)) description.append("[C]")
-    if (Item.isEquipped(i)) description.append("(E)") else description.append("( )")
-    description.append("\n")
-    if (Item.getRawDamage(i) > 0) description.append("dmg:").append(Item.getRawDamage(i))
-    if (Item.getArmor(i) > 0) description.append(" armor:").append(Item.getArmor(i))
-    if (Item.getCharmSlotsRequired(i) > 0) description.append("-:").append(Item.getCharmSlotsRequired(i))
-    if (Item.getCharmSlotsProvided(i) > 0) description.append("+:").append(Item.getCharmSlotsProvided(i))
-    if (Item.getElementType(i) != ElementType.NONE) description.append("{").append(Item.getElementType(i)).append("}")
-    if (Item.getStatusType(i) != StatusType.NONE) description.append("<").append(Item.getStatusType(i)).append(">")
-    description.toString()
+    val desc = new StringBuilder()
+    desc.append(i.getName)
+    desc.append("[").append(i.getUniqueID).append("]")
+    if (Item.isWeapon(i)) desc.append("[W]")
+    if (Item.isArmor(i)) desc.append("[A]")
+    if (Item.isCharm(i)) desc.append("[C]")
+    if (Item.isEquipped(i)) desc.append("(E)") else desc.append("( )")
+    desc.append("\n")
+    if (Item.getRawDamage(i) > 0) desc.append("dmg:").append(Item.getRawDamage(i))
+    if (Item.getArmor(i) > 0) desc.append(" armor:").append(Item.getArmor(i))
+    if (Item.getCharmSlotsRequired(i) > 0) desc.append("-:").append(Item.getCharmSlotsRequired(i))
+    if (Item.getCharmSlotsProvided(i) > 0) desc.append("+:").append(Item.getCharmSlotsProvided(i))
+    if (Item.getElementType(i) != ElementType.NONE) desc.append("{").append(Item.getElementType(i)).append("}")
+    if (Item.getStatusType(i) != StatusType.NONE) desc.append("<").append(Item.getStatusType(i)).append(">")
+    desc.toString()
+  }
+
+  def description(inventory: Inventory): String = {
+    val desc = new StringBuilder()
+    desc.append("\nweapon\n")
+    inventory.getWeaponEquipped match {
+      case Some(w) => desc.append(description(w)).append("\n")
+      case None =>
+    }
+    desc.append("\narmor\n")
+    for (armorPart <- Seq(ArmorPart.HEAD, ArmorPart.BODY, ArmorPart.ARMS, ArmorPart.LEGS)) {
+      inventory.getArmorEquipped(armorPart) match {
+        case Some(a) => desc.append(description(a)).append("\n")
+        case None =>
+      }
+    }
+    desc.append("\n-----\n")
+    for (i <- inventory.getItems.filter(i => !i.isEquipped)) {
+      desc.append(description(i)).append("\n")
+    }
+    desc.toString()
   }
 
   def description(hunter: Hunter): String = {
-    val description = new StringBuilder()
-    description.append(hunter.getName)
-    description.append("\n")
-    description.append("dmg:").append(hunter.getDamage)
-    description.append(" armor:").append(hunter.getArmor)
-    description.toString()
+    val desc = new StringBuilder()
+    desc.append(hunter.getName)
+    desc.append("\n")
+    desc.append("dmg:").append(hunter.getDamage)
+    desc.append(" armor:").append(hunter.getArmor)
+    desc.toString()
   }
 
   def description(questResult: QuestResult): String = {
-    val description = new StringBuilder()
-    if (questResult.isMonsterSlain) description.append("monster slain")
-    if (questResult.isHunterDefeated) description.append("hunter defeated")
-    if (!questResult.isMonsterSlain & !questResult.isHunterDefeated) description.append("quest max duration reached")
-    description.toString()
+    val desc = new StringBuilder()
+    if (questResult.isMonsterSlain) desc.append("monster slain")
+    if (questResult.isHunterDefeated) desc.append("hunter defeated")
+    if (!questResult.isMonsterSlain & !questResult.isHunterDefeated) desc.append("quest max duration reached")
+    desc.toString()
   }
 
   def description(monster: Monster): String = {
-    val description = new StringBuilder()
-    description.append(monster.getName)
-    description.append("[").append(monster.getUniqueID).append("]")
-    description.toString()
+    val desc = new StringBuilder()
+    desc.append(monster.getName)
+    desc.append("[").append(monster.getUniqueID).append("]")
+    desc.toString()
   }
 
   def description(quest: Quest): String = {
-    val description = new StringBuilder()
-    description.append("quest[").append(quest.getUniqueID).append("]")
-    if (quest.isCompleted) description.append("completed")
-    description.toString()
+    val desc = new StringBuilder()
+    desc.append("quest[").append(quest.getUniqueID).append("]")
+    if (quest.isCompleted) desc.append(" completed")
+    desc.append("\n")
+    desc.append(description(quest.getMonster))
+    desc.toString()
   }
 }
