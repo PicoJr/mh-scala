@@ -1,12 +1,12 @@
 package game
 
-import console.{CommandParser, MockCommand}
+import console.{CommandParser, ConsoleCommand}
 
 /**
   * Created by nol on 04/11/17.
   */
 object Game extends App {
-  val commandParser = new CommandParser(new MockCommand())
+  val commandParser = new CommandParser(new ConsoleCommand())
   val gameState = GameState.createNewGameState
   var quit: Boolean = false
   println("Game started")

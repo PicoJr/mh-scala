@@ -13,7 +13,8 @@ class CommandParser(command: Command) {
     try {
       val conf = new Conf(args)
       conf.subcommands match {
-        case List(conf.hunter) => command.showHunter(gameState)
+        case List(conf.hunter, conf.hunter.show) => command.showHunter(gameState)
+        case List(conf.hunter, conf.hunter.rename) => command.renameHunter(gameState, conf.hunter.rename.name.toOption.get)
         case List(conf.inventory) => command.listInventory(gameState)
         case List(conf.quests, conf.quests.list) => command.listQuests(gameState)
         case List(conf.quests, conf.quests.show) => command.showQuest(gameState, conf.quests.show.id.toOption.get)
@@ -26,8 +27,15 @@ class CommandParser(command: Command) {
     }
   }
 
-  class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
-    val hunter = new Subcommand("hunter")
+  private class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
+    val hunter = new Subcommand("hunter") {
+      val show = new Subcommand("show")
+      addSubcommand(show)
+      val rename = new Subcommand("rename") {
+        val name: ScallopOption[String] = trailArg[String]("newName")
+      }
+      addSubcommand(rename)
+    }
     addSubcommand(hunter)
     val inventory = new Subcommand("inventory")
     addSubcommand(inventory)
