@@ -10,7 +10,7 @@ import unit.{GameUnit, Monster}
   */
 class Quest(monster: Monster, loot: Seq[Item]) {
   private var completed: Boolean = false
-  private val uniqueID = Quest.getNewUniqueQuestID
+  private final val uniqueID = Quest.getNewUniqueQuestID
 
   def isCompleted: Boolean = completed
 

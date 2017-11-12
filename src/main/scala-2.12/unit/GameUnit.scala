@@ -64,8 +64,9 @@ case class Monster(name: String,
                    armorElementTypes: Seq[ElementType]
                   ) extends GameUnit {
   private var _name: String = name
+  private final val uniqueID = Monster.getNewUniqueMonsterID
 
-  def getUniqueID: Long = Monster.getNewUniqueMonsterID
+  def getUniqueID: Long = uniqueID
 
   override def getName: String = _name
 
