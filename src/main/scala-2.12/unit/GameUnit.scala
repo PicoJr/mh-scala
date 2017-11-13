@@ -13,7 +13,7 @@ sealed trait GameUnit {
 
   def getName: String
 
-  def rename(newName: String): Unit
+  def setName(newName: String): Unit
 
   def getLife: Int
 
@@ -47,7 +47,7 @@ case class Monster(name: String,
 
   override def getName: String = _name
 
-  override def rename(newName: String): Unit = {
+  override def setName(newName: String): Unit = {
     _name = newName
   }
 
@@ -106,7 +106,7 @@ case class Hunter(name: String, inventory: Inventory) extends GameUnit {
 
   def getName: String = _name
 
-  def rename(newName: String): Unit = {
+  def setName(newName: String): Unit = {
     _name = newName
   }
 

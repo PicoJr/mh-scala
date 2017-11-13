@@ -78,7 +78,7 @@ class ConsoleCommand extends Command {
   }
 
   override def renameHunter(gameState: GameState, newName: String): Unit = {
-    gameState.getHunter.rename(newName)
+    gameState.getHunter.setName(newName)
     println(s"new name: $newName")
   }
 
