@@ -1,109 +1,47 @@
 package item
-
 import item.ArmorPart.ArmorPart
 import item.ElementType.ElementType
 import item.StatusType.StatusType
 
-/** Holds items
-  * Created by nol on 06/11/17.
+/**
+  * Created by nol on 14/11/17.
   */
-class Inventory {
+trait Inventory {
 
-  var items: Seq[Item] = Seq.empty
 
-  def getItems: Seq[Item] = items
+  def isEquipped(item: Item): Boolean
 
-  def getItem(itemID: Long): Option[Item] = {
-    items.find(i => i.getUniqueID == itemID)
-  }
+  def isEquipped(itemId: Long): Boolean
 
-  def getCharmSlotsProvided: Int = {
-    getItemsEquipped.foldLeft(0)((sum, i) => sum + Item.getCharmSlotsProvided(i))
-  }
+  def getItems: Seq[Item]
 
-  def getCharmSlotsUsed: Int = {
-    getItemsEquipped.foldLeft(0)((sum, i) => sum + Item.getCharmSlotsRequired(i))
-  }
+  def getItem(itemID: Long): Option[Item]
 
-  def getWeaponEquipped: Option[Item] = {
-    items.find(i => Item.isWeapon(i) && Item.isEquipped(i))
-  }
+  def getCharmSlotsProvided: Int
 
-  def getArmorEquipped(armorPart: ArmorPart): Option[Item] = {
-    getItemsEquipped.find(i => Item.isArmorPart(i, armorPart))
-  }
+  def getCharmSlotsUsed: Int
 
-  def getItemsEquipped: Seq[Item] = {
-    items.filter(i => Item.isEquipped(i))
-  }
+  def getWeaponEquipped: Option[Item]
 
-  def getArmorProvided: Int = {
-    val equipped : Seq[Item] = getItemsEquipped
-    equipped.foldLeft(0)((sum, i) => sum + Item.getArmor(i))
-  }
+  def getArmorEquipped(armorPart: ArmorPart): Option[Item]
 
-  def getRawDamageProvided: Int = {
-    getItemsEquipped.foldLeft(0)((sum, i) => sum + Item.getRawDamage(i))
-  }
+  def getItemsEquipped: Seq[Item]
 
-  def getAttackElementType: ElementType = {
-    if (getWeaponEquipped.nonEmpty) {
-      Item.getElementType(getWeaponEquipped.get)
-    } else {
-      ElementType.NONE
-    }
-  }
+  def getArmorProvided: Int
 
-  def getArmorElementTypes: Seq[ElementType] = {
-    val armorPartsEquipped: Seq[Item] = items.filter(i => Item.isArmor(i) && Item.isEquipped(i))
-    armorPartsEquipped.map(i => Item.getElementType(i))
-  }
+  def getRawDamageProvided: Int
 
-  def getAttackStatusType: StatusType = {
-    if (getWeaponEquipped.nonEmpty) {
-      Item.getStatusType(getWeaponEquipped.get)
-    } else {
-      StatusType.NONE
-    }
-  }
+  def getAttackElementType: ElementType
 
-  def getArmorStatusTypes: Seq[StatusType] = {
-    val armorPartsEquipped: Seq[Item] = items.filter(i => Item.isArmor(i) && Item.isEquipped(i))
-    armorPartsEquipped.map(i => Item.getStatusType(i))
-  }
+  def getArmorElementTypes: Seq[ElementType]
 
-  def addItems(items: Item*): Unit = {
-    this.items ++= items
-  }
+  def getAttackStatusType: StatusType
 
-  def equipItem(itemID: Long): Unit = {
-    getItem(itemID) match {
-      case Some(i) => equipItem(i)
-      case None =>
-    }
-  }
+  def getArmorStatusTypes: Seq[StatusType]
 
-  def unEquipItem(itemId: Long): Unit = {
-    getItem(itemId) match {
-      case Some(i) => i.unEquip()
-      case None =>
-    }
-  }
+  def addItems(items: Item*): Unit
 
-  private def equipItem(item: Item): Unit = {
-    if (Item.isEquipment(item)) {
-      item.getSlotTypeRequirement match {
-        case CHARM_SLOT(slot) => if ((getCharmSlotsUsed + slot) <= getCharmSlotsProvided) {
-          item.equip()
-        }
-        case WEAPON_SLOT() => if (getWeaponEquipped.isEmpty) {
-          item.equip()
-        }
-        case ARMOR_SLOT(part) => if (getArmorEquipped(part).isEmpty) {
-          item.equip()
-        }
-        case _ => item.equip()
-      }
-    } // else cannot be equipped
-  }
+  def equipItem(itemID: Long): Unit
+
+  def unEquipItem(itemId: Long): Unit
 }

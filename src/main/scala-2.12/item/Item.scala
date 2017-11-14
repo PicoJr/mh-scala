@@ -27,12 +27,6 @@ sealed class Item(name: String) {
 
   def getArmor: Int = 0
 
-  def equip(): Unit = {}
-
-  def unEquip(): Unit = {}
-
-  def isEquipped: Boolean = false
-
   def getSlotTypeRequirement: SlotTypeRequirements = INVENTORY_SLOT()
 
   def getClassifications: Set[Classification] = Set.empty
@@ -111,18 +105,6 @@ object Item {
     i.getArmor
   }
 
-  def equip(i: Item): Unit = {
-    i.equip()
-  }
-
-  def unEquip(i: Item): Unit = {
-    i.unEquip()
-  }
-
-  def isEquipped(i: Item): Boolean = {
-    i.isEquipped
-  }
-
   def getElementType(i: Item): ElementType = {
     i.getElementType
   }
@@ -173,12 +155,6 @@ abstract class ItemDecorator(i: Item, c: Classification*) extends Item(i.getName
 
   override def getArmor: Int = i.getArmor
 
-  override def equip(): Unit = i.equip()
-
-  override def unEquip(): Unit = i.unEquip()
-
-  override def isEquipped: Boolean = i.isEquipped
-
   override def getSlotTypeRequirement: SlotTypeRequirements = i.getSlotTypeRequirement
 
   override def getElementType: ElementType = i.getElementType
@@ -199,23 +175,6 @@ case class Protection(wrapped: Item, armor: Int) extends ItemDecorator(wrapped, 
 }
 
 case class Equipment(wrapped: Item, slotTypeRequirement: SlotTypeRequirements) extends ItemDecorator(wrapped, Classification.EQUIPMENT) {
-  var equipped: Boolean = false
-
-  /**
-    * post: item.isEquipped false
-    */
-  override def unEquip(): Unit = {
-    equipped = false
-  }
-
-  /**
-    * post: item.isEquipped true
-    */
-  override def equip(): Unit = {
-    equipped = true
-  }
-
-  override def isEquipped: Boolean = equipped
 
   override def getSlotTypeRequirement: SlotTypeRequirements = slotTypeRequirement
 }

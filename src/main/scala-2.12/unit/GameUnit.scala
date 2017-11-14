@@ -2,7 +2,7 @@ package unit
 
 import item.ElementType.ElementType
 import item.StatusType.StatusType
-import item.{ElementType, Inventory, StatusType}
+import item.{ElementType, Inventory, InventoryModel, StatusType}
 
 import scala.util.Random
 
@@ -94,12 +94,12 @@ object Monster {
   }
 }
 
-case class Hunter(name: String, inventory: Inventory) extends GameUnit {
+case class Hunter(name: String, inventory: InventoryModel) extends GameUnit {
 
   private var _name: String = name
 
   def this(name: String) {
-    this(name, new Inventory)
+    this(name, new InventoryModel)
   }
 
   def getInventory: Inventory = inventory

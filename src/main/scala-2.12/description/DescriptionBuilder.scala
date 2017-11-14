@@ -16,7 +16,6 @@ object DescriptionBuilder {
     if (Item.isWeapon(i)) desc.append("[W]")
     if (Item.isArmor(i)) desc.append("[A]")
     if (Item.isCharm(i)) desc.append("[C]")
-    if (Item.isEquipped(i)) desc.append("(E)") else desc.append("( )")
     desc.append("\n")
     if (Item.getRawDamage(i) > 0) desc.append("dmg:").append(Item.getRawDamage(i))
     if (Item.getArmor(i) > 0) desc.append(" armor:").append(Item.getArmor(i))
@@ -42,7 +41,7 @@ object DescriptionBuilder {
       }
     }
     desc.append("\n-----\n")
-    for (i <- inventory.getItems.filter(i => !i.isEquipped)) {
+    for (i <- inventory.getItems.filter(i => !inventory.isEquipped(i))) {
       desc.append(description(i)).append("\n")
     }
     desc.toString()
