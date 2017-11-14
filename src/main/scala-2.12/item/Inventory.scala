@@ -1,4 +1,5 @@
 package item
+
 import item.ArmorPart.ArmorPart
 import item.ElementType.ElementType
 import item.StatusType.StatusType
@@ -7,7 +8,6 @@ import item.StatusType.StatusType
   * Created by nol on 14/11/17.
   */
 trait Inventory {
-
 
   def isEquipped(item: Item): Boolean
 
@@ -44,4 +44,16 @@ trait Inventory {
   def equipItem(itemID: Long): Unit
 
   def unEquipItem(itemId: Long): Unit
+
+  def canBeEquipped(item: Item): Boolean = {
+    if (Item.isEquipment(item)) {
+      item.getSlotTypeRequirement match {
+        case CHARM_SLOT(slot) => (getCharmSlotsUsed + slot) <= getCharmSlotsProvided
+        case WEAPON_SLOT() => getWeaponEquipped.isEmpty
+        case ARMOR_SLOT(part) => getArmorEquipped(part).isEmpty
+        case _ => true
+      }
+    } else false
+  }
+
 }

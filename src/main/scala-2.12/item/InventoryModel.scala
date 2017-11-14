@@ -103,19 +103,6 @@ class InventoryModel extends Inventory {
   }
 
   private def equipItem(item: Item): Unit = {
-    if (Item.isEquipment(item)) {
-      item.getSlotTypeRequirement match {
-        case CHARM_SLOT(slot) => if ((getCharmSlotsUsed + slot) <= getCharmSlotsProvided) {
-          equipped += item
-        }
-        case WEAPON_SLOT() => if (getWeaponEquipped.isEmpty) {
-          equipped += item
-        }
-        case ARMOR_SLOT(part) => if (getArmorEquipped(part).isEmpty) {
-          equipped += item
-        }
-        case _ => equipped += item
-      }
-    } // else cannot be equipped
+    equipped += item
   }
 }

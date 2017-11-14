@@ -62,7 +62,8 @@ class ConsoleCommand extends Command {
   }
 
   override def equipItem(gameState: GameState, itemID: Long): Unit = {
-    tryActionOnItem(gameState, itemID, i => gameState.getHunter.getInventory.equipItem(i.getUniqueID))
+    val inventory = gameState.getHunter.getInventory
+    tryActionOnItem(gameState, itemID, i => if (inventory.canBeEquipped(i)) inventory.equipItem(i.getUniqueID))
   }
 
   override def unEquipItem(gameState: GameState, itemID: Long): Unit = {
