@@ -12,6 +12,19 @@ import scala.util.Random
 class Crafts private {
   private var recipes: Map[(ItemType, ItemType), ItemType] = Map.empty
 
+  private def filterReactives(p: ItemType => Boolean): Seq[ItemType] = {
+    var matching: Seq[ItemType] = Seq.empty
+    for (key <- recipes.keys) {
+      key match {
+        case (i1, i2) =>
+          if (p(i1)) matching = matching :+ i1
+          if (p(i2)) matching = matching :+ i2
+        case _ =>
+      }
+    }
+    matching
+  }
+
   def craftItemType(i1: ItemType, i2: ItemType): Option[ItemType] = {
     recipes.get((i1, i2))
   }
@@ -22,16 +35,11 @@ class Crafts private {
   }
 
   def getMaterials(level: Int): Seq[ItemType] = {
-    var materials: Seq[ItemType] = Seq.empty
-    for (key <- recipes.keys) {
-      key match {
-        case (i1, i2) =>
-          if (i1.getLevel == level && i1.isMaterial) materials = materials :+ i1
-          if (i2.getLevel == level && i2.isMaterial) materials = materials :+ i2
-        case _ =>
-      }
-    }
-    materials
+    filterReactives(i => i.isMaterial && i.getLevel == level)
+  }
+
+  def getNonMaterial(level: Int): Seq[ItemType] = {
+    filterReactives(i => !i.isMaterial && i.getLevel == level)
   }
 
   def getRecipesWith(i: Item): Map[(ItemType, ItemType), ItemType] = {

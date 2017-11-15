@@ -40,6 +40,8 @@ object GameState {
     val hunter = createHunter
     val crafts = Crafts.generateCraftRecipes
     val quests = createQuests(crafts)
+    val itemTypesFirstLevel = crafts.getNonMaterial(Config.LEVEL_MIN)
+    hunter.getInventory.addItems(itemTypesFirstLevel.map(i => ItemType.createItem(i)): _*)
     new DefaultGameState(hunter, quests, crafts)
   }
 
