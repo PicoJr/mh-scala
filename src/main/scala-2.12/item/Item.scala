@@ -16,6 +16,17 @@ class Item(name: String, level: Int, damage: Int, statusType: StatusType, armor:
     this(itemType.getName, itemType.getLevel, itemType.getRawDamage, itemType.getStatusType, itemType.getArmor, itemType.getSlotTypeRequirement, itemType.getClassifications, itemType.getElementType, itemType.getCharmSlotsProvided)
   }
 
+  def is(itemType: ItemType): Boolean = {
+    getLevel == itemType.getLevel &&
+      getRawDamage == itemType.getRawDamage &&
+      getStatusType == itemType.getStatusType &&
+      getArmor == itemType.getArmor &&
+      getSlotTypeRequirement == itemType.getSlotTypeRequirement &&
+      getClassifications == itemType.getClassifications &&
+      getElementType == itemType.getElementType &&
+      getCharmSlotsRequired == itemType.getCharmSlotsRequired
+  }
+
   private final val uniqueID = ItemType.getNewUniqueItemID
 
   def getUniqueId: Long = uniqueID

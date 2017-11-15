@@ -15,6 +15,7 @@ class CommandParser(command: Command) {
       conf.subcommands match {
         case List(conf.hunter, conf.hunter.show) => command.showHunter(gameState)
         case List(conf.hunter, conf.hunter.rename) => command.renameHunter(gameState, conf.hunter.rename.name.toOption.get)
+        case List(conf.craft, conf.craft.show) => command.showCraft(gameState, conf.craft.show.id.toOption.get)
         case List(conf.item, conf.item.list) => command.listInventory(gameState)
         case List(conf.item, conf.item.show) => command.showItem(gameState, conf.item.show.id.toOption.get)
         case List(conf.item, conf.item.equip) => command.equipItem(gameState, conf.item.equip.id.toOption.get)
@@ -57,6 +58,13 @@ class CommandParser(command: Command) {
       addSubcommand(unequip)
     }
     addSubcommand(item)
+    val craft = new Subcommand("craft", "c") {
+      val show = new Subcommand("show") {
+        val id: ScallopOption[Long] = trailArg[Long]("itemID")
+      }
+      addSubcommand(show)
+    }
+    addSubcommand(craft)
     val quest = new Subcommand("quest") {
       val list = new Subcommand("ls")
       addSubcommand(list)

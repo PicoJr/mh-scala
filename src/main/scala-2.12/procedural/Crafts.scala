@@ -2,7 +2,7 @@ package procedural
 
 import config.Config
 import item.Classification.Classification
-import item.{ArmorPart, Classification, ItemType, RandomItemTypeFactory}
+import item._
 
 import scala.util.Random
 
@@ -34,7 +34,9 @@ class Crafts private {
     materials
   }
 
-  def size: Int = recipes.size
+  def getRecipesWith(i: Item): Map[(ItemType, ItemType), ItemType] = {
+    recipes.filterKeys { case (i1, i2) => i.is(i1) || i.is(i2) }
+  }
 }
 
 

@@ -97,4 +97,8 @@ class ConsoleCommand extends Command {
   private def notImplementedYet(): Unit = {
     println("not implemented yet")
   }
+
+  override def showCraft(gameState: GameState, itemId: Long): Unit = {
+    tryActionOnItem(gameState, itemId, i => println(DescriptionBuilder.description(gameState.getCrafts.getRecipesWith(i))))
+  }
 }

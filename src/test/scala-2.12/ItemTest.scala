@@ -18,6 +18,11 @@ class ItemTest extends FlatSpec {
     assert(item1.getUniqueId != item2.getUniqueId)
   }
 
+  "An item" should "be seen as an ItemType instance" in {
+    val itemType = new ItemType("1", Config.LEVEL_MIN)
+    assert(ItemType.createItem(itemType).is(itemType))
+  }
+
   "A weapon" should "be a weapon" in {
     assert(ItemType.createWeapon("w", 42, Config.LEVEL_MIN).isWeapon)
   }

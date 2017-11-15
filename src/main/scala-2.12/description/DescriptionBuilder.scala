@@ -9,20 +9,37 @@ import unit.{Hunter, Monster}
   */
 object DescriptionBuilder {
 
-  def description(i: Item): String = {
+
+  def description(recipes: Map[(ItemType, ItemType), ItemType]): String = {
+    val desc = new StringBuilder()
+    for (m <- recipes) {
+      m match {
+        case ((i1, i2), result) =>
+          desc.append(i1.getName).append(" + ").append(i2.getName).append("->").append(description(result)).append("\n")
+      }
+    }
+    desc.toString()
+  }
+
+  def description(i: ItemType): String = {
     val desc = new StringBuilder()
     desc.append(i.getName)
-    desc.append("[").append(i.getUniqueId).append("]")
     if (i.isWeapon) desc.append("[W]")
     if (i.isArmor) desc.append("[A]")
     if (i.isCharm) desc.append("[C]")
-    desc.append("\n")
-    if (i.getRawDamage > 0) desc.append("dmg:").append(i.getRawDamage)
+    if (i.getRawDamage > 0) desc.append(" dmg:").append(i.getRawDamage)
     if (i.getArmor > 0) desc.append(" armor:").append(i.getArmor)
     if (i.getCharmSlotsRequired > 0) desc.append("-:").append(i.getCharmSlotsRequired)
     if (i.getCharmSlotsProvided > 0) desc.append("+:").append(i.getCharmSlotsProvided)
     if (i.getElementType != ElementType.NONE) desc.append("{").append(i.getElementType).append("}")
     if (i.getStatusType != StatusType.NONE) desc.append("<").append(i.getStatusType).append(">")
+    desc.toString()
+  }
+
+  def description(i: Item): String = {
+    val desc = new StringBuilder()
+    desc.append("[").append(i.getUniqueId).append("]")
+    desc.append(description(i.asInstanceOf[ItemType]))
     desc.toString()
   }
 

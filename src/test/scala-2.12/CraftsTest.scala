@@ -41,10 +41,6 @@ class CraftsTest extends FlatSpec {
     }
   }
 
-  "Crafts" must "be non empty" in {
-    assert(crafts.size > 0)
-  }
-
   "Crafts" must "have materials for each level" in {
     for (level <- Config.LEVEL_MIN to Config.LEVEL_MAX) {
       assert(crafts.getMaterials(level).nonEmpty, s"level $level")

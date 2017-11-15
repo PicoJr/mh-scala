@@ -11,6 +11,8 @@ trait Command {
 
   def listInventory(gameState: GameState): Unit
 
+  def showCraft(gameState: GameState, itemID: Long): Unit
+
   def showQuest(gameState: GameState, questID: Long): Unit
 
   def showMonster(gameState: GameState, monsterID: Long): Unit
