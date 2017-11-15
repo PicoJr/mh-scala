@@ -1,4 +1,5 @@
-import item.{InventoryModel, Item}
+import config.Config
+import item.{InventoryModel, Item, ItemType}
 import org.scalatest.FlatSpec
 
 /**
@@ -11,15 +12,15 @@ class InventoryModelTest extends FlatSpec {
 
   it should "have items when items are added" in {
     val inventory = new InventoryModel
-    inventory.addItems(new Item("item"))
+    inventory.addItems(new Item(new ItemType("name", Config.LEVEL_MIN)))
     assert(inventory.getItems.nonEmpty)
   }
 
   it should "provide damage when a weapon is equipped" in {
     val inventory = new InventoryModel
-    val weapon = Item.createWeapon("weapon", 42)
+    val weapon = new Item(ItemType.createWeapon("weapon", Config.LEVEL_MIN, 42))
     inventory.addItems(weapon)
-    inventory.equipItem(weapon.getUniqueID)
+    inventory.equipItem(weapon.getUniqueId)
     assert(inventory.getRawDamageProvided > 0)
   }
 

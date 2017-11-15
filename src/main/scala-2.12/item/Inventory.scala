@@ -46,7 +46,7 @@ trait Inventory {
   def unEquipItem(itemId: Long): Unit
 
   def canBeEquipped(item: Item): Boolean = {
-    if (Item.isEquipment(item)) {
+    if (item.isEquipment) {
       item.getSlotTypeRequirement match {
         case CHARM_SLOT(slot) => (getCharmSlotsUsed + slot) <= getCharmSlotsProvided
         case WEAPON_SLOT() => getWeaponEquipped.isEmpty

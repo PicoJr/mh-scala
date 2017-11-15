@@ -1,30 +1,23 @@
 package quest
 
 import config.Config
-import item.ElementType.ElementType
-import item.{Item, RandomItemFactory}
+import id.Identifiable
+import item.ItemType
 import unit.Monster
 
 /**
   * Created by nol on 05/11/17.
   */
-class Quest(monster: Monster, loot: Seq[Item]) {
-  private var completed: Boolean = false
+class Quest(monster: Monster, loot: Seq[ItemType]) extends Identifiable {
   private final val uniqueID: Long = Quest.getNewUniqueQuestID
 
-  def isCompleted: Boolean = completed
+  def getUniqueId: Long = uniqueID
 
-  def complete(): Unit = {
-    completed = true
-  }
-
-  def getUniqueID: Long = uniqueID
-
-  def getMaxDuration: Int = Config.getQuestMaxDuration
+  def getMaxDuration: Int = Config.QUEST_DURATION_MAX
 
   def getMonster: Monster = monster
 
-  def getLoot: Seq[Item] = loot
+  def getLoot: Seq[ItemType] = loot
 }
 
 object Quest {
@@ -36,16 +29,8 @@ object Quest {
     questID
   }
 
-  def createLoot(level: Int, elementType: ElementType): Seq[Item] = {
-    val w = RandomItemFactory.getRandomWeapon(level)
-    val a = RandomItemFactory.getRandomArmor(level)
-    val c = RandomItemFactory.getRandomCharm(level)
-    Seq(w, a, c)
-  }
-
-  def createQuest(level: Int): Quest = {
+  def createQuest(level: Int, loot: Seq[ItemType]): Quest = {
     val monster = Monster.generateMonster(level)
-    val loot = Quest.createLoot(level, monster.getAttackElementType)
     new Quest(monster, loot)
   }
 }

@@ -1,5 +1,5 @@
 import description.DescriptionBuilder
-import item.RandomItemFactory
+import item.{Item, RandomItemTypeFactory}
 import org.scalatest.FlatSpec
 import unit.Hunter
 
@@ -9,7 +9,7 @@ import unit.Hunter
 class DescriptionTest extends FlatSpec {
 
   it should "give an item description" in {
-    val item = RandomItemFactory.getRandomWeapon(1)
+    val item = new Item(RandomItemTypeFactory.createWeaponType(1))
     println(DescriptionBuilder.description(item))
   }
 

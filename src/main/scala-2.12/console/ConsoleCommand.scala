@@ -12,7 +12,7 @@ import unit.Monster
 class ConsoleCommand extends Command {
 
   private def getQuest(gameState: GameState, questID: Long): Option[Quest] = {
-    gameState.getQuests.find(q => q.getUniqueID == questID)
+    gameState.getQuests.find(q => q.getUniqueId == questID)
   }
 
   private def getMonster(gameState: GameState, monsterID: Long): Option[Monster] = {
@@ -63,11 +63,11 @@ class ConsoleCommand extends Command {
 
   override def equipItem(gameState: GameState, itemID: Long): Unit = {
     val inventory = gameState.getHunter.getInventory
-    tryActionOnItem(gameState, itemID, i => if (inventory.canBeEquipped(i)) inventory.equipItem(i.getUniqueID))
+    tryActionOnItem(gameState, itemID, i => if (inventory.canBeEquipped(i)) inventory.equipItem(i.getUniqueId))
   }
 
   override def unEquipItem(gameState: GameState, itemID: Long): Unit = {
-    tryActionOnItem(gameState, itemID, i => gameState.getHunter.getInventory.unEquipItem(i.getUniqueID))
+    tryActionOnItem(gameState, itemID, i => gameState.getHunter.getInventory.unEquipItem(i.getUniqueId))
   }
 
   override def removeItem(gameState: GameState, itemID: Long): Unit = {

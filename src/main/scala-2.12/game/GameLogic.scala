@@ -1,7 +1,7 @@
 package game
 
 import config.Config
-import item.ElementType
+import item.{ElementType, Item}
 import quest.{Quest, QuestResult}
 import unit.{GameUnit, Hunter}
 
@@ -10,9 +10,15 @@ import unit.{GameUnit, Hunter}
   */
 object GameLogic {
 
+  /**
+    *
+    * @param attacker deal damage
+    * @param defender receive damage
+    * @return damage > 0
+    */
   def computeDamageDealt(attacker: GameUnit, defender: GameUnit) : Double = {
     val multiplier = defender.getArmorElementType.foldLeft(1.0)((m, e) => m * ElementType.multiplier(attacker.getAttackElementType, e))
-    math.max(Config.getMinDamage, attacker.getDamage * multiplier - defender.getArmor) // an attack deals at least 1 dmg
+    math.max(Config.DAMAGE_MIN, attacker.getDamage * multiplier - defender.getArmor)
   }
 
   def computeQuestResult(hunter: Hunter, quest: Quest): QuestResult = {
@@ -34,8 +40,8 @@ object GameLogic {
 
   def processQuestResult(hunter: Hunter, quest: Quest, result: QuestResult): Unit = {
     if (!result.isHunterDefeated && result.isMonsterSlain) {
-      hunter.getInventory.addItems(quest.getLoot: _*)
-      quest.complete()
+      val items = quest.getLoot.map(itemType => new Item(itemType))
+      hunter.getInventory.addItems(items: _*)
     }
   }
 

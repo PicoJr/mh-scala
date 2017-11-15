@@ -4,8 +4,6 @@ import item.ElementType.ElementType
 import item.StatusType.StatusType
 import item.{ElementType, Inventory, InventoryModel, StatusType}
 
-import scala.util.Random
-
 /**
   * Created by nol on 05/11/17.
   */
@@ -31,15 +29,7 @@ sealed trait GameUnit {
 
 }
 
-case class Monster(name: String,
-                   life: Int,
-                   armor: Int,
-                   damage: Int,
-                   attackStatusType: StatusType,
-                   attackElementType: ElementType,
-                   armorStatusTypes: Seq[StatusType],
-                   armorElementTypes: Seq[ElementType]
-                  ) extends GameUnit {
+case class Monster(name: String, life: Int, armor: Int, damage: Int, attackStatusType: StatusType, attackElementType: ElementType, armorStatusTypes: Seq[StatusType], armorElementTypes: Seq[ElementType]) extends GameUnit {
   private var _name: String = name
   private final val uniqueID = Monster.getNewUniqueMonsterID
 
@@ -75,7 +65,7 @@ object Monster {
   }
 
   def generateName(): String = {
-    "m" + Random.nextInt() // TODO let the player rename monsters
+    "m" // TODO let the player rename monsters
   }
 
   def generateMonster(level: Int): Monster = {
@@ -110,7 +100,7 @@ case class Hunter(name: String, inventory: InventoryModel) extends GameUnit {
     _name = newName
   }
 
-  def getLife: Int = config.Config.getHunterLife
+  def getLife: Int = config.Config.HUNTER_LIFE_MAX
 
   def getArmor: Int = getInventory.getArmorProvided
 

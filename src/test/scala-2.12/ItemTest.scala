@@ -1,3 +1,4 @@
+import config.Config
 import item._
 import org.scalatest.FlatSpec
 
@@ -7,40 +8,44 @@ import org.scalatest.FlatSpec
 class ItemTest extends FlatSpec {
 
   "An Item ID" should "remain the same" in {
-    val item = new Item("1")
-    assert(item.getUniqueID == item.getUniqueID)
+    val item = new Item(new ItemType("1", Config.LEVEL_MIN))
+    assert(item.getUniqueId == item.getUniqueId)
   }
 
   "An Item ID" should "be unique" in {
-    val item1 = new Item("1")
-    val item2 = new Item("2")
-    assert(item1.getUniqueID != item2.getUniqueID)
+    val item1 = new Item(new ItemType("1", Config.LEVEL_MIN))
+    val item2 = new Item(new ItemType("2", Config.LEVEL_MIN))
+    assert(item1.getUniqueId != item2.getUniqueId)
   }
 
   "A weapon" should "be a weapon" in {
-    assert(Item.isWeapon(Item.createWeapon("w", 42)))
+    assert(ItemType.createWeapon("w", 42, Config.LEVEL_MIN).isWeapon)
   }
 
   "An armor" should "be an armor" in {
-    val armor = Item.createArmor("a", 42, ArmorPart.HEAD)
-    assert(Item.isArmor(armor))
-    assert(Item.isArmorPart(armor, ArmorPart.HEAD))
+    val armor = ItemType.createArmor("a", Config.LEVEL_MIN, 42, ArmorPart.HEAD)
+    assert(armor.isArmor)
+    assert(armor.isArmorPart(ArmorPart.HEAD))
   }
 
   "A charm" should "be a charm" in {
-    assert(Item.isCharm(Item.createCharm("c", 42)))
+    assert(ItemType.createCharm("c", Config.LEVEL_MIN, 42).isCharm)
   }
 
   "A random weapon" should "be a weapon" in {
-    assert(Item.isWeapon(RandomItemFactory.getRandomDefaultWeapon(1)))
+    assert(RandomItemTypeFactory.createWeaponType(Config.LEVEL_MIN).isWeapon)
   }
 
   "A random armor" should "be an armor" in {
-    assert(Item.isArmor(RandomItemFactory.getRandomDefaultArmor(1)))
+    assert(RandomItemTypeFactory.createArmorType(1, ArmorPart.HEAD).isArmor)
   }
 
   "A random charm" should "be a charm" in {
-    assert(Item.isCharm(RandomItemFactory.getRandomDefaultCharm(1)))
+    assert(RandomItemTypeFactory.createCharmType(1).isCharm)
+  }
+
+  "A random material" should "be a material" in {
+    assert(RandomItemTypeFactory.createMaterialType(1).isMaterial)
   }
 
 }

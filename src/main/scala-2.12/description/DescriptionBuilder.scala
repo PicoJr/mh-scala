@@ -12,17 +12,17 @@ object DescriptionBuilder {
   def description(i: Item): String = {
     val desc = new StringBuilder()
     desc.append(i.getName)
-    desc.append("[").append(i.getUniqueID).append("]")
-    if (Item.isWeapon(i)) desc.append("[W]")
-    if (Item.isArmor(i)) desc.append("[A]")
-    if (Item.isCharm(i)) desc.append("[C]")
+    desc.append("[").append(i.getUniqueId).append("]")
+    if (i.isWeapon) desc.append("[W]")
+    if (i.isArmor) desc.append("[A]")
+    if (i.isCharm) desc.append("[C]")
     desc.append("\n")
-    if (Item.getRawDamage(i) > 0) desc.append("dmg:").append(Item.getRawDamage(i))
-    if (Item.getArmor(i) > 0) desc.append(" armor:").append(Item.getArmor(i))
-    if (Item.getCharmSlotsRequired(i) > 0) desc.append("-:").append(Item.getCharmSlotsRequired(i))
-    if (Item.getCharmSlotsProvided(i) > 0) desc.append("+:").append(Item.getCharmSlotsProvided(i))
-    if (Item.getElementType(i) != ElementType.NONE) desc.append("{").append(Item.getElementType(i)).append("}")
-    if (Item.getStatusType(i) != StatusType.NONE) desc.append("<").append(Item.getStatusType(i)).append(">")
+    if (i.getRawDamage > 0) desc.append("dmg:").append(i.getRawDamage)
+    if (i.getArmor > 0) desc.append(" armor:").append(i.getArmor)
+    if (i.getCharmSlotsRequired > 0) desc.append("-:").append(i.getCharmSlotsRequired)
+    if (i.getCharmSlotsProvided > 0) desc.append("+:").append(i.getCharmSlotsProvided)
+    if (i.getElementType != ElementType.NONE) desc.append("{").append(i.getElementType).append("}")
+    if (i.getStatusType != StatusType.NONE) desc.append("<").append(i.getStatusType).append(">")
     desc.toString()
   }
 
@@ -73,8 +73,7 @@ object DescriptionBuilder {
 
   def description(quest: Quest): String = {
     val desc = new StringBuilder()
-    desc.append("quest[").append(quest.getUniqueID).append("]")
-    if (quest.isCompleted) desc.append(" completed")
+    desc.append("quest[").append(quest.getUniqueId).append("]")
     desc.append("\n")
     desc.append(description(quest.getMonster))
     desc.toString()

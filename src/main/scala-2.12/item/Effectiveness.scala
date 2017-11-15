@@ -8,6 +8,7 @@ object Effectiveness extends Enumeration {
   val INEFFECTIVE, NORMAL, EFFECTIVE = Value
 
 
+  // TODO get values from Config instead of hard code
   def multiplier(effectiveness: Effectiveness): Double = effectiveness match {
     case Effectiveness.NORMAL => 1.0
     case Effectiveness.INEFFECTIVE => 0.5
