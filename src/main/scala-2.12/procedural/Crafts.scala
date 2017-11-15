@@ -42,10 +42,10 @@ class Crafts private {
 
 object Crafts {
 
-  private def classificationsAt(level: Int): Seq[Classification] = {
+  private def armorsClassificationsAt(level: Int): Seq[Classification] = {
     var classifications = Seq.empty[Classification]
     if (level >= Config.LEVEL_MIN) {
-      classifications ++= Seq(Classification.PROTECTION, Classification.DAMAGE)
+      classifications ++= Seq(Classification.DAMAGE)
     } else if (level >= (Config.LEVEL_MIN + 1)) {
       classifications ++= Seq(Classification.ELEMENT)
     } else if (level >= (Config.LEVEL_MIN + 2)) {
@@ -56,10 +56,36 @@ object Crafts {
     classifications
   }
 
+  private def weaponsClassificationsAt(level: Int): Seq[Classification] = {
+    var classifications = Seq.empty[Classification]
+    if (level >= Config.LEVEL_MIN) {
+      classifications ++= Seq(Classification.PROTECTION)
+    } else if (level >= (Config.LEVEL_MIN + 1)) {
+      classifications ++= Seq(Classification.ELEMENT)
+    } else if (level >= (Config.LEVEL_MIN + 2)) {
+      classifications ++= Seq(Classification.CHARM_SLOT)
+    } else if (level >= (Config.LEVEL_MIN + 3)) {
+      classifications ++= Seq(Classification.STATUS)
+    }
+    classifications
+  }
+
+  private def charmsClassificationsAt(level: Int): Seq[Classification] = {
+    var classifications = Seq.empty[Classification]
+    if (level >= Config.LEVEL_MIN) {
+      classifications ++= Seq(Classification.DAMAGE, Classification.PROTECTION)
+    } else if (level >= (Config.LEVEL_MIN + 1)) {
+      classifications ++= Seq(Classification.ELEMENT)
+    } else if (level >= (Config.LEVEL_MIN + 2)) {
+      classifications ++= Seq(Classification.STATUS)
+    }
+    classifications
+  }
+
   def createWeapons(level: Int): Seq[ItemType] = {
     var weapons = Seq.empty[ItemType]
     for (_ <- 1 to Config.WEAPONS_PER_LEVEL) {
-      val classifications = classificationsAt(level)
+      val classifications = weaponsClassificationsAt(level)
       weapons = weapons :+ RandomItemTypeFactory.createWeaponType(level, classifications: _*)
     }
     weapons
@@ -68,7 +94,7 @@ object Crafts {
   def createArmors(level: Int): Seq[ItemType] = {
     var armors = Seq.empty[ItemType]
     for (_ <- 1 to Config.ARMORS_PER_LEVEL) {
-      val classifications = classificationsAt(level)
+      val classifications = armorsClassificationsAt(level)
       // 4 parts -> 1 armor
       armors = armors :+ RandomItemTypeFactory.createArmorType(level, ArmorPart.HEAD, classifications: _*)
       armors = armors :+ RandomItemTypeFactory.createArmorType(level, ArmorPart.BODY, classifications: _*)
@@ -81,7 +107,7 @@ object Crafts {
   def createCharms(level: Int): Seq[ItemType] = {
     var charms = Seq.empty[ItemType]
     for (_ <- 1 to Config.CHARMS_PER_LEVEL) {
-      val classifications = classificationsAt(level)
+      val classifications = charmsClassificationsAt(level)
       charms = charms :+ RandomItemTypeFactory.createCharmType(level, classifications: _*)
     }
     charms

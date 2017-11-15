@@ -15,7 +15,7 @@ object DescriptionBuilder {
     for (m <- recipes) {
       m match {
         case ((i1, i2), result) =>
-          desc.append(i1.getName).append(" + ").append(i2.getName).append("->").append(description(result)).append("\n")
+          desc.append(i1.getName).append(" + ").append(i2.getName).append(" -> ").append(description(result)).append("\n")
       }
     }
     desc.toString()
