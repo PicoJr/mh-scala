@@ -1,6 +1,6 @@
 package description
 
-import item._
+import item.{ArmorPart, _}
 import quest.{Quest, QuestResult}
 import unit.{Hunter, Monster}
 
@@ -24,9 +24,19 @@ object DescriptionBuilder {
   def description(i: ItemType): String = {
     val desc = new StringBuilder()
     desc.append(i.getName)
+    desc.append("[" + i.getLevel + "]")
     if (i.isWeapon) desc.append("[W]")
     if (i.isArmor) desc.append("[A]")
     if (i.isCharm) desc.append("[C]")
+    if (i.isArmor) {
+      i.getSlotTypeRequirement match {
+        case ARMOR_SLOT(ArmorPart.HEAD) => desc.append("[HEAD]")
+        case ARMOR_SLOT(ArmorPart.BODY) => desc.append("[BODY]")
+        case ARMOR_SLOT(ArmorPart.ARMS) => desc.append("[ARMS]")
+        case ARMOR_SLOT(ArmorPart.LEGS) => desc.append("[LEGS]")
+        case _ =>
+      }
+    }
     if (i.getRawDamage > 0) desc.append(" dmg:").append(i.getRawDamage)
     if (i.getArmor > 0) desc.append(" armor:").append(i.getArmor)
     if (i.getCharmSlotsRequired > 0) desc.append("-:").append(i.getCharmSlotsRequired)

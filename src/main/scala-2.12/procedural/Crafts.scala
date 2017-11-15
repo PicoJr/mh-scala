@@ -54,11 +54,14 @@ object Crafts {
     var classifications = Seq.empty[Classification]
     if (level >= Config.LEVEL_MIN) {
       classifications ++= Seq(Classification.DAMAGE)
-    } else if (level >= (Config.LEVEL_MIN + 1)) {
+    }
+    if (level >= (Config.LEVEL_MIN + 1)) {
       classifications ++= Seq(Classification.ELEMENT)
-    } else if (level >= (Config.LEVEL_MIN + 2)) {
+    }
+    if (level >= (Config.LEVEL_MIN + 2)) {
       classifications ++= Seq(Classification.CHARM_SLOT)
-    } else if (level >= (Config.LEVEL_MIN + 3)) {
+    }
+    if (level >= (Config.LEVEL_MIN + 3)) {
       classifications ++= Seq(Classification.STATUS)
     }
     classifications
@@ -68,11 +71,14 @@ object Crafts {
     var classifications = Seq.empty[Classification]
     if (level >= Config.LEVEL_MIN) {
       classifications ++= Seq(Classification.PROTECTION)
-    } else if (level >= (Config.LEVEL_MIN + 1)) {
+    }
+    if (level >= (Config.LEVEL_MIN + 1)) {
       classifications ++= Seq(Classification.ELEMENT)
-    } else if (level >= (Config.LEVEL_MIN + 2)) {
+    }
+    if (level >= (Config.LEVEL_MIN + 2)) {
       classifications ++= Seq(Classification.CHARM_SLOT)
-    } else if (level >= (Config.LEVEL_MIN + 3)) {
+    }
+    if (level >= (Config.LEVEL_MIN + 3)) {
       classifications ++= Seq(Classification.STATUS)
     }
     classifications
@@ -82,9 +88,11 @@ object Crafts {
     var classifications = Seq.empty[Classification]
     if (level >= Config.LEVEL_MIN) {
       classifications ++= Seq(Classification.DAMAGE, Classification.PROTECTION)
-    } else if (level >= (Config.LEVEL_MIN + 1)) {
+    }
+    if (level >= (Config.LEVEL_MIN + 1)) {
       classifications ++= Seq(Classification.ELEMENT)
-    } else if (level >= (Config.LEVEL_MIN + 2)) {
+    }
+    if (level >= (Config.LEVEL_MIN + 2)) {
       classifications ++= Seq(Classification.STATUS)
     }
     classifications

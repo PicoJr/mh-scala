@@ -1,4 +1,5 @@
 import config.Config
+import item.Classification
 import org.scalatest.FlatSpec
 import procedural.Crafts
 
@@ -20,6 +21,13 @@ class CraftsTest extends FlatSpec {
   "Armors" should "be generated for each level" in {
     for (level <- Config.LEVEL_MIN to Config.LEVEL_MAX) {
       assert(Crafts.createArmors(level).nonEmpty)
+    }
+  }
+
+  "Last level armors" should "have all classifications enabled" in {
+    val lastLevelArmors = Crafts.createArmors(Config.LEVEL_MAX)
+    for (armor <- lastLevelArmors) {
+      assert(armor.isClassifiedAs(Classification.CHARM_SLOT, Classification.DAMAGE, Classification.ELEMENT, Classification.STATUS))
     }
   }
 
