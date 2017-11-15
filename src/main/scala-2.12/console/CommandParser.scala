@@ -15,13 +15,13 @@ class CommandParser(command: Command) {
       conf.subcommands match {
         case List(conf.hunter, conf.hunter.show) => command.showHunter(gameState)
         case List(conf.hunter, conf.hunter.rename) => command.renameHunter(gameState, conf.hunter.rename.name.toOption.get)
-        case List(conf.items, conf.items.list) => command.listInventory(gameState)
-        case List(conf.items, conf.items.show) => command.showItem(gameState, conf.items.show.id.toOption.get)
-        case List(conf.items, conf.items.equip) => command.equipItem(gameState, conf.items.equip.id.toOption.get)
-        case List(conf.items, conf.items.unequip) => command.unEquipItem(gameState, conf.items.unequip.id.toOption.get)
-        case List(conf.quests, conf.quests.list) => command.listQuests(gameState)
-        case List(conf.quests, conf.quests.show) => command.showQuest(gameState, conf.quests.show.id.toOption.get)
-        case List(conf.quests, conf.quests.start) => command.startQuest(gameState, conf.quests.start.id.toOption.get)
+        case List(conf.item, conf.item.list) => command.listInventory(gameState)
+        case List(conf.item, conf.item.show) => command.showItem(gameState, conf.item.show.id.toOption.get)
+        case List(conf.item, conf.item.equip) => command.equipItem(gameState, conf.item.equip.id.toOption.get)
+        case List(conf.item, conf.item.unequip) => command.unEquipItem(gameState, conf.item.unequip.id.toOption.get)
+        case List(conf.quest, conf.quest.list) => command.listQuests(gameState)
+        case List(conf.quest, conf.quest.show) => command.showQuest(gameState, conf.quest.show.id.toOption.get)
+        case List(conf.quest, conf.quest.start) => command.startQuest(gameState, conf.quest.start.id.toOption.get)
         case List(conf.quit) => println("quit")
         case _ =>
       }
@@ -31,7 +31,7 @@ class CommandParser(command: Command) {
   }
 
   private class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
-    val hunter = new Subcommand("hunter") {
+    val hunter = new Subcommand("hunter", "h") {
       val show = new Subcommand("show")
       addSubcommand(show)
       val rename = new Subcommand("rename") {
@@ -40,24 +40,24 @@ class CommandParser(command: Command) {
       addSubcommand(rename)
     }
     addSubcommand(hunter)
-    val items = new Subcommand("items") {
+    val item = new Subcommand("item", "i") {
       val list = new Subcommand("ls")
       addSubcommand(list)
       val show = new Subcommand("show") {
         val id: ScallopOption[Long] = trailArg[Long]("itemID")
       }
       addSubcommand(show)
-      val equip = new Subcommand("equip") {
+      val equip = new Subcommand("equip", "e") {
         val id: ScallopOption[Long] = trailArg[Long]("itemID")
       }
       addSubcommand(equip)
-      val unequip = new Subcommand("unequip") {
+      val unequip = new Subcommand("unequip", "u") {
         val id: ScallopOption[Long] = trailArg[Long]("itemID")
       }
       addSubcommand(unequip)
     }
-    addSubcommand(items)
-    val quests = new Subcommand("quests") {
+    addSubcommand(item)
+    val quest = new Subcommand("quest") {
       val list = new Subcommand("ls")
       addSubcommand(list)
       val show = new Subcommand("show") {
@@ -69,7 +69,7 @@ class CommandParser(command: Command) {
       }
       addSubcommand(start)
     }
-    addSubcommand(quests)
+    addSubcommand(quest)
     val quit = new Subcommand("quit")
     addSubcommand(quit)
     verify()
