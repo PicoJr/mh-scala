@@ -1,7 +1,7 @@
 import config.Config
+import craft.Crafts
 import item.Classification
 import org.scalatest.FlatSpec
-import procedural.Crafts
 
 /**
   * Created by nol on 15/11/17.

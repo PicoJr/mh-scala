@@ -1,4 +1,4 @@
-package procedural
+package craft
 
 import config.Config
 import item.Classification.Classification

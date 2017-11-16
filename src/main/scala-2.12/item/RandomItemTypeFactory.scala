@@ -1,5 +1,6 @@
 package item
 
+import config.Config
 import item.ArmorPart.ArmorPart
 import item.Classification.Classification
 
@@ -10,26 +11,32 @@ import scala.util.Random
   */
 object RandomItemTypeFactory {
 
+  def getRandomSlot: Int = Random.nextInt(3) + 1 // 1,2,3
+
+  def getVariation: Double = Random.nextDouble() * Config.PERCENTAGE_VARIATION / 100.0
+
+  def getRandomValue(level: Int, base: Int): Int = {
+    val value = base * Math.pow(Config.STATS_GROWTH, level)
+    (value + (getVariation * value)).toInt
+  }
+
   def createWeaponType(level: Int, classifications: Classification*): ItemType = {
     val name = "w"
-    val damage = 100
-    // TODO random(level)
+    val damage = getRandomValue(level, Config.DAMAGE_BASE)
     val w = ItemType.createWeapon(name, level, damage)
     decorateItemRandomly(level, w, classifications: _*)
   }
 
   def createArmorType(level: Int, armorPart: ArmorPart, classifications: Classification*): ItemType = {
     val name = "a"
-    val armor = 100
-    // TODO random(level)
+    val armor = getRandomValue(level, Config.ARMOR_BASE)
     val a = ItemType.createArmor(name, level, armor, armorPart)
     decorateItemRandomly(level, a, classifications: _*)
   }
 
   def createCharmType(level: Int, classifications: Classification*): ItemType = {
     val name = "c"
-    val slots = Random.nextInt(3) + 1
-    // 1,2,3
+    val slots = getRandomSlot
     val c = ItemType.createCharm(name, level, slots)
     decorateItemRandomly(level, c, classifications: _*)
   }
@@ -46,16 +53,16 @@ object RandomItemTypeFactory {
     for (c <- randomClassifications) {
       c match {
         case Classification.CHARM_SLOT =>
-          val charmSlotsProvided = Random.nextInt(3) + 1 // 1,2,3
+          val charmSlotsProvided = getRandomSlot
           randomlyDecorated = CharmSlot(randomlyDecorated, charmSlotsProvided)
         case Classification.DAMAGE =>
-          val damage = 10 // TODO random(level)
+          val damage = getRandomValue(level, Config.DAMAGE_BONUS_BASE)
           randomlyDecorated = Damage(randomlyDecorated, damage)
         case Classification.ELEMENT =>
           val element = ElementType.getRandomElementType
           randomlyDecorated = Element(randomlyDecorated, element)
         case Classification.PROTECTION =>
-          val armor = 10 // TODO random(level)
+          val armor = getRandomValue(level, Config.ARMOR_BONUS_BASE)
           randomlyDecorated = Protection(randomlyDecorated, armor)
         case Classification.STATUS =>
           val statusType = StatusType.getRandomStatusType

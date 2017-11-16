@@ -1,8 +1,8 @@
 package game
 
 import config.Config
+import craft.Crafts
 import item.ItemType
-import procedural.Crafts
 import quest.Quest
 import unit.Hunter
 
