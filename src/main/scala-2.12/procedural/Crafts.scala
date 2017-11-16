@@ -43,7 +43,7 @@ class Crafts private {
   }
 
   def getRecipesWith(i: Item): Map[(ItemType, ItemType), ItemType] = {
-    recipes.filterKeys { case (i1, i2) => i.is(i1) || i.is(i2) }
+    recipes.filterKeys { case (i1, i2) => i.isItemType(i1) || i.isItemType(i2) }
   }
 }
 
