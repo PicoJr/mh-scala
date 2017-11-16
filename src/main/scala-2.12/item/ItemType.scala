@@ -10,13 +10,19 @@ import item.StatusType.StatusType
   */
 class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, armor: Int, slotTypeRequirements: SlotTypeRequirements, classifications: Set[Classification], elementType: ElementType, charmSlots: Int) {
 
+  var _name: String = name
+
   def this(name: String, level: Int) {
     this(name, level, 0, StatusType.NONE, 0, INVENTORY_SLOT(), Set.empty, ElementType.NONE, 0)
   }
 
   def getLevel: Int = level
 
-  def getName: String = name
+  def getName: String = _name
+
+  def setName(newName: String): Unit = {
+    _name = newName
+  }
 
   def getRawDamage: Int = damage
 
