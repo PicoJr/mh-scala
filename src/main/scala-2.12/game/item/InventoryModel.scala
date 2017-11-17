@@ -42,7 +42,7 @@ class InventoryModel extends Inventory {
   }
 
   def getArmorEquipped(armorPart: ArmorPart): Option[Item] = {
-    getItemsEquipped.find(i => i.isArmorPart(armorPart))
+    getItemsEquipped.find(i => i.isArmorPartRequired(armorPart))
   }
 
   def getItemsEquipped: Seq[Item] = {
@@ -55,7 +55,7 @@ class InventoryModel extends Inventory {
   }
 
   def getRawDamageProvided: Int = {
-    getItemsEquipped.foldLeft(0)((sum, i) => sum + i.getRawDamage)
+    getItemsEquipped.foldLeft(0)((sum, i) => sum + i.getDamage)
   }
 
   def getAttackElementType: ElementType = {

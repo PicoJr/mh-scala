@@ -11,14 +11,21 @@ sealed abstract class SlotTypeRequirements
 
 case class WEAPON_SLOT() extends SlotTypeRequirements
 
-/**
+/** Charm slot requirement
   *
-  * @param slots number of charm slots required, >= 1
+  * @param slots number of charm slots required >= 1
   */
 case class CHARM_SLOT(slots: Int) extends SlotTypeRequirements
 
+/** Inventory slot requirement (implicitly 1 slot)
+  *
+  */
 case class INVENTORY_SLOT() extends SlotTypeRequirements
 
+/** Armor slot requirement (implicitely 1 slot) of armor part.
+  *
+  * @param part of armor
+  */
 case class ARMOR_SLOT(part: ArmorPart) extends SlotTypeRequirements
 
 object ArmorPart extends Enumeration {

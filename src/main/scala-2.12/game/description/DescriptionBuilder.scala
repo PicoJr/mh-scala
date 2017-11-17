@@ -25,7 +25,7 @@ object DescriptionBuilder {
     val desc = new StringBuilder()
     desc.append(i.getName)
     desc.append("[" + i.getLevel + "]")
-    if (i.hasDamage) desc.append(" dmg:").append(i.getRawDamage)
+    if (i.hasDamage) desc.append(" dmg:").append(i.getDamage)
     if (i.hasArmor) desc.append(" armor:").append(i.getArmor)
     if (i.requiresSlot) desc.append("-:").append(i.getCharmSlotsRequired)
     if (i.providesSlot) desc.append("+:").append(i.getCharmSlotsProvided)

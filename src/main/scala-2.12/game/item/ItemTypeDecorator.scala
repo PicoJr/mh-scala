@@ -16,7 +16,7 @@ abstract class ItemTypeDecorator(i: ItemType, c: Classification*) extends ItemTy
 
   override def getClassifications: Set[Classification] = i.getClassifications ++ c
 
-  override def getRawDamage: Int = i.getRawDamage
+  override def getDamage: Int = i.getDamage
 
   override def getStatusType: StatusType = i.getStatusType
 
@@ -30,7 +30,7 @@ abstract class ItemTypeDecorator(i: ItemType, c: Classification*) extends ItemTy
 }
 
 case class Damage(wrapped: ItemType, damage: Int) extends ItemTypeDecorator(wrapped, Classification.DAMAGE) {
-  override def getRawDamage: Int = damage
+  override def getDamage: Int = damage
 }
 
 case class Status(wrapped: ItemType, statusType: StatusType) extends ItemTypeDecorator(wrapped, Classification.STATUS) {

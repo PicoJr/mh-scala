@@ -5,7 +5,7 @@ import game.item.ArmorPart.ArmorPart
 import game.item.Classification.Classification
 import game.util.Procedural
 
-/**
+/** Factory for procedural item type generation
   * Created by nol on 14/11/17.
   */
 object RandomItemTypeFactory {
@@ -41,11 +41,9 @@ object RandomItemTypeFactory {
     material
   }
 
-
   private def decorateItemRandomly(level: Int, item: ItemType, classifications: Classification*): ItemType = {
     var randomlyDecorated: ItemType = item
-    val randomClassifications = Classification.takeRandom(classifications: _*)
-    for (c <- randomClassifications) {
+    for (c <- classifications) {
       c match {
         case Classification.CHARM_SLOT =>
           val charmSlotsProvided = getRandomSlot
