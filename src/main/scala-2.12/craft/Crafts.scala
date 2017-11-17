@@ -11,7 +11,7 @@ import util.Procedural
 class Crafts private {
   private var recipes: Map[(ItemType, ItemType), ItemType] = Map.empty
 
-  private def filterReactives(p: ItemType => Boolean): Seq[ItemType] = {
+  private def filterIngredients(p: ItemType => Boolean): Seq[ItemType] = {
     var matching: Seq[ItemType] = Seq.empty
     for (key <- recipes.keys) {
       key match {
@@ -34,11 +34,11 @@ class Crafts private {
   }
 
   def getMaterials(level: Int): Seq[ItemType] = {
-    filterReactives(i => i.isMaterial && i.getLevel == level)
+    filterIngredients(i => i.isMaterial && i.getLevel == level)
   }
 
   def getNonMaterial(level: Int): Seq[ItemType] = {
-    filterReactives(i => !i.isMaterial && i.getLevel == level)
+    filterIngredients(i => !i.isMaterial && i.getLevel == level)
   }
 
   def getRecipesWith(i: Item): Map[(ItemType, ItemType), ItemType] = {
