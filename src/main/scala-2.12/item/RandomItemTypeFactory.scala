@@ -11,10 +11,6 @@ import scala.util.Random
   */
 object RandomItemTypeFactory {
 
-  private def pickRandom[T](seq: Seq[T]): Option[T] = {
-    seq.lift(Random.nextInt(seq.size))
-  }
-
   def getRandomSlot: Int = Random.nextInt(3) + 1 // 1,2,3
 
   def getVariation: Double = Random.nextDouble() * Config.PERCENTAGE_VARIATION / 100.0
@@ -24,49 +20,26 @@ object RandomItemTypeFactory {
     (value + (getVariation * value)).toInt
   }
 
-  def getRandomWeaponName(weapon: ItemType): String = {
-    val name = new StringBuilder()
-    val weaponTypes = Seq("sword", "hammer", "axe")
-    val protections = Seq("shielded", "reinforced", "solid", "hardened")
-    if (weapon.isClassifiedAs(Classification.PROTECTION)) name.append(pickRandom(protections).get).append(" ")
-    if (weapon.getElementType != ElementType.NONE) name.append(weapon.getElementType.toString.toLowerCase).append(" ")
-    name.append(pickRandom(weaponTypes).get)
-    name.toString()
-  }
-
-  def getRandomArmorName(armor: ItemType): String = {
-    val name = new StringBuilder()
-    val damages = Seq("bladed", "spiky", "sharp")
-    val part = armor.getSlotTypeRequirement match {
-      case ARMOR_SLOT(ArmorPart.HEAD) => "helmet"
-      case ARMOR_SLOT(ArmorPart.BODY) => "plastron"
-      case ARMOR_SLOT(ArmorPart.ARMS) => "sleaves"
-      case ARMOR_SLOT(ArmorPart.LEGS) => "greaves"
-      case _ => ""
-    }
-    if (armor.getRawDamage > 0) name.append(pickRandom(damages).get).append(" ")
-    if (armor.getElementType != ElementType.NONE) name.append(armor.getElementType.toString.toLowerCase).append(" ")
-    name.append(part)
-    name.toString()
-  }
 
   def createWeaponType(level: Int, classifications: Classification*): ItemType = {
     val w = ItemType.createWeapon("weapon", level, getRandomValue(level, Config.DAMAGE_BASE))
     val weapon = decorateItemRandomly(level, w, classifications: _*)
-    weapon.setName(getRandomWeaponName(weapon))
+    weapon.setName(NameFactory.getRandomWeaponDescription(weapon).getDescription)
     weapon
   }
 
   def createArmorType(level: Int, armorPart: ArmorPart, classifications: Classification*): ItemType = {
     val a = ItemType.createArmor("armor", level, getRandomValue(level, Config.ARMOR_BASE), armorPart)
     val armor = decorateItemRandomly(level, a, classifications: _*)
-    armor.setName(getRandomArmorName(armor))
+    armor.setName(NameFactory.getRandomArmorDescription(armor).getDescription)
     armor
   }
 
   def createCharmType(level: Int, classifications: Classification*): ItemType = {
     val c = ItemType.createCharm("charm", level, getRandomSlot)
-    decorateItemRandomly(level, c, classifications: _*)
+    val charm = decorateItemRandomly(level, c, classifications: _*)
+    charm.setName(NameFactory.getRandomCharmDescription(charm).getDescription)
+    charm
   }
 
   def createMaterialType(level: Int): ItemType = {

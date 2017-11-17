@@ -25,24 +25,12 @@ object DescriptionBuilder {
     val desc = new StringBuilder()
     desc.append(i.getName)
     desc.append("[" + i.getLevel + "]")
-    if (i.isWeapon) desc.append("[W]")
-    if (i.isArmor) desc.append("[A]")
-    if (i.isCharm) desc.append("[C]")
-    if (i.isArmor) {
-      i.getSlotTypeRequirement match {
-        case ARMOR_SLOT(ArmorPart.HEAD) => desc.append("[HEAD]")
-        case ARMOR_SLOT(ArmorPart.BODY) => desc.append("[BODY]")
-        case ARMOR_SLOT(ArmorPart.ARMS) => desc.append("[ARMS]")
-        case ARMOR_SLOT(ArmorPart.LEGS) => desc.append("[LEGS]")
-        case _ =>
-      }
-    }
-    if (i.getRawDamage > 0) desc.append(" dmg:").append(i.getRawDamage)
-    if (i.getArmor > 0) desc.append(" armor:").append(i.getArmor)
-    if (i.getCharmSlotsRequired > 0) desc.append("-:").append(i.getCharmSlotsRequired)
-    if (i.getCharmSlotsProvided > 0) desc.append("+:").append(i.getCharmSlotsProvided)
-    if (i.getElementType != ElementType.NONE) desc.append("{").append(i.getElementType).append("}")
-    if (i.getStatusType != StatusType.NONE) desc.append("<").append(i.getStatusType).append(">")
+    if (i.hasDamage) desc.append(" dmg:").append(i.getRawDamage)
+    if (i.hasArmor) desc.append(" armor:").append(i.getArmor)
+    if (i.requiresSlot) desc.append("-:").append(i.getCharmSlotsRequired)
+    if (i.providesSlot) desc.append("+:").append(i.getCharmSlotsProvided)
+    if (i.hasElementType) desc.append("{").append(i.getElementType).append("}")
+    if (i.hasStatusType) desc.append("<").append(i.getStatusType).append(">")
     desc.toString()
   }
 

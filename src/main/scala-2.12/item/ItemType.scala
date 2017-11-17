@@ -53,6 +53,14 @@ class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, ar
     }
   }
 
+  def hasArmor: Boolean = getArmor > 0
+
+  def hasDamage: Boolean = getRawDamage > 0
+
+  def hasElementType: Boolean = getElementType != ElementType.NONE
+
+  def hasStatusType: Boolean = getStatusType != StatusType.NONE
+
   def isArmor: Boolean = {
     getSlotTypeRequirement match {
       case ARMOR_SLOT(_) => true
@@ -89,6 +97,9 @@ class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, ar
     }
   }
 
+  def providesSlot: Boolean = getCharmSlotsProvided > 0
+
+  def requiresSlot: Boolean = getCharmSlotsRequired > 0
 }
 
 object ItemType {

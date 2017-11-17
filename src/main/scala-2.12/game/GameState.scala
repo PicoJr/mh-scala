@@ -23,15 +23,20 @@ trait GameState {
 }
 
 private class DefaultGameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts) extends GameState {
+
+  private var questsCompletedIds: Set[Long] = Set.empty
+
   override def getHunter: Hunter = hunter
 
   override def getQuests: Seq[Quest] = quests
 
   override def getCrafts: Crafts = crafts
 
-  override def completeQuest(questId: Long): Unit = {} // TODO
+  override def completeQuest(questId: Long): Unit = {
+    questsCompletedIds += questId
+  }
 
-  override def isCompletedQuest(questId: Long): Boolean = false
+  override def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
 }
 
 

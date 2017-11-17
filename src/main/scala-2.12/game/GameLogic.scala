@@ -10,12 +10,6 @@ import unit.{GameUnit, Hunter}
   */
 object GameLogic {
 
-  /**
-    *
-    * @param attacker deal damage
-    * @param defender receive damage
-    * @return damage > 0
-    */
   def computeDamageDealt(attacker: GameUnit, defender: GameUnit) : Double = {
     val multiplier = defender.getArmorElementType.foldLeft(1.0)((m, e) => m * ElementType.multiplier(attacker.getAttackElementType, e))
     math.max(Config.DAMAGE_MIN, attacker.getDamage * multiplier - defender.getArmor)
