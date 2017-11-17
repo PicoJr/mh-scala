@@ -10,9 +10,9 @@ import util.Procedural
   */
 object RandomItemTypeFactory {
 
-  def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
+  private def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
 
-  def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, Config.STATS_GROWTH, Config.PERCENTAGE_VARIATION)
+  private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, Config.STATS_GROWTH, Config.PERCENTAGE_VARIATION)
 
   def createWeaponType(level: Int, classifications: Classification*): ItemType = {
     val w = ItemType.createWeapon("weapon", level, getRandomValue(level, Config.DAMAGE_BASE))
