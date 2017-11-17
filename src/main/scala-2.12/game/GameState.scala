@@ -9,34 +9,21 @@ import unit.Hunter
 /**
   * Created by nol on 11/11/17.
   */
-trait GameState {
-
-  def getCrafts: Crafts
-
-  def getHunter: Hunter
-
-  def getQuests: Seq[Quest]
-
-  def completeQuest(questId: Long): Unit
-
-  def isCompletedQuest(questId: Long): Boolean
-}
-
-private class DefaultGameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts) extends GameState {
+class GameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts) {
 
   private var questsCompletedIds: Set[Long] = Set.empty
 
-  override def getHunter: Hunter = hunter
+  def getHunter: Hunter = hunter
 
-  override def getQuests: Seq[Quest] = quests
+  def getQuests: Seq[Quest] = quests
 
-  override def getCrafts: Crafts = crafts
+  def getCrafts: Crafts = crafts
 
-  override def completeQuest(questId: Long): Unit = {
+  def completeQuest(questId: Long): Unit = {
     questsCompletedIds += questId
   }
 
-  override def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
+  def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
 }
 
 
@@ -47,7 +34,7 @@ object GameState {
     val quests = createQuests(crafts)
     val itemTypesFirstLevel = crafts.getNonMaterial(Config.LEVEL_MIN)
     hunter.getInventory.addItems(itemTypesFirstLevel.map(i => ItemType.createItem(i)): _*)
-    new DefaultGameState(hunter, quests, crafts)
+    new GameState(hunter, quests, crafts)
   }
 
   private def createHunter: Hunter = {
