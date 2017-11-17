@@ -1,5 +1,5 @@
-import config.Config
-import item._
+import game.Config
+import game.item._
 import org.scalatest.FlatSpec
 
 /**

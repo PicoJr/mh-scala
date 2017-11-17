@@ -1,7 +1,7 @@
-import description.DescriptionBuilder
-import item.{Item, RandomItemTypeFactory}
+import game.description.DescriptionBuilder
+import game.item.{Item, RandomItemTypeFactory}
+import game.unit.Hunter
 import org.scalatest.FlatSpec
-import unit.Hunter
 
 /**
   * Created by nol on 11/11/17.

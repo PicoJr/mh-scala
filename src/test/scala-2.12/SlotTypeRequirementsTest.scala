@@ -1,4 +1,4 @@
-import item._
+import game.item._
 import org.scalatest.FlatSpec
 
 /**

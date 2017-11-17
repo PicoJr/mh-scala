@@ -1,5 +1,5 @@
-import config.Config
-import craft.Crafts
+import game.Config
+import game.item.craft.Crafts
 import org.scalatest.FlatSpec
 
 /**

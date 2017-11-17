@@ -1,12 +1,11 @@
 package game
 
-import config.Config
-import craft.Crafts
-import item.ItemType
-import quest.Quest
-import unit.Hunter
+import game.item.craft.Crafts
+import game.item.{Item, ItemType}
+import game.quest.Quest
+import game.unit.{Hunter, Monster}
 
-/**
+/** Holds all game entities and states.
   * Created by nol on 11/11/17.
   */
 class GameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts) {
@@ -19,15 +18,45 @@ class GameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts) {
 
   def getCrafts: Crafts = crafts
 
-  def completeQuest(questId: Long): Unit = {
+  def getQuest(questID: Long): Option[Quest] = {
+    getQuests.find(q => q.getUniqueId == questID)
+  }
+
+  def getMonster(monsterID: Long): Option[Monster] = {
+    getQuests.find(q => q.getMonster.getUniqueID == monsterID) match {
+      case Some(q) => Some(q.getMonster)
+      case None => None
+    }
+  }
+
+  def getItem(itemID: Long): Option[Item] = {
+    getHunter.getInventory.getItem(itemID)
+  }
+
+  /** Set quest with id questId as completed
+    *
+    * @param questId of quest
+    */
+  def setCompleted(questId: Long): Unit = {
     questsCompletedIds += questId
   }
 
+  /** Check quest with id questId is completed
+    *
+    * @param questId of quest
+    * @return true if quest is completed, false if not or invalid Id
+    */
   def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
 }
 
 
 object GameState {
+
+  /** Procedurally create a new GameState.
+    * may fail if config values are inconsistent.
+    *
+    * @return new GameState
+    */
   def createNewGameState: GameState = {
     val hunter = createHunter
     val crafts = Crafts.generateCraftRecipes

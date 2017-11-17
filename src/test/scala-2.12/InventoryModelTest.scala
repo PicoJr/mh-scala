@@ -1,5 +1,5 @@
-import config.Config
-import item.{InventoryModel, Item, ItemType}
+import game.Config
+import game.item.{InventoryModel, Item, ItemType}
 import org.scalatest.FlatSpec
 
 /**
