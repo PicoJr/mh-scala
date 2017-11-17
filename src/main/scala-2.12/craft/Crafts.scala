@@ -3,8 +3,7 @@ package craft
 import config.Config
 import item.Classification.Classification
 import item._
-
-import scala.util.Random
+import util.Procedural
 
 /**
   * Created by nol on 14/11/17.
@@ -142,6 +141,7 @@ object Crafts {
   }
 
   def generateCraftRecipes: Crafts = {
+    val ITEM_LEVEL_MAX: Int = Config.LEVEL_MAX + 1
     val crafts = new Crafts
     var itemTypes: Map[Int, Seq[ItemType]] = Map.empty
     var materials: Map[Int, Seq[ItemType]] = Map.empty
@@ -149,12 +149,11 @@ object Crafts {
       itemTypes += (level -> createItemTypes(level))
       materials += (level -> createMaterials(level))
     }
-    for (level <- Config.LEVEL_MIN to Config.LEVEL_MAX) {
+    itemTypes += (ITEM_LEVEL_MAX -> createItemTypes(ITEM_LEVEL_MAX))
+    for (level <- (Config.LEVEL_MIN + 1) to ITEM_LEVEL_MAX) {
       for (result <- itemTypes(level)) {
-        val itemsPreviousLevel = itemTypes(level)
-        val itemTypePreviousLevel = itemsPreviousLevel(Random.nextInt(itemsPreviousLevel.size))
-        val materialsPreviousLevel = materials(level)
-        val materialPreviousLevel = materialsPreviousLevel(Random.nextInt(materialsPreviousLevel.size))
+        val itemTypePreviousLevel = Procedural.pickRandomFromSeq(itemTypes(level - 1)).get
+        val materialPreviousLevel = Procedural.pickRandomFromSeq(materials(level - 1)).get
         crafts.addRecipe(itemTypePreviousLevel, materialPreviousLevel, result)
       }
     }

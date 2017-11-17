@@ -42,4 +42,10 @@ object Config {
 
   final val STATS_GROWTH: Double = 1.2
 
+  final val MONSTER_LIFE_BASE: Int = 100
+
+  final val MONSTER_ARMOR_BASE: Int = 5
+
+  final val MONSTER_DAMAGE_BASE: Int = 10
+
 }

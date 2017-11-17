@@ -3,7 +3,7 @@ package quest
 import config.Config
 import id.Identifiable
 import item.ItemType
-import unit.Monster
+import unit.{Monster, RandomMonsterFactory}
 
 /**
   * Created by nol on 05/11/17.
@@ -30,7 +30,7 @@ object Quest {
   }
 
   def createQuest(level: Int, loot: Seq[ItemType]): Quest = {
-    val monster = Monster.generateMonster(level)
+    val monster = RandomMonsterFactory.generateMonster(level)
     new Quest(monster, loot)
   }
 }

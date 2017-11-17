@@ -3,23 +3,16 @@ package item
 import config.Config
 import item.ArmorPart.ArmorPart
 import item.Classification.Classification
-
-import scala.util.Random
+import util.Procedural
 
 /**
   * Created by nol on 14/11/17.
   */
 object RandomItemTypeFactory {
 
-  def getRandomSlot: Int = Random.nextInt(3) + 1 // 1,2,3
+  def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
 
-  def getVariation: Double = Random.nextDouble() * Config.PERCENTAGE_VARIATION / 100.0
-
-  def getRandomValue(level: Int, base: Int): Int = {
-    val value = base * Math.pow(Config.STATS_GROWTH, level)
-    (value + (getVariation * value)).toInt
-  }
-
+  def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, Config.STATS_GROWTH, Config.PERCENTAGE_VARIATION)
 
   def createWeaponType(level: Int, classifications: Classification*): ItemType = {
     val w = ItemType.createWeapon("weapon", level, getRandomValue(level, Config.DAMAGE_BASE))
@@ -43,8 +36,9 @@ object RandomItemTypeFactory {
   }
 
   def createMaterialType(level: Int): ItemType = {
-    val name = "m"
-    ItemType.createMaterial(name, level)
+    val material = ItemType.createMaterial("material", level)
+    material.setName(NameFactory.getRandomMaterialDescription(material).getDescription)
+    material
   }
 
 

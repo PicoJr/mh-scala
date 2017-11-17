@@ -2,37 +2,36 @@ package item
 
 import item.ArmorPart.ArmorPart
 import item.ElementType.ElementType
-
-import scala.util.Random
+import util.Procedural
 
 /**
   * Created by nol on 17/11/17.
   */
 object NameFactory {
 
-  private def pickRandom[T](seq: Seq[T]): Option[T] = {
-    seq.lift(Random.nextInt(seq.size))
-  }
-
   private def pickRandomWeaponNature: String = {
-    pickRandom(Seq("sword", "hammer", "axe")).get
+    Procedural.pickRandom("sword", "hammer", "axe").get
   }
 
   private def pickRandomCharmNature: String = {
-    pickRandom(Seq("talisman", "relic", "charm")).get
+    Procedural.pickRandom("talisman", "relic", "charm").get
+  }
+
+  private def pickRandomMaterialNature: String = {
+    Procedural.pickRandom("orb", "spike", "scale", "plate").get
   }
 
   private def pickRandomProtectionAdjective: String = {
-    pickRandom(Seq("shielded", "reinforced", "solid", "hardened")).get
+    Procedural.pickRandom("shielded", "reinforced", "solid", "hardened").get
   }
 
   private def pickRandomDamageAdjective: String = {
-    pickRandom(Seq("bladed", "sharp")).get
+    Procedural.pickRandom("bladed", "sharp").get
   }
 
   private def pickRandomElementAdjective(elementType: ElementType): String = elementType match {
-    case ElementType.FIRE => pickRandom(Seq("burning")).get
-    case ElementType.WATER => pickRandom(Seq("flowing")).get
+    case ElementType.FIRE => Procedural.pickRandom("burning").get
+    case ElementType.WATER => Procedural.pickRandom("flowing").get
     case _ => ""
   }
 
@@ -69,6 +68,12 @@ object NameFactory {
     if (charm.hasArmor) description.addAdjective(pickRandomProtectionAdjective)
     if (charm.hasDamage) description.addAdjective(pickRandomDamageAdjective)
     if (charm.hasElementType) description.addAdjective(pickRandomElementAdjective(charm.getElementType))
+    description
+  }
+
+  def getRandomMaterialDescription(material: ItemType): DescriptionBuilder = {
+    val description = new DescriptionBuilder
+    description.addNature(pickRandomMaterialNature)
     description
   }
 

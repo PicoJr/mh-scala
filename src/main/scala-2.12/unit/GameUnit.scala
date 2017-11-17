@@ -2,7 +2,7 @@ package unit
 
 import item.ElementType.ElementType
 import item.StatusType.StatusType
-import item.{ElementType, Inventory, InventoryModel, StatusType}
+import item.{Inventory, InventoryModel}
 
 /**
   * Created by nol on 05/11/17.
@@ -13,14 +13,34 @@ sealed trait GameUnit {
 
   def setName(newName: String): Unit
 
+  /**
+    *
+    * @return unit life (>=0)
+    */
   def getLife: Int
 
+  /**
+    *
+    * @return unit armor (>= 0)
+    */
   def getArmor: Int
 
+  /**
+    *
+    * @return unit damage (>=0)
+    */
   def getDamage: Int
 
-  def getArmorElementType: Seq[ElementType]
+  /**
+    *
+    * @return unit armor element types (may be empty)
+    */
+  def getArmorElementTypes: Seq[ElementType]
 
+  /**
+    *
+    * @return unit armor status types (may be empty)
+    */
   def getArmorStatusTypes: Seq[StatusType]
 
   def getAttackElementType: ElementType
@@ -47,7 +67,7 @@ case class Monster(name: String, life: Int, armor: Int, damage: Int, attackStatu
 
   override def getDamage: Int = damage
 
-  override def getArmorElementType: Seq[ElementType] = armorElementTypes
+  override def getArmorElementTypes: Seq[ElementType] = armorElementTypes
 
   override def getAttackStatusType: StatusType = attackStatusType
 
@@ -59,29 +79,15 @@ case class Monster(name: String, life: Int, armor: Int, damage: Int, attackStatu
 object Monster {
   private var monsterID: Long = 0
 
+  /**
+    *
+    * @return new unique id (increasing, not thread safe)
+    */
   def getNewUniqueMonsterID: Long = {
     monsterID += 1
     monsterID
   }
 
-  def generateName(): String = {
-    "m" // TODO let the player rename monsters
-  }
-
-  def generateMonster(level: Int): Monster = {
-    val name = generateName()
-    // TODO procedural
-    val life = 100
-    // TODO procedural
-    val armor = 100
-    // TODO procedural
-    val damage = 100
-    val attackStatusType = StatusType.getRandomStatusType
-    val attackElementType = ElementType.getRandomElementType
-    val armorStatusTypes = Seq(StatusType.getRandomStatusType)
-    val armorElementTypes = Seq(attackElementType, ElementType.getRandomElementType)
-    Monster(name, armor, life, damage, attackStatusType, attackElementType, armorStatusTypes, armorElementTypes)
-  }
 }
 
 case class Hunter(name: String, inventory: InventoryModel) extends GameUnit {
@@ -108,7 +114,7 @@ case class Hunter(name: String, inventory: InventoryModel) extends GameUnit {
 
   def getAttackElementType: ElementType = getInventory.getAttackElementType
 
-  def getArmorElementType: Seq[ElementType] = getInventory.getArmorElementTypes
+  def getArmorElementTypes: Seq[ElementType] = getInventory.getArmorElementTypes
 
   def getAttackStatusType: StatusType = getInventory.getAttackStatusType
 
