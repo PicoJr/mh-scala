@@ -1,6 +1,6 @@
 package game.console
 
-import game.description.DescriptionBuilder
+import game.description.DescriptionFactory
 import game.item.Item
 import game.{GameState, QuestLogic}
 
@@ -18,30 +18,30 @@ class ConsoleCommand extends Command {
 
   override def listQuests(gameState: GameState): Unit = {
     for (q <- gameState.getQuests) {
-      println(DescriptionBuilder.description(q))
+      println(DescriptionFactory.description(q))
     }
   }
 
   override def listInventory(gameState: GameState): Unit = {
-    println(DescriptionBuilder.description(gameState.getHunter.getInventory))
+    println(DescriptionFactory.description(gameState.getHunter.getInventory))
   }
 
   override def showQuest(gameState: GameState, questId: Long): Unit = {
     gameState.getQuest(questId) match {
-      case Some(q) => println(DescriptionBuilder.description(q))
+      case Some(q) => println(DescriptionFactory.description(q))
       case None => println(s"quest with id $questId not found")
     }
   }
 
   override def showMonster(gameState: GameState, monsterId: Long): Unit = {
     gameState.getMonster(monsterId) match {
-      case Some(m) => println(DescriptionBuilder.description(m))
+      case Some(m) => println(DescriptionFactory.description(m))
       case None => println(s"monster with id $monsterId not found")
     }
   }
 
   override def showHunter(gameState: GameState): Unit = {
-    println(DescriptionBuilder.description(gameState.getHunter))
+    println(DescriptionFactory.description(gameState.getHunter))
   }
 
   override def equipItem(gameState: GameState, itemId: Long): Unit = {
@@ -58,7 +58,7 @@ class ConsoleCommand extends Command {
   }
 
   override def showItem(gameState: GameState, itemId: Long): Unit = {
-    tryActionOnItem(gameState, itemId, i => println(DescriptionBuilder.description(i)))
+    tryActionOnItem(gameState, itemId, i => println(DescriptionFactory.description(i)))
   }
 
   override def renameHunter(gameState: GameState, newName: String): Unit = {
@@ -70,7 +70,7 @@ class ConsoleCommand extends Command {
     gameState.getQuest(questId) match {
       case Some(_) =>
         val questResult = QuestLogic.processQuest(gameState, questId)
-        println(DescriptionBuilder.description(questResult))
+        println(DescriptionFactory.description(questResult))
       case None => println(s"quest with id $questId not found")
     }
   }
@@ -80,6 +80,6 @@ class ConsoleCommand extends Command {
   }
 
   override def showCraft(gameState: GameState, itemId: Long): Unit = {
-    tryActionOnItem(gameState, itemId, i => println(DescriptionBuilder.description(gameState.getCrafts.getRecipesWith(i))))
+    tryActionOnItem(gameState, itemId, i => println(DescriptionFactory.description(gameState.getCrafts.getRecipesWith(i))))
   }
 }

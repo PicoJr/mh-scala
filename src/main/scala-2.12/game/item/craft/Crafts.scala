@@ -5,7 +5,7 @@ import game.item.Classification.Classification
 import game.item._
 import game.util.Procedural
 
-/**
+/** Holds all craft recipes for all item types.
   * Created by nol on 14/11/17.
   */
 class Crafts private {

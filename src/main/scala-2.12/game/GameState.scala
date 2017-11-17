@@ -23,14 +23,14 @@ class GameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts) {
   }
 
   def getMonster(monsterID: Long): Option[Monster] = {
-    getQuests.find(q => q.getMonster.getUniqueID == monsterID) match {
+    getQuests.find(q => q.getMonster.getUniqueId == monsterID) match {
       case Some(q) => Some(q.getMonster)
       case None => None
     }
   }
 
   def getItem(itemID: Long): Option[Item] = {
-    getHunter.getInventory.getItem(itemID)
+    getHunter.getInventory.findItem(itemID)
   }
 
   /** Set quest with id questId as completed

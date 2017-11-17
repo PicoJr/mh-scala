@@ -5,7 +5,7 @@ import game.id.Identifiable
 import game.item.ItemType
 import game.unit.{Monster, RandomMonsterFactory}
 
-/**
+/** Rewards hunter with loot when monster is slain
   * Created by nol on 05/11/17.
   */
 class Quest(monster: Monster, loot: Seq[ItemType]) extends Identifiable {

@@ -7,7 +7,7 @@ import game.unit.{Hunter, Monster}
 /**
   * Created by nol on 11/11/17.
   */
-object DescriptionBuilder {
+object DescriptionFactory {
 
 
   def description(recipes: Map[(ItemType, ItemType), ItemType]): String = {
@@ -15,7 +15,8 @@ object DescriptionBuilder {
     for (m <- recipes) {
       m match {
         case ((i1, i2), result) =>
-          desc.append(i1.getName).append(" + ").append(i2.getName).append(" -> ").append(description(result)).append("\n")
+          desc.append(i1.getName).append(" + ").append(i2.getName)
+          desc.append(" -> ").append(description(result)).append("\n")
       }
     }
     desc.toString()
@@ -82,7 +83,7 @@ object DescriptionBuilder {
   def description(monster: Monster): String = {
     val desc = new StringBuilder()
     desc.append(monster.getName)
-    desc.append("[").append(monster.getUniqueID).append("]")
+    desc.append("[").append(monster.getUniqueId).append("]")
     desc.toString()
   }
 

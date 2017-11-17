@@ -4,46 +4,147 @@ import game.item.ArmorPart.ArmorPart
 import game.item.ElementType.ElementType
 import game.item.StatusType.StatusType
 
-/**
-  * Created by nol on 14/11/17.
+/** Holds items
+  * Created by nol on 06/11/17.
   */
-trait Inventory {
+class Inventory {
 
-  def isEquipped(item: Item): Boolean
+  private var items: Seq[Item] = Seq.empty
+  private var equipped: Set[Item] = Set.empty
 
-  def isEquipped(itemId: Long): Boolean
+  /** Test if item from inventory is equipped
+    *
+    * @param item from inventory
+    * @return item is equipped (false if not equipped or not in inventory)
+    */
+  def isEquipped(item: Item): Boolean = {
+    equipped.contains(item)
+  }
 
-  def getItems: Seq[Item]
+  /** Test if item from inventory is equipped
+    *
+    * @param itemId of item from inventory
+    * @return item is equipped (false if not equipped or not in inventory)
+    */
+  def isEquipped(itemId: Long): Boolean = {
+    findItem(itemId) match {
+      case Some(i) => isEquipped(i)
+      case None => false
+    }
+  }
 
-  def getItem(itemID: Long): Option[Item]
+  /** Get all items from inventory
+    *
+    * @return items from inventory
+    */
+  def getItems: Seq[Item] = items
 
-  def getCharmSlotsProvided: Int
+  /** Find item with id itemId from inventory
+    *
+    * @param itemId of item
+    * @return item with itemId if found else None
+    */
+  def findItem(itemId: Long): Option[Item] = {
+    items.find(i => i.getUniqueId == itemId)
+  }
 
-  def getCharmSlotsUsed: Int
+  /** Charm slots provided by equipped items
+    *
+    * @return charm slots provided by equipped items
+    */
+  def getCharmSlotsProvided: Int = {
+    getItemsEquipped.foldLeft(0)((sum, i) => sum + i.getCharmSlotsProvided)
+  }
 
-  def getWeaponEquipped: Option[Item]
+  /** Charm slots used by equipped items
+    *
+    * @return charm slots used by equipped items
+    */
+  def getCharmSlotsUsed: Int = {
+    getItemsEquipped.foldLeft(0)((sum, i) => sum + i.getCharmSlotsRequired)
+  }
 
-  def getArmorEquipped(armorPart: ArmorPart): Option[Item]
+  /** Get weapon equipped
+    *
+    * @return weapon equipped if any else None
+    */
+  def getWeaponEquipped: Option[Item] = {
+    items.find(i => i.isWeapon && isEquipped(i))
+  }
 
-  def getItemsEquipped: Seq[Item]
+  /** Get armor equipped
+    *
+    * @param armorPart checked
+    * @return armor using armor part slot if any else None
+    */
+  def getArmorEquipped(armorPart: ArmorPart): Option[Item] = {
+    getItemsEquipped.find(i => i.isArmorPartRequired(armorPart))
+  }
 
-  def getArmorProvided: Int
+  /** Get items equipped
+    *
+    * @return items equipped
+    */
+  def getItemsEquipped: Seq[Item] = {
+    items.filter(i => isEquipped(i))
+  }
 
-  def getRawDamageProvided: Int
+  def getArmorProvided: Int = {
+    val equipped: Seq[Item] = getItemsEquipped
+    equipped.foldLeft(0)((sum, i) => sum + i.getArmor)
+  }
 
-  def getAttackElementType: ElementType
+  def getRawDamageProvided: Int = {
+    getItemsEquipped.foldLeft(0)((sum, i) => sum + i.getDamage)
+  }
 
-  def getArmorElementTypes: Seq[ElementType]
+  def getAttackElementType: ElementType = {
+    if (getWeaponEquipped.nonEmpty) {
+      getWeaponEquipped.get.getElementType
+    } else {
+      ElementType.NONE
+    }
+  }
 
-  def getAttackStatusType: StatusType
+  def getArmorElementTypes: Seq[ElementType] = {
+    val armorPartsEquipped: Seq[Item] = items.filter(i => i.isArmor && isEquipped(i))
+    armorPartsEquipped.map(i => i.getElementType)
+  }
 
-  def getArmorStatusTypes: Seq[StatusType]
+  def getAttackStatusType: StatusType = {
+    if (getWeaponEquipped.nonEmpty) {
+      getWeaponEquipped.get.getStatusType
+    } else {
+      StatusType.NONE
+    }
+  }
 
-  def addItems(items: Item*): Unit
+  def getArmorStatusTypes: Seq[StatusType] = {
+    val armorPartsEquipped: Seq[Item] = items.filter(i => i.isArmor && isEquipped(i))
+    armorPartsEquipped.map(i => i.getStatusType)
+  }
 
-  def equipItem(itemID: Long): Unit
+  def addItems(items: Item*): Unit = {
+    this.items ++= items
+  }
 
-  def unEquipItem(itemId: Long): Unit
+  def equipItem(itemID: Long): Unit = {
+    findItem(itemID) match {
+      case Some(i) => equipItem(i)
+      case None =>
+    }
+  }
+
+  def unEquipItem(itemId: Long): Unit = {
+    findItem(itemId) match {
+      case Some(i) => equipped -= i
+      case None =>
+    }
+  }
+
+  private def equipItem(item: Item): Unit = {
+    equipped += item
+  }
 
   def canBeEquipped(item: Item): Boolean = {
     if (item.isEquipment) {
@@ -55,5 +156,4 @@ trait Inventory {
       }
     } else false
   }
-
 }

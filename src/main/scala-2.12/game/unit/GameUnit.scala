@@ -1,18 +1,27 @@
 package game.unit
 
 import game.Config
+import game.id.Identifiable
 import game.item.ElementType.ElementType
+import game.item.Inventory
 import game.item.StatusType.StatusType
-import game.item.{Inventory, InventoryModel}
 
-/**
+/** Game units are either hunters or monsters.
   * Created by nol on 05/11/17.
   */
-sealed trait GameUnit {
+sealed abstract class GameUnit(name: String) {
 
-  def getName: String
+  private var _name: String = name
 
-  def setName(newName: String): Unit
+  /** Get game unit name
+    *
+    * @return game unit name
+    */
+  def getName: String = _name
+
+  def setName(newName: String): Unit = {
+    _name = newName
+  }
 
   /**
     *
@@ -32,35 +41,36 @@ sealed trait GameUnit {
     */
   def getDamage: Int
 
-  /**
+  /** Get unit armor element types
     *
     * @return unit armor element types (may be empty)
     */
   def getArmorElementTypes: Seq[ElementType]
 
-  /**
+  /** Get armor status types
     *
     * @return unit armor status types (may be empty)
     */
   def getArmorStatusTypes: Seq[StatusType]
 
+  /** Get attack element type
+    *
+    * @return attack element type
+    */
   def getAttackElementType: ElementType
 
+  /** Get attack status type
+    *
+    * @return attack status type
+    */
   def getAttackStatusType: StatusType
 
 }
 
-case class Monster(name: String, life: Int, armor: Int, damage: Int, attackStatusType: StatusType, attackElementType: ElementType, armorStatusTypes: Seq[StatusType], armorElementTypes: Seq[ElementType]) extends GameUnit {
-  private var _name: String = name
+case class Monster(name: String, life: Int, armor: Int, damage: Int, attackStatusType: StatusType, attackElementType: ElementType, armorStatusTypes: Seq[StatusType], armorElementTypes: Seq[ElementType]) extends GameUnit(name) with Identifiable {
   private final val uniqueID = Monster.getNewUniqueMonsterID
 
-  def getUniqueID: Long = uniqueID
-
-  override def getName: String = _name
-
-  override def setName(newName: String): Unit = {
-    _name = newName
-  }
+  def getUniqueId: Long = uniqueID
 
   override def getLife: Int = life
 
@@ -91,21 +101,17 @@ object Monster {
 
 }
 
-case class Hunter(name: String, inventory: InventoryModel) extends GameUnit {
-
-  private var _name: String = name
+case class Hunter(name: String, inventory: Inventory) extends GameUnit(name) {
 
   def this(name: String) {
-    this(name, new InventoryModel)
+    this(name, new Inventory)
   }
 
+  /** Get hunter inventory
+    *
+    * @return hunter inventory
+    */
   def getInventory: Inventory = inventory
-
-  def getName: String = _name
-
-  def setName(newName: String): Unit = {
-    _name = newName
-  }
 
   def getLife: Int = Config.HUNTER_LIFE_MAX
 

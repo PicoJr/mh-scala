@@ -4,7 +4,7 @@ import game.item.ArmorPart.ArmorPart
 import game.item.ElementType.ElementType
 import game.util.Procedural
 
-/**
+/** Factory for procedural name generation
   * Created by nol on 17/11/17.
   */
 object NameFactory {

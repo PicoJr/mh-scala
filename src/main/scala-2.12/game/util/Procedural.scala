@@ -2,12 +2,12 @@ package game.util
 
 import scala.util.Random
 
-/**
+/** Procedural util functions
   * Created by nol on 17/11/17.
   */
 object Procedural {
 
-  /**
+  /** Pick random element from sequence
     *
     * @param seq elements to choose from
     * @tparam T any
@@ -17,7 +17,7 @@ object Procedural {
     seq.lift(Random.nextInt(seq.size))
   }
 
-  /**
+  /** Pick random element from elements
     *
     * @param elements to choose from
     * @tparam T any

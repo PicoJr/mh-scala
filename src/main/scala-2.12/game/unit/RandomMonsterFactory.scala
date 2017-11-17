@@ -11,9 +11,9 @@ import game.util.Procedural
   */
 object RandomMonsterFactory {
 
-  def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, Config.STATS_GROWTH, Config.PERCENTAGE_VARIATION)
+  private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, Config.STATS_GROWTH, Config.PERCENTAGE_VARIATION)
 
-  def generateName(level: Int): String = {
+  private def generateName(level: Int): String = {
     var name = "unnamed"
     if (level == Config.LEVEL_MIN) name = Procedural.pickRandom("gloupix", "trumf", "patkir").get
     if (level == (Config.LEVEL_MIN + 1)) name = Procedural.pickRandom("tulpor", "dackdack", "plossy").get
@@ -23,7 +23,7 @@ object RandomMonsterFactory {
     name
   }
 
-  def getRandomAttackStatusType(level: Int): StatusType = {
+  private def getRandomAttackStatusType(level: Int): StatusType = {
     var statusType = StatusType.NONE
     if (level >= Config.LEVEL_MIN + 2) {
       statusType = StatusType.getRandomStatusType
@@ -31,7 +31,7 @@ object RandomMonsterFactory {
     statusType
   }
 
-  def getRandomAttackElementType(level: Int): ElementType = {
+  private def getRandomAttackElementType(level: Int): ElementType = {
     var elementType = ElementType.NONE
     if (level >= Config.LEVEL_MIN + 3) {
       elementType = ElementType.getRandomElementType
@@ -39,7 +39,7 @@ object RandomMonsterFactory {
     elementType
   }
 
-  def getRandomArmorStatusTypes(level: Int): Seq[StatusType] = {
+  private def getRandomArmorStatusTypes(level: Int): Seq[StatusType] = {
     var statusTypes: Seq[StatusType] = Seq.empty
     if (level >= Config.LEVEL_MIN + 4) {
       statusTypes = statusTypes :+ StatusType.getRandomStatusType
