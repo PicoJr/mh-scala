@@ -16,6 +16,7 @@ class CommandParser(command: Command) {
       |  mh item (equip | unequip | show) <itemId>
       |  mh quest (ls | start <questId>)
       |  mh craft show <itemId>
+      |  mh craft new <itemId1> <itemId2>
       |  mh quit
       |  mh (-h | --help)
       |  mh --version
@@ -50,6 +51,9 @@ class CommandParser(command: Command) {
       } else if (opts.get("craft").asInstanceOf[Boolean]) {
         if (opts.get("show").asInstanceOf[Boolean]) {
           command.showCraft(gameState, opts.get("<itemId>").toString.toLong)
+        }
+        if (opts.get("new").asInstanceOf[Boolean]) {
+          command.craftItem(gameState, opts.get("<itemId1>").toString.toLong, opts.get("<itemId2>").toString.toLong)
         }
       } else if (opts.get("quest").asInstanceOf[Boolean]) {
         if (opts.get("start").asInstanceOf[Boolean]) {

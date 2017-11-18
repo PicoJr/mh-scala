@@ -2,7 +2,7 @@ package game.console
 
 import game.GameState
 import game.description.DescriptionFactory
-import game.item.Item
+import game.item.{Item, ItemType}
 import game.quest.QuestLogic
 
 /**
@@ -74,5 +74,19 @@ class ConsoleCommand extends Command {
 
   override def showCraft(gameState: GameState, itemId: Long): Unit = {
     tryActionOnItem(gameState, itemId, i => println(DescriptionFactory.description(gameState.getCrafts.getRecipesWith(i))))
+  }
+
+  override def craftItem(gameState: GameState, itemId1: Long, itemId2: Long): Unit = {
+    val optI1 = gameState.findItem(itemId1)
+    val optI2 = gameState.findItem(itemId2)
+    (optI1, optI2) match {
+      case (Some(i1), Some(i2)) =>
+        gameState.getCrafts.craftItemType(i1.getItemType, i2.getItemType) match {
+          case Some(result) =>
+            gameState.getHunter.getInventory.addItems(ItemType.createItem(result))
+          case None => println("no matching craft recipe found")
+        }
+      case _ => println(s"item with id $itemId1 or $itemId2 not found")
+    }
   }
 }

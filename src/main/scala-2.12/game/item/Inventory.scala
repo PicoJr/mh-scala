@@ -175,7 +175,20 @@ class Inventory {
     */
   def unEquipItem(itemId: Long): Unit = {
     findItem(itemId) match {
-      case Some(i) => equipped -= i
+      case Some(i) => equipped = equipped - i
+      case None =>
+    }
+  }
+
+  /** Remove and un-equip item with id itemId from inventory if any
+    *
+    * @param itemId of item to remove
+    */
+  def removeItem(itemId: Long): Unit = {
+    findItem(itemId) match {
+      case Some(_) =>
+        unEquipItem(itemId)
+        items = items.filterNot(i => i.getUniqueId == itemId)
       case None =>
     }
   }

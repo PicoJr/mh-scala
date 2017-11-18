@@ -25,6 +25,14 @@ trait Command {
     */
   def showCraft(gameState: GameState, itemId: Long): Unit
 
+  /** Craft item result of itemId1 and itemId2, add it to hunter inventory
+    *
+    * @param gameState containing items
+    * @param itemId1   1st item id
+    * @param itemId2   2nd item id
+    */
+  def craftItem(gameState: GameState, itemId1: Long, itemId2: Long): Unit
+
   /** Show quest info with id questId if any
     *
     * @param gameState containing quests
