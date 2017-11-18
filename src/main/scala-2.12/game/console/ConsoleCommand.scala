@@ -1,8 +1,9 @@
 package game.console
 
+import game.GameState
 import game.description.DescriptionFactory
 import game.item.Item
-import game.{GameState, QuestLogic}
+import game.quest.QuestLogic
 
 /**
   * Created by nol on 12/11/17.
@@ -68,8 +69,8 @@ class ConsoleCommand extends Command {
 
   override def startQuest(gameState: GameState, questId: Long): Unit = {
     gameState.findQuest(questId) match {
-      case Some(_) =>
-        val questResult = QuestLogic.processQuest(gameState, questId)
+      case Some(quest) =>
+        val questResult = QuestLogic.processQuestResult(gameState, quest)
         println(DescriptionFactory.description(questResult))
       case None => println(s"quest with id $questId not found")
     }
