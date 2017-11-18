@@ -2,7 +2,7 @@ package game.quest
 
 import game.Config
 import game.id.Identifiable
-import game.item.ItemType
+import game.item.{Item, ItemType}
 import game.unit.{Monster, RandomMonsterFactory}
 
 /** Rewards hunter with loot when monster is slain
@@ -17,7 +17,7 @@ class Quest(monster: Monster, loot: Seq[ItemType]) extends Identifiable {
 
   def getMonster: Monster = monster
 
-  def getLoot: Seq[ItemType] = loot
+  def getLoot: Seq[Item] = loot.map(i => ItemType.createItem(i))
 }
 
 object Quest {

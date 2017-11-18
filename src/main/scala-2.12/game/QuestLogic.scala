@@ -1,6 +1,6 @@
 package game
 
-import game.item.{ElementType, Item}
+import game.item.ElementType
 import game.quest.{Quest, QuestResult}
 import game.unit.{GameUnit, Hunter}
 
@@ -31,18 +31,11 @@ object QuestLogic {
     computeQuestResult(durationMaxHunter, durationMaxMonster, quest.getMaxDuration)
   }
 
-  private def processQuestResult(hunter: Hunter, quest: Quest, result: QuestResult): Unit = {
-    if (!result.isHunterDefeated && result.isMonsterSlain) {
-      val items = quest.getLoot.map(itemType => new Item(itemType))
-      hunter.getInventory.addItems(items: _*)
-    }
-  }
-
   def processQuest(gameState: GameState, questId: Long): QuestResult = {
     val hunter = gameState.getHunter
     val quest = gameState.findQuest(questId).get
     val questResult = computeQuestResult(hunter, quest)
-    processQuestResult(hunter, quest, questResult)
+    if (questResult.isSuccessful) hunter.getInventory.addItems(quest.getLoot: _*)
     questResult
   }
 
