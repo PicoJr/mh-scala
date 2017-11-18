@@ -54,10 +54,6 @@ class ConsoleCommand extends Command {
     tryActionOnItem(gameState, itemId, i => gameState.getHunter.getInventory.unEquipItem(i.getUniqueId))
   }
 
-  override def removeItem(gameState: GameState, itemId: Long): Unit = {
-    notImplementedYet()
-  }
-
   override def showItem(gameState: GameState, itemId: Long): Unit = {
     tryActionOnItem(gameState, itemId, i => println(DescriptionFactory.description(i)))
   }
@@ -74,10 +70,6 @@ class ConsoleCommand extends Command {
         println(DescriptionFactory.description(questResult))
       case None => println(s"quest with id $questId not found")
     }
-  }
-
-  private def notImplementedYet(): Unit = {
-    println("not implemented yet")
   }
 
   override def showCraft(gameState: GameState, itemId: Long): Unit = {
