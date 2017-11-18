@@ -10,7 +10,7 @@ import game.{GameState, QuestLogic}
 class ConsoleCommand extends Command {
 
   private def tryActionOnItem(gameState: GameState, itemId: Long, action: Item => Unit): Unit = {
-    gameState.getItem(itemId) match {
+    gameState.findItem(itemId) match {
       case Some(i) => action(i)
       case None => println(s"item with id $itemId not found")
     }
@@ -27,14 +27,14 @@ class ConsoleCommand extends Command {
   }
 
   override def showQuest(gameState: GameState, questId: Long): Unit = {
-    gameState.getQuest(questId) match {
+    gameState.findQuest(questId) match {
       case Some(q) => println(DescriptionFactory.description(q))
       case None => println(s"quest with id $questId not found")
     }
   }
 
   override def showMonster(gameState: GameState, monsterId: Long): Unit = {
-    gameState.getMonster(monsterId) match {
+    gameState.findMonster(monsterId) match {
       case Some(m) => println(DescriptionFactory.description(m))
       case None => println(s"monster with id $monsterId not found")
     }
@@ -67,7 +67,7 @@ class ConsoleCommand extends Command {
   }
 
   override def startQuest(gameState: GameState, questId: Long): Unit = {
-    gameState.getQuest(questId) match {
+    gameState.findQuest(questId) match {
       case Some(_) =>
         val questResult = QuestLogic.processQuest(gameState, questId)
         println(DescriptionFactory.description(questResult))

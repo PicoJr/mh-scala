@@ -40,7 +40,7 @@ object QuestLogic {
 
   def processQuest(gameState: GameState, questId: Long): QuestResult = {
     val hunter = gameState.getHunter
-    val quest = gameState.getQuest(questId).get
+    val quest = gameState.findQuest(questId).get
     val questResult = computeQuestResult(hunter, quest)
     processQuestResult(hunter, quest, questResult)
     questResult
