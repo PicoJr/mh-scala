@@ -1,6 +1,6 @@
 package game.unit
 
-import game.Config
+import game.config.ConfigLoader
 import game.id.Identifiable
 import game.item.ElementType.ElementType
 import game.item.Inventory
@@ -113,7 +113,7 @@ case class Hunter(name: String, inventory: Inventory) extends GameUnit(name) {
     */
   def getInventory: Inventory = inventory
 
-  def getLife: Int = Config.HUNTER_LIFE_MAX
+  def getLife: Int = Hunter.HUNTER_LIFE_MAX
 
   def getArmor: Int = getInventory.getArmorProvided
 
@@ -126,4 +126,10 @@ case class Hunter(name: String, inventory: Inventory) extends GameUnit(name) {
   def getAttackStatusType: StatusType = getInventory.getAttackStatusType
 
   def getArmorStatusTypes: Seq[StatusType] = getInventory.getArmorStatusTypes
+}
+
+object Hunter {
+  private final val config = ConfigLoader.loadConfig
+
+  final val HUNTER_LIFE_MAX: Int = config.getHunterLifeMax
 }

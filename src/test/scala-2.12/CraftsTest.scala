@@ -1,4 +1,4 @@
-import game.Config
+import game.config.ConfigLoader
 import game.item.craft.Crafts
 import org.scalatest.FlatSpec
 
@@ -7,10 +7,12 @@ import org.scalatest.FlatSpec
   */
 class CraftsTest extends FlatSpec {
 
+  private val config = ConfigLoader.loadConfig
+
   private val crafts = Crafts.generateCraftRecipes
 
   "Crafts" must "have materials for each level" in {
-    for (level <- Config.LEVEL_MIN to Config.LEVEL_MAX) {
+    for (level <- config.getLevelMin to config.getLevelMax) {
       assert(crafts.getMaterials(level).nonEmpty, s"level $level")
     }
   }

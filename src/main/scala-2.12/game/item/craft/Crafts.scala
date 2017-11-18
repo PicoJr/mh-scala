@@ -1,6 +1,6 @@
 package game.item.craft
 
-import game.Config
+import game.config.ConfigLoader
 import game.item.Classification.Classification
 import game.item._
 import game.util.Procedural
@@ -49,18 +49,20 @@ class Crafts private {
 
 object Crafts {
 
+  private final val config = ConfigLoader.loadConfig
+
   private def armorsClassificationsAt(level: Int): Seq[Classification] = {
     var classifications = Seq.empty[Classification]
-    if (level >= Config.LEVEL_MIN) {
+    if (level >= config.getLevelMin) {
       classifications ++= Seq(Classification.DAMAGE)
     }
-    if (level >= (Config.LEVEL_MIN + 1)) {
+    if (level >= (config.getLevelMin + 1)) {
       classifications ++= Seq(Classification.ELEMENT)
     }
-    if (level >= (Config.LEVEL_MIN + 2)) {
+    if (level >= (config.getLevelMin + 2)) {
       classifications ++= Seq(Classification.CHARM_SLOT)
     }
-    if (level >= (Config.LEVEL_MIN + 3)) {
+    if (level >= (config.getLevelMin + 3)) {
       classifications ++= Seq(Classification.STATUS)
     }
     classifications
@@ -68,16 +70,16 @@ object Crafts {
 
   private def weaponsClassificationsAt(level: Int): Seq[Classification] = {
     var classifications = Seq.empty[Classification]
-    if (level >= Config.LEVEL_MIN) {
+    if (level >= config.getLevelMin) {
       classifications ++= Seq(Classification.PROTECTION)
     }
-    if (level >= (Config.LEVEL_MIN + 1)) {
+    if (level >= (config.getLevelMin + 1)) {
       classifications ++= Seq(Classification.ELEMENT)
     }
-    if (level >= (Config.LEVEL_MIN + 2)) {
+    if (level >= (config.getLevelMin + 2)) {
       classifications ++= Seq(Classification.CHARM_SLOT)
     }
-    if (level >= (Config.LEVEL_MIN + 3)) {
+    if (level >= (config.getLevelMin + 3)) {
       classifications ++= Seq(Classification.STATUS)
     }
     classifications
@@ -85,13 +87,13 @@ object Crafts {
 
   private def charmsClassificationsAt(level: Int): Seq[Classification] = {
     var classifications = Seq.empty[Classification]
-    if (level >= Config.LEVEL_MIN) {
+    if (level >= config.getLevelMin) {
       classifications ++= Seq(Classification.DAMAGE, Classification.PROTECTION)
     }
-    if (level >= (Config.LEVEL_MIN + 1)) {
+    if (level >= (config.getLevelMin + 1)) {
       classifications ++= Seq(Classification.ELEMENT)
     }
-    if (level >= (Config.LEVEL_MIN + 2)) {
+    if (level >= (config.getLevelMin + 2)) {
       classifications ++= Seq(Classification.STATUS)
     }
     classifications
@@ -99,7 +101,7 @@ object Crafts {
 
   private def createWeapons(level: Int): Seq[ItemType] = {
     var weapons = Seq.empty[ItemType]
-    for (_ <- 1 to Config.WEAPONS_PER_LEVEL) {
+    for (_ <- 1 to config.getWeaponsPerLevel) {
       val classifications = weaponsClassificationsAt(level)
       weapons = weapons :+ RandomItemTypeFactory.createWeaponType(level, classifications: _*)
     }
@@ -108,7 +110,7 @@ object Crafts {
 
   private def createArmors(level: Int): Seq[ItemType] = {
     var armors = Seq.empty[ItemType]
-    for (_ <- 1 to Config.ARMORS_PER_LEVEL) {
+    for (_ <- 1 to config.getArmorsPerLevel) {
       val classifications = armorsClassificationsAt(level)
       // 4 parts -> 1 armor
       armors = armors :+ RandomItemTypeFactory.createArmorType(level, ArmorPart.HEAD, classifications: _*)
@@ -121,7 +123,7 @@ object Crafts {
 
   private def createCharms(level: Int): Seq[ItemType] = {
     var charms = Seq.empty[ItemType]
-    for (_ <- 1 to Config.CHARMS_PER_LEVEL) {
+    for (_ <- 1 to config.getCharmsPerLevel) {
       val classifications = charmsClassificationsAt(level)
       charms = charms :+ RandomItemTypeFactory.createCharmType(level, classifications: _*)
     }
@@ -134,23 +136,23 @@ object Crafts {
 
   private def createMaterials(level: Int): Seq[ItemType] = {
     var materials = Seq.empty[ItemType]
-    for (_ <- 1 to Config.MATERIALS_PER_LEVEL) {
+    for (_ <- 1 to config.getMaterialsPerLevel) {
       materials = materials :+ RandomItemTypeFactory.createMaterialType(level)
     }
     materials
   }
 
   def generateCraftRecipes: Crafts = {
-    val ITEM_LEVEL_MAX: Int = Config.LEVEL_MAX + 1
+    val ITEM_LEVEL_MAX: Int = config.getLevelMax + 1
     val crafts = new Crafts
     var itemTypes: Map[Int, Seq[ItemType]] = Map.empty
     var materials: Map[Int, Seq[ItemType]] = Map.empty
-    for (level <- Config.LEVEL_MIN to Config.LEVEL_MAX) {
+    for (level <- config.getLevelMin to config.getLevelMax) {
       itemTypes += (level -> createItemTypes(level))
       materials += (level -> createMaterials(level))
     }
     itemTypes += (ITEM_LEVEL_MAX -> createItemTypes(ITEM_LEVEL_MAX))
-    for (level <- (Config.LEVEL_MIN + 1) to ITEM_LEVEL_MAX) {
+    for (level <- (config.getLevelMin + 1) to ITEM_LEVEL_MAX) {
       for (result <- itemTypes(level)) {
         val itemTypePreviousLevel = Procedural.pickRandomFromSeq(itemTypes(level - 1)).get
         val materialPreviousLevel = Procedural.pickRandomFromSeq(materials(level - 1)).get

@@ -1,6 +1,6 @@
 package game.unit
 
-import game.Config
+import game.config.ConfigLoader
 import game.item.ElementType.ElementType
 import game.item.StatusType.StatusType
 import game.item.{ElementType, StatusType}
@@ -11,21 +11,23 @@ import game.util.Procedural
   */
 object RandomMonsterFactory {
 
-  private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, Config.STATS_GROWTH, Config.PERCENTAGE_VARIATION)
+  private final val config = ConfigLoader.loadConfig
+
+  private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, config.getStatsGrowth, config.getPercentageVariation)
 
   private def generateName(level: Int): String = {
     var name = "unnamed"
-    if (level == Config.LEVEL_MIN) name = Procedural.pickRandom("gloupix", "trumf", "patkir").get
-    if (level == (Config.LEVEL_MIN + 1)) name = Procedural.pickRandom("tulpor", "dackdack", "plossy").get
-    if (level == (Config.LEVEL_MIN + 2)) name = Procedural.pickRandom("grusk", "scoptr", "phyga").get
-    if (level == (Config.LEVEL_MIN + 3)) name = Procedural.pickRandom("acknack", "devian", "slendr").get
-    if (level >= (Config.LEVEL_MIN + 4)) name = Procedural.pickRandom("prolog", "sysmic", "cratOS").get
+    if (level == config.getLevelMin) name = Procedural.pickRandom("gloupix", "trumf", "patkir").get
+    if (level == (config.getLevelMin + 1)) name = Procedural.pickRandom("tulpor", "dackdack", "plossy").get
+    if (level == (config.getLevelMin + 2)) name = Procedural.pickRandom("grusk", "scoptr", "phyga").get
+    if (level == (config.getLevelMin + 3)) name = Procedural.pickRandom("acknack", "devian", "slendr").get
+    if (level >= (config.getLevelMin + 4)) name = Procedural.pickRandom("prolog", "sysmic", "cratOS").get
     name
   }
 
   private def getRandomAttackStatusType(level: Int): StatusType = {
     var statusType = StatusType.NONE
-    if (level >= Config.LEVEL_MIN + 2) {
+    if (level >= config.getLevelMin + 2) {
       statusType = StatusType.getRandomStatusType
     }
     statusType
@@ -33,7 +35,7 @@ object RandomMonsterFactory {
 
   private def getRandomAttackElementType(level: Int): ElementType = {
     var elementType = ElementType.NONE
-    if (level >= Config.LEVEL_MIN + 3) {
+    if (level >= config.getLevelMin + 3) {
       elementType = ElementType.getRandomElementType
     }
     elementType
@@ -41,7 +43,7 @@ object RandomMonsterFactory {
 
   private def getRandomArmorStatusTypes(level: Int): Seq[StatusType] = {
     var statusTypes: Seq[StatusType] = Seq.empty
-    if (level >= Config.LEVEL_MIN + 4) {
+    if (level >= config.getLevelMin + 4) {
       statusTypes = statusTypes :+ StatusType.getRandomStatusType
     }
     statusTypes
@@ -49,9 +51,9 @@ object RandomMonsterFactory {
 
   def generateMonster(level: Int): Monster = {
     val name = generateName(level)
-    val life = getRandomValue(level, Config.MONSTER_LIFE_BASE)
-    val armor = getRandomValue(level, Config.MONSTER_ARMOR_BASE)
-    val damage = getRandomValue(level, Config.MONSTER_DAMAGE_BASE)
+    val life = getRandomValue(level, config.getMonsterLifeBase)
+    val armor = getRandomValue(level, config.getMonsterArmorBase)
+    val damage = getRandomValue(level, config.getMonsterDamageBase)
     val attackStatusType = getRandomAttackStatusType(level)
     val attackElementType = getRandomAttackElementType(level)
     val armorStatusTypes = getRandomArmorStatusTypes(level)

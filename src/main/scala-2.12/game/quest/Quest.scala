@@ -1,6 +1,5 @@
 package game.quest
 
-import game.Config
 import game.id.Identifiable
 import game.item.{Item, ItemType}
 import game.unit.{Monster, RandomMonsterFactory}
@@ -12,8 +11,6 @@ class Quest(monster: Monster, loot: Seq[ItemType]) extends Identifiable {
   private final val uniqueID: Long = Quest.getNewUniqueQuestID
 
   def getUniqueId: Long = uniqueID
-
-  def getMaxDuration: Int = Config.QUEST_DURATION_MAX
 
   def getMonster: Monster = monster
 
