@@ -18,7 +18,7 @@ class Inventory {
     * @return item is equipped (false if not equipped or not in inventory)
     */
   def isEquipped(item: Item): Boolean = {
-    equipped.contains(item)
+    isEquipped(item.getUniqueId)
   }
 
   /** Test if item from inventory is equipped
@@ -27,10 +27,7 @@ class Inventory {
     * @return item is equipped (false if not equipped or not in inventory)
     */
   def isEquipped(itemId: Long): Boolean = {
-    findItem(itemId) match {
-      case Some(i) => isEquipped(i)
-      case None => false
-    }
+    equipped.exists(i => i.getUniqueId == itemId)
   }
 
   /** Get all items from inventory
@@ -94,8 +91,7 @@ class Inventory {
     * @return armor provided by equipped items
     */
   def getArmorProvided: Int = {
-    val equipped: Seq[Item] = getItemsEquipped
-    equipped.foldLeft(0)((sum, i) => sum + i.getArmor)
+    getItemsEquipped.foldLeft(0)((sum, i) => sum + i.getArmor)
   }
 
   /** Compute damage provided by equipped items from inventory
