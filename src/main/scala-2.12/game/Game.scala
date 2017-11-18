@@ -1,6 +1,6 @@
 package game
 
-import console.{CommandParser, ConsoleCommand}
+import game.console.{CommandParser, ConsoleCommand}
 
 /**
   * Created by nol on 04/11/17.

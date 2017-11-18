@@ -1,91 +1,67 @@
 package game.console
 
 import game.GameState
-import org.rogach.scallop.exceptions._
-import org.rogach.scallop.{ScallopConf, ScallopOption, Subcommand}
+import org.docopt.{Docopt, DocoptExitException}
 
 /**
-  * Created by nol on 11/11/17.
+  * Created by nol on 18/11/17.
   */
 class CommandParser(command: Command) {
 
+  private final val doc: String =
+    """ Monster Hunter
+      |Usage:
+      |  mh hunter show
+      |  mh item ls
+      |  mh item (equip | unequip | show) <itemId>
+      |  mh quest (ls | start <questId>)
+      |  mh craft show <itemId>
+      |  mh quit
+      |  mh (-h | --help)
+      |  mh --version
+      |Options:
+      |  -h --help    Show this screen.
+      |  --version    Show version
+    """.stripMargin
+
   def runCommand(args: Seq[String], gameState: GameState): Unit = {
+    val docopt = new Docopt(doc).withVersion("MH 1.0").withExit(false).withHelp(false)
     try {
-      val conf = new Conf(args)
-      conf.subcommands match {
-        case List(conf.hunter, conf.hunter.show) => command.showHunter(gameState)
-        case List(conf.hunter, conf.hunter.rename) => command.renameHunter(gameState, conf.hunter.rename.name.toOption.get)
-        case List(conf.craft, conf.craft.show) => command.showCraft(gameState, conf.craft.show.id.toOption.get)
-        case List(conf.item, conf.item.list) => command.listInventory(gameState)
-        case List(conf.item, conf.item.show) => command.showItem(gameState, conf.item.show.id.toOption.get)
-        case List(conf.item, conf.item.equip) => command.equipItem(gameState, conf.item.equip.id.toOption.get)
-        case List(conf.item, conf.item.unequip) => command.unEquipItem(gameState, conf.item.unequip.id.toOption.get)
-        case List(conf.quest, conf.quest.list) => command.listQuests(gameState)
-        case List(conf.quest, conf.quest.show) => command.showQuest(gameState, conf.quest.show.id.toOption.get)
-        case List(conf.quest, conf.quest.start) => command.startQuest(gameState, conf.quest.start.id.toOption.get)
-        case List(conf.quit) => println("quit")
-        case _ =>
+      val opts = docopt.parse(args: _*)
+      if (opts.get("--help").asInstanceOf[Boolean]) {
+        println(doc)
+      } else if (opts.get("hunter").asInstanceOf[Boolean]) {
+        if (opts.get("show").asInstanceOf[Boolean]) {
+          command.showHunter(gameState)
+        }
+      } else if (opts.get("item").asInstanceOf[Boolean]) {
+        if (opts.get("show").asInstanceOf[Boolean]) {
+          command.showItem(gameState, opts.get("<itemId>").toString.toLong)
+        }
+        if (opts.get("equip").asInstanceOf[Boolean]) {
+          command.equipItem(gameState, opts.get("<itemId>").toString.toLong)
+        }
+        if (opts.get("unequip").asInstanceOf[Boolean]) {
+          command.unEquipItem(gameState, opts.get("<itemId>").toString.toLong)
+        }
+        if (opts.get("ls").asInstanceOf[Boolean]) {
+          command.listInventory(gameState)
+        }
+      } else if (opts.get("craft").asInstanceOf[Boolean]) {
+        if (opts.get("show").asInstanceOf[Boolean]) {
+          command.showCraft(gameState, opts.get("<itemId>").toString.toLong)
+        }
+      } else if (opts.get("quest").asInstanceOf[Boolean]) {
+        if (opts.get("start").asInstanceOf[Boolean]) {
+          command.startQuest(gameState, opts.get("<questId>").toString.toLong)
+        }
+        if (opts.get("ls").asInstanceOf[Boolean]) {
+          command.listQuests(gameState)
+        }
       }
     } catch {
-      case ScallopException(message) => System.err.println(s"$message")
-    }
-  }
-
-  private class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
-    val hunter = new Subcommand("hunter", "h") {
-      val show = new Subcommand("show")
-      addSubcommand(show)
-      val rename = new Subcommand("rename") {
-        val name: ScallopOption[String] = trailArg[String]("newName")
-      }
-      addSubcommand(rename)
-    }
-    addSubcommand(hunter)
-    val item = new Subcommand("item", "i") {
-      val list = new Subcommand("ls")
-      addSubcommand(list)
-      val show = new Subcommand("show") {
-        val id: ScallopOption[Long] = trailArg[Long]("itemID")
-      }
-      addSubcommand(show)
-      val equip = new Subcommand("equip", "e") {
-        val id: ScallopOption[Long] = trailArg[Long]("itemID")
-      }
-      addSubcommand(equip)
-      val unequip = new Subcommand("unequip", "u") {
-        val id: ScallopOption[Long] = trailArg[Long]("itemID")
-      }
-      addSubcommand(unequip)
-    }
-    addSubcommand(item)
-    val craft = new Subcommand("craft", "c") {
-      val show = new Subcommand("show") {
-        val id: ScallopOption[Long] = trailArg[Long]("itemID")
-      }
-      addSubcommand(show)
-    }
-    addSubcommand(craft)
-    val quest = new Subcommand("quest") {
-      val list = new Subcommand("ls")
-      addSubcommand(list)
-      val show = new Subcommand("show") {
-        val id: ScallopOption[Long] = trailArg[Long]("questID")
-      }
-      addSubcommand(show)
-      val start = new Subcommand("start") {
-        val id: ScallopOption[Long] = trailArg[Long]("questID")
-      }
-      addSubcommand(start)
-    }
-    addSubcommand(quest)
-    val quit = new Subcommand("quit")
-    addSubcommand(quit)
-    verify()
-
-    override def onError(e: Throwable): Unit = e match {
-      case Help("") => builder.printHelp
-      case Help(subName) => builder.findSubbuilder(subName).get.printHelp()
-      case other => throw other
+      case _: DocoptExitException =>
+      case e: IllegalArgumentException => System.err.println(e.getMessage)
     }
   }
 
