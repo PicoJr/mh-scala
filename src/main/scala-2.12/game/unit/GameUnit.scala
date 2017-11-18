@@ -117,7 +117,7 @@ case class Hunter(name: String, inventory: Inventory) extends GameUnit(name) {
 
   def getArmor: Int = getInventory.getArmorProvided
 
-  def getDamage: Int = getInventory.getRawDamageProvided
+  def getDamage: Int = getInventory.getDamageProvided
 
   def getAttackElementType: ElementType = getInventory.getAttackElementType
 

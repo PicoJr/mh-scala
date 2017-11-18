@@ -21,7 +21,7 @@ class InventoryTest extends FlatSpec {
     val weapon = new Item(ItemType.createWeapon("weapon", Config.LEVEL_MIN, 42))
     inventory.addItems(weapon)
     inventory.equipItem(weapon.getUniqueId)
-    assert(inventory.getRawDamageProvided > 0)
+    assert(inventory.getDamageProvided > 0)
   }
 
 }

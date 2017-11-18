@@ -89,52 +89,90 @@ class Inventory {
     items.filter(i => isEquipped(i))
   }
 
+  /** Compute armor provided by equipped items from inventory
+    *
+    * @return armor provided by equipped items
+    */
   def getArmorProvided: Int = {
     val equipped: Seq[Item] = getItemsEquipped
     equipped.foldLeft(0)((sum, i) => sum + i.getArmor)
   }
 
-  def getRawDamageProvided: Int = {
+  /** Compute damage provided by equipped items from inventory
+    *
+    * @return damage provided by equipped items
+    */
+  def getDamageProvided: Int = {
     getItemsEquipped.foldLeft(0)((sum, i) => sum + i.getDamage)
   }
 
+  /** Get attack element type provided by equipped weapon if any
+    * if no weapon equipped => NONE
+    *
+    * @return attack element type provided by equipped weapon if any
+    */
   def getAttackElementType: ElementType = {
-    if (getWeaponEquipped.nonEmpty) {
-      getWeaponEquipped.get.getElementType
-    } else {
-      ElementType.NONE
+    getWeaponEquipped match {
+      case Some(w) => w.getElementType
+      case None => ElementType.NONE
     }
   }
 
+  /** Get armor element types provided by equipped armor parts if any
+    * if no armor parts equipped => Seq.empty
+    *
+    * @return armor element types provided by equipped armor parts
+    */
   def getArmorElementTypes: Seq[ElementType] = {
     val armorPartsEquipped: Seq[Item] = items.filter(i => i.isArmor && isEquipped(i))
     armorPartsEquipped.map(i => i.getElementType)
   }
 
+  /** Get attack status type provided by equipped weapon if any
+    * if no weapon equipped => NONE
+    *
+    * @return attack status type provided by equipped weapon if any
+    */
   def getAttackStatusType: StatusType = {
-    if (getWeaponEquipped.nonEmpty) {
-      getWeaponEquipped.get.getStatusType
-    } else {
-      StatusType.NONE
+    getWeaponEquipped match {
+      case Some(w) => w.getStatusType
+      case None => StatusType.NONE
     }
   }
 
+  /** Get armor status types resistances provided by equipped armor parts if any
+    * if no armor parts equipped => Seq.empty
+    *
+    * @return armor status types resistance provided by equipped armor parts
+    */
   def getArmorStatusTypes: Seq[StatusType] = {
     val armorPartsEquipped: Seq[Item] = items.filter(i => i.isArmor && isEquipped(i))
     armorPartsEquipped.map(i => i.getStatusType)
   }
 
+  /** Add items to inventory
+    *
+    * @param items to add
+    */
   def addItems(items: Item*): Unit = {
     this.items ++= items
   }
 
-  def equipItem(itemID: Long): Unit = {
-    findItem(itemID) match {
-      case Some(i) => equipItem(i)
+  /** Equip item with id itemId from inventory if any and possible
+    *
+    * @param itemId of item to equip
+    */
+  def equipItem(itemId: Long): Unit = {
+    findItem(itemId) match {
+      case Some(i) => if (canBeEquipped(i)) equipItem(i)
       case None =>
     }
   }
 
+  /** Un-equip item with id itemId if any
+    *
+    * @param itemId of item to un-equip
+    */
   def unEquipItem(itemId: Long): Unit = {
     findItem(itemId) match {
       case Some(i) => equipped -= i
@@ -146,6 +184,11 @@ class Inventory {
     equipped += item
   }
 
+  /** Check item can be equipped i.e. is an equipment and complies with slot requirements
+    *
+    * @param item to check
+    * @return item can be equipped
+    */
   def canBeEquipped(item: Item): Boolean = {
     if (item.isEquipment) {
       item.getSlotTypeRequirement match {
