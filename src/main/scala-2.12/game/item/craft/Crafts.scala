@@ -25,6 +25,8 @@ class Crafts private {
     matching
   }
 
+  def getRecipes: Map[(ItemType, ItemType), ItemType] = recipes
+
   def craftItemType(i1: ItemType, i2: ItemType): Option[ItemType] = {
     recipes.get((i1, i2))
   }
