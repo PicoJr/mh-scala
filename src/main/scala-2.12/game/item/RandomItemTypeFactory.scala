@@ -18,29 +18,21 @@ object RandomItemTypeFactory {
 
   def createWeaponType(level: Int, classifications: Classification*): ItemType = {
     val w = ItemType.createWeapon("weapon", level, getRandomValue(level, config.getDamageBase))
-    val weapon = decorateItemRandomly(level, w, classifications: _*)
-    weapon.setName(NameFactory.getRandomWeaponDescription(weapon).getDescription)
-    weapon
+    decorateItemRandomly(level, w, classifications: _*)
   }
 
   def createArmorType(level: Int, armorPart: ArmorPart, classifications: Classification*): ItemType = {
     val a = ItemType.createArmor("armor", level, getRandomValue(level, config.getArmorBase), armorPart)
-    val armor = decorateItemRandomly(level, a, classifications: _*)
-    armor.setName(NameFactory.getRandomArmorDescription(armor).getDescription)
-    armor
+    decorateItemRandomly(level, a, classifications: _*)
   }
 
   def createCharmType(level: Int, classifications: Classification*): ItemType = {
     val c = ItemType.createCharm("charm", level, getRandomSlot)
-    val charm = decorateItemRandomly(level, c, classifications: _*)
-    charm.setName(NameFactory.getRandomCharmDescription(charm).getDescription)
-    charm
+    decorateItemRandomly(level, c, classifications: _*)
   }
 
   def createMaterialType(level: Int): ItemType = {
-    val material = ItemType.createMaterial("material", level)
-    material.setName(NameFactory.getRandomMaterialDescription(material).getDescription)
-    material
+    ItemType.createMaterial("material", level)
   }
 
   private def decorateItemRandomly(level: Int, item: ItemType, classifications: Classification*): ItemType = {

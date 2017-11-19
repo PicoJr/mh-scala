@@ -2,6 +2,7 @@ package game.item.craft
 
 import game.config.ConfigLoader
 import game.item.Classification.Classification
+import game.item.NameFactory.DescriptionBuilder
 import game.item._
 import game.util.Procedural
 
@@ -130,36 +131,54 @@ object Crafts {
     charms
   }
 
-  private def createItemTypes(level: Int): Seq[ItemType] = {
-    createArmors(level) ++ createWeapons(level) ++ createCharms(level)
-  }
-
-  private def createMaterials(level: Int): Seq[ItemType] = {
-    var materials = Seq.empty[ItemType]
-    for (_ <- 1 to config.getMaterialsPerLevel) {
-      materials = materials :+ RandomItemTypeFactory.createMaterialType(level)
-    }
-    materials
-  }
-
   def generateCraftRecipes: Crafts = {
     val ITEM_LEVEL_MAX: Int = config.getLevelMax + 1
     val crafts = new Crafts
-    var itemTypes: Map[Int, Seq[ItemType]] = Map.empty
-    var materials: Map[Int, Seq[ItemType]] = Map.empty
-    for (level <- config.getLevelMin to config.getLevelMax) {
-      itemTypes += (level -> createItemTypes(level))
-      materials += (level -> createMaterials(level))
+    var weapons: Map[Int, Seq[ItemType]] = Map.empty
+    var armors: Map[Int, Seq[ItemType]] = Map.empty
+    var charms: Map[Int, Seq[ItemType]] = Map.empty
+    for (level <- config.getLevelMin to ITEM_LEVEL_MAX) {
+      weapons += (level -> createWeapons(level))
+      armors += (level -> createArmors(level))
+      charms += (level -> createCharms(level))
     }
-    itemTypes += (ITEM_LEVEL_MAX -> createItemTypes(ITEM_LEVEL_MAX))
+    val descriptionBuildersCache = new DescriptionBuildersCache
     for (level <- (config.getLevelMin + 1) to ITEM_LEVEL_MAX) {
-      for (result <- itemTypes(level)) {
-        val itemTypePreviousLevel = Procedural.pickRandomFromSeq(itemTypes(level - 1)).get
-        val materialPreviousLevel = Procedural.pickRandomFromSeq(materials(level - 1)).get
-        crafts.addRecipe(itemTypePreviousLevel, materialPreviousLevel, result)
+      for (values <- Seq(weapons, armors, charms)) {
+        for (itemResult <- values(level)) {
+          val itemPreviousLevel = Procedural.pickRandomFromSeq(values(level - 1)).get
+          val materialPreviousLevel = RandomItemTypeFactory.createMaterialType(level - 1)
+          val itemPreviousLevelDescription = descriptionBuildersCache.getItemTypeDescriptionBuilder(itemPreviousLevel)
+          val itemResultDescription = descriptionBuildersCache.getItemTypeDescriptionBuilder(itemResult)
+          val materialDescription = NameFactory.getRandomMaterialDescription(itemResultDescription)
+          itemPreviousLevel.setName(itemPreviousLevelDescription.getDescription)
+          materialPreviousLevel.setName(materialDescription.getDescription)
+          itemResult.setName(itemResultDescription.getDescription)
+          crafts.addRecipe(itemPreviousLevel, materialPreviousLevel, itemResult)
+        }
       }
     }
     crafts
+  }
+
+  private class DescriptionBuildersCache {
+    var descriptions: Map[ItemType, DescriptionBuilder] = Map.empty
+
+    def getItemTypeDescriptionBuilder(itemType: ItemType): DescriptionBuilder = {
+      descriptions.get(itemType) match {
+        case Some(d) => d
+        case None =>
+          if (itemType.isArmor) {
+            NameFactory.getRandomArmorDescription(itemType)
+          } else if (itemType.isWeapon) {
+            NameFactory.getRandomWeaponDescription(itemType)
+          } else if (itemType.isCharm) {
+            NameFactory.getRandomCharmDescription(itemType)
+          } else {
+            new DescriptionBuilder
+          }
+      }
+    }
   }
 
 }

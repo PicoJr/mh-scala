@@ -71,9 +71,14 @@ object NameFactory {
     description
   }
 
-  def getRandomMaterialDescription(material: ItemType): DescriptionBuilder = {
+  def getRandomMaterialDescription(resultDescription: DescriptionBuilder): DescriptionBuilder = {
     val description = new DescriptionBuilder
     description.addNature(pickRandomMaterialNature)
+    resultDescription.getElement match {
+      case Some(element) => description.addElement(element)
+      case None =>
+    }
+    if (resultDescription.getAdjectives.nonEmpty) description.addAdjective(Procedural.pickRandomFromSeq(resultDescription.getAdjectives).get)
     description
   }
 
