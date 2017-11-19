@@ -10,7 +10,7 @@ import game.unit.{GameUnit, Hunter}
   */
 object QuestLogic {
 
-  private final val config = ConfigLoader.loadConfig
+  private final val config = ConfigLoader.loadGameConfig
 
   private def computeDamageDealt(attacker: GameUnit, defender: GameUnit): Double = {
     val multiplier = defender.getArmorElementTypes.foldLeft(1.0)((m, e) => m * ElementType.multiplier(attacker.getAttackElementType, e))

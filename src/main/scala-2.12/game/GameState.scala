@@ -80,7 +80,7 @@ class GameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts) {
 
 object GameState {
 
-  private val config = ConfigLoader.loadConfig
+  private val config = ConfigLoader.loadGameConfig
 
   /** Procedurally create a new GameState.
     * may fail if config values are inconsistent.

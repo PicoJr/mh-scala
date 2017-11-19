@@ -11,7 +11,7 @@ import game.util.Procedural
   */
 object RandomMonsterFactory {
 
-  private final val config = ConfigLoader.loadConfig
+  private final val config = ConfigLoader.loadGameConfig
 
   private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, config.getStatsGrowth, config.getPercentageVariation)
 

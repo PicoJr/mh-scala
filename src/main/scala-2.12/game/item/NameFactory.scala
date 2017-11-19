@@ -1,5 +1,6 @@
 package game.item
 
+import game.config.ConfigLoader
 import game.item.ArmorPart.ArmorPart
 import game.item.ElementType.ElementType
 import game.util.Procedural
@@ -9,37 +10,39 @@ import game.util.Procedural
   */
 object NameFactory {
 
+  private val nameConfig = ConfigLoader.loadNameConfig
+
   private def pickRandomWeaponNature: String = {
-    Procedural.pickRandom("sword", "hammer", "axe").get
+    Procedural.pickRandomFromSeq(nameConfig.getWeaponNatures).get
   }
 
   private def pickRandomCharmNature: String = {
-    Procedural.pickRandom("talisman", "relic", "charm").get
+    Procedural.pickRandomFromSeq(nameConfig.getCharmNatures).get
   }
 
   private def pickRandomMaterialNature: String = {
-    Procedural.pickRandom("orb", "spike", "scale", "plate").get
+    Procedural.pickRandomFromSeq(nameConfig.getMaterialNatures).get
   }
 
   private def pickRandomProtectionAdjective: String = {
-    Procedural.pickRandom("shielded", "reinforced", "solid", "hardened").get
+    Procedural.pickRandomFromSeq(nameConfig.getProtectionAdjectives).get
   }
 
   private def pickRandomDamageAdjective: String = {
-    Procedural.pickRandom("bladed", "sharp").get
+    Procedural.pickRandomFromSeq(nameConfig.getDamageAdjectives).get
   }
 
   private def pickRandomElementAdjective(elementType: ElementType): String = elementType match {
-    case ElementType.FIRE => Procedural.pickRandom("burning").get
-    case ElementType.WATER => Procedural.pickRandom("flowing").get
+    case ElementType.FIRE => Procedural.pickRandomFromSeq(nameConfig.getFireAdjectives).get
+    case ElementType.WATER => Procedural.pickRandomFromSeq(nameConfig.getWaterAdjectives).get
     case _ => ""
   }
 
   private def getArmorNature(armorPart: ArmorPart): String = armorPart match {
-    case ArmorPart.HEAD => "helmet"
-    case ArmorPart.BODY => "plastron"
-    case ArmorPart.ARMS => "sleaves"
-    case ArmorPart.LEGS => "greaves"
+    case ArmorPart.HEAD => Procedural.pickRandomFromSeq(nameConfig.getArmorHeadNatures).get
+    case ArmorPart.BODY => Procedural.pickRandomFromSeq(nameConfig.getArmorBodyNatures).get
+    case ArmorPart.ARMS => Procedural.pickRandomFromSeq(nameConfig.getArmorArmsNatures).get
+    case ArmorPart.LEGS => Procedural.pickRandomFromSeq(nameConfig.getArmorLegsNatures).get
     case _ => ""
   }
 

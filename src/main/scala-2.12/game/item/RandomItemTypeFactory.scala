@@ -10,7 +10,7 @@ import game.util.Procedural
   */
 object RandomItemTypeFactory {
 
-  private val config = ConfigLoader.loadConfig
+  private val config = ConfigLoader.loadGameConfig
 
   private def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
 

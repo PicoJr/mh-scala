@@ -6,7 +6,7 @@ import org.scalatest.FlatSpec
   * Created by nol on 11/11/17.
   */
 class InventoryTest extends FlatSpec {
-  private val config = ConfigLoader.loadConfig
+  private val config = ConfigLoader.loadGameConfig
 
   "A new Inventory" must "be empty" in {
     assert(new Inventory().getItems.isEmpty)

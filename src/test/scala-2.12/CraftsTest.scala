@@ -7,7 +7,7 @@ import org.scalatest.FlatSpec
   */
 class CraftsTest extends FlatSpec {
 
-  private val config = ConfigLoader.loadConfig
+  private val config = ConfigLoader.loadGameConfig
 
   private val crafts = Crafts.generateCraftRecipes
 

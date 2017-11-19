@@ -7,7 +7,7 @@ import org.scalatest.FlatSpec
   */
 class ItemTest extends FlatSpec {
 
-  private val config = ConfigLoader.loadConfig
+  private val config = ConfigLoader.loadGameConfig
 
   "An Item ID" should "remain the same" in {
     val item = new Item(new ItemType("1", config.getLevelMin))

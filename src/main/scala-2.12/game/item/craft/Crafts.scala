@@ -52,7 +52,7 @@ class Crafts private {
 
 object Crafts {
 
-  private final val config = ConfigLoader.loadConfig
+  private final val config = ConfigLoader.loadGameConfig
 
   private def armorsClassificationsAt(level: Int): Seq[Classification] = {
     var classifications = Seq.empty[Classification]

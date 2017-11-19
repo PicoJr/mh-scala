@@ -129,7 +129,7 @@ case class Hunter(name: String, inventory: Inventory) extends GameUnit(name) {
 }
 
 object Hunter {
-  private final val config = ConfigLoader.loadConfig
+  private final val config = ConfigLoader.loadGameConfig
 
   final val HUNTER_LIFE_MAX: Int = config.getHunterLifeMax
 }
