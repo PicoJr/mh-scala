@@ -136,9 +136,7 @@ object CraftPrototype {
   case class CraftAtLevel(nextLevel: Int, crafts: Crafts, categories: Seq[CategoryBuilder])
 
   def addCraftAtLevel(craftAtLevel: CraftAtLevel): CraftAtLevel = {
-    def createRecipe(craftAtLevel: CraftAtLevel, category: CategoryBuilder, resultCategory: CategoryBuilder): Unit = {
-      val itemType = createItemType(category, craftAtLevel.nextLevel - 1)
-      itemType.setName(createDescription(category).getDescription)
+    def createRecipe(craftAtLevel: CraftAtLevel, itemType: ItemType, category: CategoryBuilder, resultCategory: CategoryBuilder): Unit = {
       val result = createItemType(category, craftAtLevel.nextLevel)
       result.setName(createDescription(resultCategory).getDescription)
       val material = createMaterial(resultCategory, craftAtLevel.nextLevel - 1)
@@ -156,27 +154,33 @@ object CraftPrototype {
       CraftAtLevel(config.getLevelMin + 1, new Crafts, categories)
     } else if (craftAtLevel.nextLevel == config.getLevelMin + 1) {
       for (category <- craftAtLevel.categories) {
+        val itemType = createItemType(category, craftAtLevel.nextLevel - 1)
+        itemType.setName(createDescription(category).getDescription)
         for (elementCategory <- ElementType.values) {
           val resultCategory = category.copy.addElementCategory(elementCategory)
-          createRecipe(craftAtLevel, category, resultCategory)
+          createRecipe(craftAtLevel, itemType, category, resultCategory)
           categories = categories :+ resultCategory
         }
       }
       CraftAtLevel(craftAtLevel.nextLevel + 1, craftAtLevel.crafts, categories)
     } else if (craftAtLevel.nextLevel == config.getLevelMin + 2) {
       for (category <- craftAtLevel.categories) {
+        val itemType = createItemType(category, craftAtLevel.nextLevel - 1)
+        itemType.setName(createDescription(category).getDescription)
         for (statusCategory <- StatusType.values) {
           val resultCategory = category.copy.addStatusCategory(statusCategory)
-          createRecipe(craftAtLevel, category, resultCategory)
+          createRecipe(craftAtLevel, itemType, category, resultCategory)
           categories = categories :+ resultCategory
         }
       }
       CraftAtLevel(craftAtLevel.nextLevel + 1, craftAtLevel.crafts, categories)
     } else if (craftAtLevel.nextLevel == config.getLevelMin + 3) {
       for (category <- craftAtLevel.categories) {
+        val itemType = createItemType(category, craftAtLevel.nextLevel - 1)
+        itemType.setName(createDescription(category).getDescription)
         for (bonusCategory <- BonusCategory.values) {
           val resultCategory = category.copy.addBonusCategory(bonusCategory)
-          createRecipe(craftAtLevel, category, resultCategory)
+          createRecipe(craftAtLevel, itemType, category, resultCategory)
           categories = categories :+ resultCategory
         }
       }
