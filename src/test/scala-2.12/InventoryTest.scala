@@ -20,7 +20,7 @@ class InventoryTest extends FlatSpec {
 
   "Equipped items" should "be detected as equipped" in {
     val inventory = new Inventory
-    val item = ItemType.createItem(ItemType.createWeapon("material", config.getLevelMin, 42))
+    val item = ItemType.createItem(ItemType.createWeapon(config.getLevelMin, 42))
     assert(!inventory.isEquipped(item))
     inventory.addItems(item)
     inventory.equipItem(item.getUniqueId)
@@ -29,7 +29,7 @@ class InventoryTest extends FlatSpec {
 
   it should "provide damage when a weapon is equipped" in {
     val inventory = new Inventory
-    val weapon = new Item(ItemType.createWeapon("weapon", config.getLevelMin, 42))
+    val weapon = new Item(ItemType.createWeapon(config.getLevelMin, 42))
     inventory.addItems(weapon)
     inventory.equipItem(weapon.getUniqueId)
     assert(inventory.getDamageProvided > 0)
@@ -37,7 +37,7 @@ class InventoryTest extends FlatSpec {
 
   it should "provide armor when an armor is equipped" in {
     val inventory = new Inventory
-    val armor = new Item(ItemType.createArmor("armor", config.getLevelMin, 42, ArmorPart.HEAD))
+    val armor = new Item(ItemType.createArmor(config.getLevelMin, 42, ArmorPart.HEAD))
     inventory.addItems(armor)
     inventory.equipItem(armor.getUniqueId)
     assert(inventory.getArmorProvided > 0)

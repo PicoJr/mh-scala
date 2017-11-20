@@ -9,7 +9,7 @@ import game.util.Procedural
 /** Holds all craft recipes for all item types.
   * Created by nol on 14/11/17.
   */
-class Crafts private {
+class Crafts {
   private var recipes: Map[(ItemType, ItemType), ItemType] = Map.empty
 
   private def filterIngredients(p: ItemType => Boolean): Seq[ItemType] = {

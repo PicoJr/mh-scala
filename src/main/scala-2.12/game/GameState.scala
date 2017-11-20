@@ -98,7 +98,7 @@ object GameState {
 
   private def createHunter: Hunter = {
     val hunter = new Hunter("unnamed")
-    val weapon = ItemType.createItem(ItemType.createWeapon("fists", config.getLevelMin, 500))
+    val weapon = ItemType.createItem(ItemType.createWeapon(config.getLevelMin, 500))
     hunter.getInventory.addItems(weapon)
     hunter.getInventory.equipItem(weapon.getUniqueId)
     hunter

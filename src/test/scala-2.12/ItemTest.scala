@@ -26,17 +26,17 @@ class ItemTest extends FlatSpec {
   }
 
   "A weapon" should "be a weapon" in {
-    assert(ItemType.createWeapon("w", 42, config.getLevelMin).isWeapon)
+    assert(ItemType.createWeapon(42, config.getLevelMin).isWeapon)
   }
 
   "An armor" should "be an armor" in {
-    val armor = ItemType.createArmor("a", config.getLevelMin, 42, ArmorPart.HEAD)
+    val armor = ItemType.createArmor(config.getLevelMin, 42, ArmorPart.HEAD)
     assert(armor.isArmor)
     assert(armor.isArmorPartRequired(ArmorPart.HEAD))
   }
 
   "A charm" should "be a charm" in {
-    assert(ItemType.createCharm("c", config.getLevelMin, 42).isCharm)
+    assert(ItemType.createCharm(config.getLevelMin, 42).isCharm)
   }
 
   "A random weapon" should "be a weapon" in {

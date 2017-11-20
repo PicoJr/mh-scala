@@ -17,17 +17,17 @@ object RandomItemTypeFactory {
   private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, config.getStatsGrowth, config.getPercentageVariation)
 
   def createWeaponType(level: Int, classifications: Classification*): ItemType = {
-    val w = ItemType.createWeapon("weapon", level, getRandomValue(level, config.getDamageBase))
+    val w = ItemType.createWeapon(level, getRandomValue(level, config.getDamageBase))
     decorateItemRandomly(level, w, classifications: _*)
   }
 
   def createArmorType(level: Int, armorPart: ArmorPart, classifications: Classification*): ItemType = {
-    val a = ItemType.createArmor("armor", level, getRandomValue(level, config.getArmorBase), armorPart)
+    val a = ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), armorPart)
     decorateItemRandomly(level, a, classifications: _*)
   }
 
   def createCharmType(level: Int, classifications: Classification*): ItemType = {
-    val c = ItemType.createCharm("charm", level, getRandomSlot)
+    val c = ItemType.createCharm(level, getRandomSlot)
     decorateItemRandomly(level, c, classifications: _*)
   }
 

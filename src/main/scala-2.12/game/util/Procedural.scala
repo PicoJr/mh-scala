@@ -17,6 +17,10 @@ object Procedural {
     seq.lift(Random.nextInt(seq.size))
   }
 
+  def takeRandomFromSeq[T](seq: Seq[T], n: Int): Seq[T] = {
+    Random.shuffle(seq).take(n)
+  }
+
   /** Pick random element from elements
     *
     * @param elements to choose from

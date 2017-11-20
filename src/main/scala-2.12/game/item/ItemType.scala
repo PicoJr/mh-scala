@@ -25,6 +25,11 @@ class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, ar
     this(name, level, 0, StatusType.NONE, 0, INVENTORY_SLOT(), Set.empty, ElementType.NONE, 0)
   }
 
+  def this(level: Int) {
+    this("unnamed", level, 0, StatusType.NONE, 0, INVENTORY_SLOT(), Set.empty, ElementType.NONE, 0)
+  }
+
+
   /** Get level
     *
     * @return level
@@ -213,36 +218,33 @@ object ItemType {
 
   /** Create weapon
     *
-    * @param name   of weapon
     * @param level  of weapon
     * @param damage provided
     * @return weapon s.t. weapon.isWeapon
     */
-  def createWeapon(name: String, level: Int, damage: Int): ItemType = {
-    Damage(Equipment(new ItemType(name, level), WEAPON_SLOT()), damage)
+  def createWeapon(level: Int, damage: Int): ItemType = {
+    Damage(Equipment(new ItemType(level), WEAPON_SLOT()), damage)
   }
 
   /** Create armor
     *
-    * @param name      of armor
     * @param level     of armor >= 0
     * @param armor     provided >= 0
     * @param armorPart of armor
     * @return armor s.t. armor.isArmor
     */
-  def createArmor(name: String, level: Int, armor: Int, armorPart: ArmorPart): ItemType = {
-    Protection(Equipment(new ItemType(name, level), ARMOR_SLOT(armorPart)), armor)
+  def createArmor(level: Int, armor: Int, armorPart: ArmorPart): ItemType = {
+    Protection(Equipment(new ItemType(level), ARMOR_SLOT(armorPart)), armor)
   }
 
   /** Create Charm
     *
-    * @param name          of charm
     * @param level         of charm >= 0
     * @param slotsRequired by charm >= 1
     * @return charm s.t. charm.isCharm
     */
-  def createCharm(name: String, level: Int, slotsRequired: Int): ItemType = {
-    Equipment(new ItemType(name, level), CHARM_SLOT(slotsRequired))
+  def createCharm(level: Int, slotsRequired: Int): ItemType = {
+    Equipment(new ItemType(level), CHARM_SLOT(slotsRequired))
   }
 
   /** Create Material
