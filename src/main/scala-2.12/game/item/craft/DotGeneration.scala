@@ -35,10 +35,6 @@ object DotGeneration extends App {
       recipe match {
         case ((i1, i2), result) =>
           if (p(i1, i2, result)) {
-            /*
-            g = g + LDiEdge(i1.getName + "[" + i1.getLevel + "]", result.getName + "[" + result.getLevel + "]")(result.getLevel)
-            g = g + LDiEdge(i2.getName + "[" + i2.getLevel + "]", result.getName + "[" + result.getLevel + "]")(result.getLevel)
-            */
             val i1Name = i1.getName + "[" + i1.getLevel + "]"
             val i2Name = i2.getName + "[" + i2.getLevel + "]"
             val resultName = result.getName + "[" + result.getLevel + "]"
