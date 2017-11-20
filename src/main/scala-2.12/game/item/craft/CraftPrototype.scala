@@ -2,7 +2,6 @@ package game.item.craft
 
 import game.config.ConfigLoader
 import game.item.ElementType.ElementType
-import game.item.NameFactory.DescriptionBuilder
 import game.item.StatusType.StatusType
 import game.item._
 import game.item.craft.CraftPrototype.BonusCategory.BonusCategory

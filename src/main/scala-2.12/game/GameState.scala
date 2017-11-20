@@ -1,7 +1,7 @@
 package game
 
 import game.config.ConfigLoader
-import game.item.craft.Crafts
+import game.item.craft.{CraftPrototype, Crafts}
 import game.item.{Item, ItemType}
 import game.quest.Quest
 import game.unit.{Hunter, Monster}
@@ -89,9 +89,9 @@ object GameState {
     */
   def createNewGameState: GameState = {
     val hunter = createHunter
-    val crafts = Crafts.generateCraftRecipes
+    val crafts = CraftPrototype.generateCraft
     val quests = createQuests(crafts)
-    val itemTypesFirstLevel = crafts.getNonMaterial(config.getLevelMin)
+    val itemTypesFirstLevel = crafts.getNonMaterial(config.getLevelMin).distinct
     hunter.getInventory.addItems(itemTypesFirstLevel.map(i => ItemType.createItem(i)): _*)
     new GameState(hunter, quests, crafts)
   }
@@ -106,10 +106,10 @@ object GameState {
 
   private def createQuests(crafts: Crafts): Seq[Quest] = {
     var quests: Seq[Quest] = Seq.empty
-    for (level <- config.getLevelMin to config.getLevelMax) {
+    for (level <- config.getLevelMin until config.getLevelMax) {
       val lootSizeAtLevel: Int = crafts.getMaterials(level).size
       val questsAtLevel: Int = Math.min(lootSizeAtLevel, config.getQuestsPerLevel)
-      assert(questsAtLevel > 0)
+      assert(questsAtLevel > 0, level)
       val lootPerQuest: Int = lootSizeAtLevel / questsAtLevel
       assert(lootPerQuest >= 1)
       for (q <- 0 until questsAtLevel) {

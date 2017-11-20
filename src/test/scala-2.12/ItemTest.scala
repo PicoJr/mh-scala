@@ -39,20 +39,4 @@ class ItemTest extends FlatSpec {
     assert(ItemType.createCharm(config.getLevelMin, 42).isCharm)
   }
 
-  "A random weapon" should "be a weapon" in {
-    assert(RandomItemTypeFactory.createWeaponType(config.getLevelMin).isWeapon)
-  }
-
-  "A random armor" should "be an armor" in {
-    assert(RandomItemTypeFactory.createArmorType(config.getLevelMin, ArmorPart.HEAD).isArmor)
-  }
-
-  "A random charm" should "be a charm" in {
-    assert(RandomItemTypeFactory.createCharmType(config.getLevelMin).isCharm)
-  }
-
-  "A random material" should "be a material" in {
-    assert(RandomItemTypeFactory.createMaterialType(config.getLevelMin).isMaterial)
-  }
-
 }
