@@ -2,7 +2,7 @@ package game.console
 
 import game.GameState
 import game.description.DescriptionFactory
-import game.item.{Item, ItemType}
+import game.item.Item
 import game.quest.QuestLogic
 
 /**
@@ -83,7 +83,7 @@ class ConsoleCommand extends Command {
       case (Some(i1), Some(i2)) =>
         gameState.getCrafts.craftItemType(i1.getItemType, i2.getItemType) match {
           case Some(result) =>
-            gameState.getHunter.getInventory.addItems(ItemType.createItem(result))
+            gameState.getHunter.getInventory.addItems(Item.createItem(result))
           case None => println("no matching craft recipe found")
         }
       case _ => println(s"item with id $itemId1 or $itemId2 not found")

@@ -22,7 +22,7 @@ class ItemTest extends FlatSpec {
 
   "An item" should "be seen as an ItemType instance" in {
     val itemType = new ItemType("1", config.getLevelMin)
-    assert(ItemType.createItem(itemType).isItemType(itemType))
+    assert(Item.createItem(itemType).isItemType(itemType))
   }
 
   "A weapon" should "be a weapon" in {

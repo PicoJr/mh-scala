@@ -14,7 +14,7 @@ class Quest(monster: Monster, loot: Seq[ItemType]) extends Identifiable {
 
   def getMonster: Monster = monster
 
-  def getLoot: Seq[Item] = loot.map(i => ItemType.createItem(i))
+  def getLoot: Seq[Item] = loot.map(i => Item.createItem(i))
 }
 
 object Quest {

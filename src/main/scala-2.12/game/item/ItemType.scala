@@ -207,15 +207,6 @@ object ItemType {
 
   private var itemID: Long = 0
 
-  /** Create item from itemType
-    *
-    * @param itemType of item
-    * @return item from itemType
-    */
-  def createItem(itemType: ItemType): Item = {
-    new Item(itemType)
-  }
-
   /** Create weapon
     *
     * @param level  of weapon

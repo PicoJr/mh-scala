@@ -28,3 +28,15 @@ class Item(itemType: ItemType)
 
   def getUniqueId: Long = uniqueID
 }
+
+object Item {
+
+  /** Create item from itemType
+    *
+    * @param itemType of item
+    * @return item from itemType
+    */
+  def createItem(itemType: ItemType): Item = {
+    new Item(itemType)
+  }
+}

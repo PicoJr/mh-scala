@@ -20,7 +20,7 @@ class InventoryTest extends FlatSpec {
 
   "Equipped items" should "be detected as equipped" in {
     val inventory = new Inventory
-    val item = ItemType.createItem(ItemType.createWeapon(config.getLevelMin, 42))
+    val item = Item.createItem(ItemType.createWeapon(config.getLevelMin, 42))
     assert(!inventory.isEquipped(item))
     inventory.addItems(item)
     inventory.equipItem(item.getUniqueId)

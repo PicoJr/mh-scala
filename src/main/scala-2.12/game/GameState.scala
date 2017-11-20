@@ -92,13 +92,13 @@ object GameState {
     val crafts = CraftPrototype.generateCraft
     val quests = createQuests(crafts)
     val itemTypesFirstLevel = crafts.getNonMaterial(config.getLevelMin).distinct
-    hunter.getInventory.addItems(itemTypesFirstLevel.map(i => ItemType.createItem(i)): _*)
+    hunter.getInventory.addItems(itemTypesFirstLevel.map(i => Item.createItem(i)): _*)
     new GameState(hunter, quests, crafts)
   }
 
   private def createHunter: Hunter = {
     val hunter = new Hunter("unnamed")
-    val weapon = ItemType.createItem(ItemType.createWeapon(config.getLevelMin, 500))
+    val weapon = Item.createItem(ItemType.createWeapon(config.getLevelMin, 500))
     hunter.getInventory.addItems(weapon)
     hunter.getInventory.equipItem(weapon.getUniqueId)
     hunter
