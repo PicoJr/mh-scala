@@ -9,7 +9,7 @@ class Item(itemType: ItemType)
   extends ItemType(itemType.getName, itemType.getLevel, itemType.getDamage, itemType.getStatusType, itemType.getArmor, itemType.getSlotTypeRequirement, itemType.getClassifications, itemType.getElementType, itemType.getCharmSlotsProvided)
     with Identifiable {
 
-  private final val uniqueID = ItemType.getNewUniqueItemID
+  private final val uniqueID = Item.getNewUniqueItemID
 
   /** Get item type
     *
@@ -31,6 +31,8 @@ class Item(itemType: ItemType)
 
 object Item {
 
+  private var itemID: Long = 0
+
   /** Create item from itemType
     *
     * @param itemType of item
@@ -38,5 +40,15 @@ object Item {
     */
   def createItem(itemType: ItemType): Item = {
     new Item(itemType)
+  }
+
+  /** Get new unique id
+    * first id is 0
+    *
+    * @return new unique id, >= 0, increasing
+    */
+  def getNewUniqueItemID: Long = {
+    itemID += 1
+    itemID
   }
 }

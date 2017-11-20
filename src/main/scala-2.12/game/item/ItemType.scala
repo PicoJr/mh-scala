@@ -205,8 +205,6 @@ class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, ar
 
 object ItemType {
 
-  private var itemID: Long = 0
-
   /** Create weapon
     *
     * @param level  of weapon
@@ -248,15 +246,6 @@ object ItemType {
     Material(new ItemType(name, level: Int))
   }
 
-  /** Get new unique id
-    * first id is 0
-    *
-    * @return new unique id, >= 0, increasing
-    */
-  def getNewUniqueItemID: Long = {
-    itemID += 1
-    itemID
-  }
 
 }
 
