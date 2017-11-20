@@ -137,7 +137,7 @@ object CraftPrototype {
 
   def addCraftAtLevel(craftAtLevel: CraftAtLevel): CraftAtLevel = {
     def createRecipe(craftAtLevel: CraftAtLevel, itemType: ItemType, category: CategoryBuilder, resultCategory: CategoryBuilder): Unit = {
-      val result = createItemType(category, craftAtLevel.nextLevel)
+      val result = createItemType(resultCategory, craftAtLevel.nextLevel)
       result.setName(createDescription(resultCategory).getDescription)
       val material = createMaterial(resultCategory, craftAtLevel.nextLevel - 1)
       val resultDescription = createDescription(resultCategory)
