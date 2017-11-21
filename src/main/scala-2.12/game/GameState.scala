@@ -107,13 +107,14 @@ object GameState {
   private def createQuests(crafts: Crafts): Seq[Quest] = {
     var quests: Seq[Quest] = Seq.empty
     for (level <- config.getLevelMin until config.getLevelMax) {
-      val lootSizeAtLevel: Int = crafts.getMaterials(level).size
+      val lootAtLevel = crafts.getMaterials(level).distinct
+      val lootSizeAtLevel: Int = lootAtLevel.size
       val questsAtLevel: Int = Math.min(lootSizeAtLevel, config.getQuestsPerLevel)
       assert(questsAtLevel > 0, level)
       val lootPerQuest: Int = lootSizeAtLevel / questsAtLevel
       assert(lootPerQuest >= 1)
       for (q <- 0 until questsAtLevel) {
-        val loot = crafts.getMaterials(level).slice(q * lootPerQuest, q * lootPerQuest + lootPerQuest)
+        val loot = lootAtLevel.slice(q * lootPerQuest, q * lootPerQuest + lootPerQuest)
         quests = quests :+ Quest.createQuest(level, loot)
       }
     }

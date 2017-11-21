@@ -4,8 +4,8 @@ import game.config.ConfigLoader
 import game.item.ElementType.ElementType
 import game.item.StatusType.StatusType
 import game.item._
-import game.item.craft.CraftPrototype.BonusCategory.BonusCategory
-import game.item.craft.CraftPrototype.NatureCategory.NatureCategory
+import game.item.craft.CraftPrototype.BonusType.BonusType
+import game.item.craft.CraftPrototype.NatureType.NatureType
 import game.util.Procedural
 
 /**
@@ -19,69 +19,69 @@ object CraftPrototype {
 
   private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, config.getStatsGrowth, config.getPercentageVariation)
 
-  object NatureCategory extends Enumeration {
-    type NatureCategory = Value
+  object NatureType extends Enumeration {
+    type NatureType = Value
     val WEAPON, HELMET, PLASTRON, GREAVE, SLEEVE, CHARM = Value
   }
 
-  object BonusCategory extends Enumeration {
-    type BonusCategory = Value
+  object BonusType extends Enumeration {
+    type BonusType = Value
     val ARMOR, DAMAGE, NONE = Value
   }
 
   class CategoryBuilder {
-    private var natureCategory: Option[NatureCategory] = Option.empty
-    private var elementCategory: Option[ElementType] = Option.empty
-    private var statusCategory: Option[StatusType] = Option.empty
-    private var bonusCategory: Option[BonusCategory] = Option.empty
+    private var natureType: Option[NatureType] = Option.empty
+    private var elementType: Option[ElementType] = Option.empty
+    private var statusType: Option[StatusType] = Option.empty
+    private var bonusType: Option[BonusType] = Option.empty
 
 
-    def getNatureCategory: Option[NatureCategory] = natureCategory
+    def getNatureCategory: Option[NatureType] = natureType
 
-    def getElementCategory: Option[ElementType] = elementCategory
+    def getElementCategory: Option[ElementType] = elementType
 
-    def getStatusCategory: Option[StatusType] = statusCategory
+    def getStatusCategory: Option[StatusType] = statusType
 
-    def getBonusCategory: Option[BonusCategory] = bonusCategory
+    def getBonusCategory: Option[BonusType] = bonusType
 
-    def addNatureCategory(natureCategory: NatureCategory): CategoryBuilder = {
-      this.natureCategory = Some(natureCategory)
+    def addNatureCategory(natureCategory: NatureType): CategoryBuilder = {
+      this.natureType = Some(natureCategory)
       this
     }
 
     def addElementCategory(elementCategory: ElementType): CategoryBuilder = {
-      this.elementCategory = Some(elementCategory)
+      this.elementType = Some(elementCategory)
       this
     }
 
     def addStatusCategory(statusCategory: StatusType): CategoryBuilder = {
-      this.statusCategory = Some(statusCategory)
+      this.statusType = Some(statusCategory)
       this
     }
 
-    def addBonusCategory(bonusCategory: BonusCategory): CategoryBuilder = {
-      this.bonusCategory = Some(bonusCategory)
+    def addBonusCategory(bonusCategory: BonusType): CategoryBuilder = {
+      this.bonusType = Some(bonusCategory)
       this
     }
 
     def copy: CategoryBuilder = {
       val copy = new CategoryBuilder
-      if (natureCategory.nonEmpty) copy.addNatureCategory(natureCategory.get)
-      if (elementCategory.nonEmpty) copy.addElementCategory(elementCategory.get)
-      if (statusCategory.nonEmpty) copy.addStatusCategory(statusCategory.get)
-      if (bonusCategory.nonEmpty) copy.addBonusCategory(bonusCategory.get)
+      if (natureType.nonEmpty) copy.addNatureCategory(natureType.get)
+      if (elementType.nonEmpty) copy.addElementCategory(elementType.get)
+      if (statusType.nonEmpty) copy.addStatusCategory(statusType.get)
+      if (bonusType.nonEmpty) copy.addBonusCategory(bonusType.get)
       copy
     }
   }
 
   def createItemType(categoryBuilder: CategoryBuilder, level: Int): ItemType = {
-    var itemType = categoryBuilder.getNatureCategory.getOrElse(NatureCategory.WEAPON) match {
-      case NatureCategory.WEAPON => ItemType.createWeapon(level, getRandomValue(level, config.getDamageBase))
-      case NatureCategory.CHARM => ItemType.createCharm(level, getRandomSlot)
-      case NatureCategory.HELMET => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.HEAD)
-      case NatureCategory.PLASTRON => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.BODY)
-      case NatureCategory.SLEEVE => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.ARMS)
-      case NatureCategory.GREAVE => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.LEGS)
+    var itemType = categoryBuilder.getNatureCategory.getOrElse(NatureType.WEAPON) match {
+      case NatureType.WEAPON => ItemType.createWeapon(level, getRandomValue(level, config.getDamageBase))
+      case NatureType.CHARM => ItemType.createCharm(level, getRandomSlot)
+      case NatureType.HELMET => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.HEAD)
+      case NatureType.PLASTRON => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.BODY)
+      case NatureType.SLEEVE => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.ARMS)
+      case NatureType.GREAVE => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.LEGS)
     }
     itemType = categoryBuilder.getElementCategory.getOrElse(ElementType.NONE) match {
       case e if e != ElementType.NONE => Element(itemType, e)
@@ -91,10 +91,10 @@ object CraftPrototype {
       case s if s != StatusType.NONE => Status(itemType, s)
       case _ => itemType
     }
-    itemType = categoryBuilder.getBonusCategory.getOrElse(BonusCategory.NONE) match {
-      case BonusCategory.DAMAGE if !itemType.isWeapon =>
+    itemType = categoryBuilder.getBonusCategory.getOrElse(BonusType.NONE) match {
+      case BonusType.DAMAGE if !itemType.isWeapon =>
         Damage(itemType, getRandomValue(level, config.getDamageBonusBase))
-      case BonusCategory.ARMOR if !itemType.isArmor =>
+      case BonusType.ARMOR if !itemType.isArmor =>
         Protection(itemType, getRandomValue(level, config.getArmorBonusBase))
       case _ => itemType
     }
@@ -103,13 +103,13 @@ object CraftPrototype {
 
   def createDescription(categoryBuilder: CategoryBuilder): DescriptionBuilder = {
     val descriptionBuilder = new DescriptionBuilder()
-    categoryBuilder.getNatureCategory.getOrElse(NatureCategory.WEAPON) match {
-      case NatureCategory.WEAPON => descriptionBuilder.addNature("weapon")
-      case NatureCategory.CHARM => descriptionBuilder.addNature("charm")
-      case NatureCategory.HELMET => descriptionBuilder.addNature("helmet")
-      case NatureCategory.PLASTRON => descriptionBuilder.addNature("plastron")
-      case NatureCategory.SLEEVE => descriptionBuilder.addNature("sleeve")
-      case NatureCategory.GREAVE => descriptionBuilder.addNature("greave")
+    categoryBuilder.getNatureCategory.getOrElse(NatureType.WEAPON) match {
+      case NatureType.WEAPON => descriptionBuilder.addNature("sword")
+      case NatureType.CHARM => descriptionBuilder.addNature("charm")
+      case NatureType.HELMET => descriptionBuilder.addNature("helmet")
+      case NatureType.PLASTRON => descriptionBuilder.addNature("plastron")
+      case NatureType.SLEEVE => descriptionBuilder.addNature("sleeve")
+      case NatureType.GREAVE => descriptionBuilder.addNature("greave")
     }
     categoryBuilder.getElementCategory.getOrElse(ElementType.NONE) match {
       case ElementType.FIRE => descriptionBuilder.addAdjective("burning")
@@ -121,80 +121,112 @@ object CraftPrototype {
       case StatusType.STUN => descriptionBuilder.addAdjective("stunning")
       case _ =>
     }
-    categoryBuilder.getBonusCategory.getOrElse(BonusCategory.NONE) match {
-      case BonusCategory.ARMOR => descriptionBuilder.addAdjective("armored")
-      case BonusCategory.DAMAGE => descriptionBuilder.addAdjective("violent")
+    categoryBuilder.getBonusCategory.getOrElse(BonusType.NONE) match {
+      case BonusType.ARMOR => descriptionBuilder.addAdjective("armored")
+      case BonusType.DAMAGE => descriptionBuilder.addAdjective("brutal")
       case _ =>
     }
     descriptionBuilder
   }
 
-  def createMaterial(categoryBuilder: CategoryBuilder, level: Int): ItemType = {
-    ItemType.createMaterial("material", level)
-  }
+  object MaterialFactory {
 
-  case class CraftAtLevel(nextLevel: Int, crafts: Crafts, categories: Seq[CategoryBuilder])
-
-  def addCraftAtLevel(craftAtLevel: CraftAtLevel): CraftAtLevel = {
-    def createRecipe(craftAtLevel: CraftAtLevel, itemType: ItemType, category: CategoryBuilder, resultCategory: CategoryBuilder): Unit = {
-      val result = createItemType(resultCategory, craftAtLevel.nextLevel)
-      result.setName(createDescription(resultCategory).getDescription)
-      val material = createMaterial(resultCategory, craftAtLevel.nextLevel - 1)
-      val resultDescription = createDescription(resultCategory)
-      val materialDescription = resultDescription.addAdjective(resultDescription.getNature).addNature("material")
-      material.setName(materialDescription.getDescription)
-      craftAtLevel.crafts.addRecipe(itemType, material, result)
+    def createMaterialFromElement(elementType: ElementType, level: Int): ItemType = {
+      ItemType.createMaterial(elementType.toString + "material", level)
     }
 
-    var categories = Seq.empty[CategoryBuilder]
-    if (craftAtLevel.nextLevel == config.getLevelMin) {
-      for (natureCategory <- NatureCategory.values) {
-        categories = categories :+ (new CategoryBuilder).addNatureCategory(natureCategory)
+    def createMaterialFromStatus(statusType: StatusType, level: Int): ItemType = {
+      ItemType.createMaterial(statusType.toString + "material", level)
+    }
+
+    def createMaterialFromBonus(bonusType: BonusType, level: Int): ItemType = {
+      ItemType.createMaterial(bonusType.toString + "material", level)
+    }
+
+  }
+
+
+  case class CraftStep(itemTypeRoot: ItemType, categoryRoot: CategoryBuilder, crafts: Crafts, materialPool: MaterialPool)
+
+  class MaterialPool {
+    private var elementMaterial = Map.empty[ElementType, ItemType]
+    private var statusMaterial = Map.empty[StatusType, ItemType]
+    private var bonusMaterial = Map.empty[BonusType, ItemType]
+
+    def getElementMaterial(elementType: ElementType, level: Int): ItemType = {
+      elementMaterial.get(elementType) match {
+        case Some(e) => e
+        case None =>
+          val e = MaterialFactory.createMaterialFromElement(elementType, level)
+          elementMaterial = elementMaterial + (elementType -> e)
+          e
       }
-      CraftAtLevel(config.getLevelMin + 1, new Crafts, categories)
-    } else if (craftAtLevel.nextLevel == config.getLevelMin + 1) {
-      for (category <- craftAtLevel.categories) {
-        val itemType = createItemType(category, craftAtLevel.nextLevel - 1)
-        itemType.setName(createDescription(category).getDescription)
-        for (elementCategory <- ElementType.values) {
-          val resultCategory = category.copy.addElementCategory(elementCategory)
-          createRecipe(craftAtLevel, itemType, category, resultCategory)
-          categories = categories :+ resultCategory
-        }
+    }
+
+    def getStatusMaterial(statusType: StatusType, level: Int): ItemType = {
+      statusMaterial.get(statusType) match {
+        case Some(e) => e
+        case None =>
+          val e = MaterialFactory.createMaterialFromStatus(statusType, level)
+          statusMaterial = statusMaterial + (statusType -> e)
+          e
       }
-      CraftAtLevel(craftAtLevel.nextLevel + 1, craftAtLevel.crafts, categories)
-    } else if (craftAtLevel.nextLevel == config.getLevelMin + 2) {
-      for (category <- craftAtLevel.categories) {
-        val itemType = createItemType(category, craftAtLevel.nextLevel - 1)
-        itemType.setName(createDescription(category).getDescription)
-        for (statusCategory <- StatusType.values) {
-          val resultCategory = category.copy.addStatusCategory(statusCategory)
-          createRecipe(craftAtLevel, itemType, category, resultCategory)
-          categories = categories :+ resultCategory
-        }
+    }
+
+    def getBonusMaterial(bonusType: BonusType, level: Int): ItemType = {
+      bonusMaterial.get(bonusType) match {
+        case Some(e) => e
+        case None =>
+          val e = MaterialFactory.createMaterialFromBonus(bonusType, level)
+          bonusMaterial = bonusMaterial + (bonusType -> e)
+          e
       }
-      CraftAtLevel(craftAtLevel.nextLevel + 1, craftAtLevel.crafts, categories)
-    } else if (craftAtLevel.nextLevel == config.getLevelMin + 3) {
-      for (category <- craftAtLevel.categories) {
-        val itemType = createItemType(category, craftAtLevel.nextLevel - 1)
-        itemType.setName(createDescription(category).getDescription)
-        for (bonusCategory <- BonusCategory.values) {
-          val resultCategory = category.copy.addBonusCategory(bonusCategory)
-          createRecipe(craftAtLevel, itemType, category, resultCategory)
-          categories = categories :+ resultCategory
-        }
+    }
+  }
+
+  def craftItemType(craftStep: CraftStep): Unit = {
+    if (craftStep.itemTypeRoot.getLevel == config.getLevelMin) {
+      for (element <- ElementType.values) {
+        val resultCategory = craftStep.categoryRoot.copy.addElementCategory(element)
+        val result = createItemType(resultCategory, craftStep.itemTypeRoot.getLevel + 1)
+        val resultDescription = createDescription(resultCategory)
+        result.setName(resultDescription.getDescription)
+        val material = craftStep.materialPool.getElementMaterial(element, craftStep.itemTypeRoot.getLevel)
+        craftStep.crafts.addRecipe(craftStep.itemTypeRoot, material, result)
+        craftItemType(CraftStep(result, resultCategory, craftStep.crafts, craftStep.materialPool))
       }
-      CraftAtLevel(craftAtLevel.nextLevel + 1, craftAtLevel.crafts, categories)
-    } else {
-      CraftAtLevel(craftAtLevel.nextLevel + 1, craftAtLevel.crafts, craftAtLevel.categories)
+    } else if (craftStep.itemTypeRoot.getLevel == config.getLevelMin + 1) {
+      for (status <- StatusType.values) {
+        val resultCategory = craftStep.categoryRoot.copy.addStatusCategory(status)
+        val result = createItemType(resultCategory, craftStep.itemTypeRoot.getLevel + 1)
+        val resultDescription = createDescription(resultCategory)
+        result.setName(resultDescription.getDescription)
+        val material = craftStep.materialPool.getStatusMaterial(status, craftStep.itemTypeRoot.getLevel)
+        craftStep.crafts.addRecipe(craftStep.itemTypeRoot, material, result)
+        craftItemType(CraftStep(result, resultCategory, craftStep.crafts, craftStep.materialPool))
+      }
+    } else if (craftStep.itemTypeRoot.getLevel == config.getLevelMin + 2) {
+      for (bonus <- BonusType.values) {
+        val resultCategory = craftStep.categoryRoot.copy.addBonusCategory(bonus)
+        val result = createItemType(resultCategory, craftStep.itemTypeRoot.getLevel + 1)
+        val resultDescription = createDescription(resultCategory)
+        result.setName(resultDescription.getDescription)
+        val material = craftStep.materialPool.getBonusMaterial(bonus, craftStep.itemTypeRoot.getLevel)
+        craftStep.crafts.addRecipe(craftStep.itemTypeRoot, material, result)
+        craftItemType(CraftStep(result, resultCategory, craftStep.crafts, craftStep.materialPool))
+      }
     }
   }
 
   def generateCraft: Crafts = {
-    var craftAtLevel = CraftAtLevel(config.getLevelMin, new Crafts, Seq.empty[CategoryBuilder])
-    for (_ <- config.getLevelMin to config.getLevelMax) {
-      craftAtLevel = addCraftAtLevel(craftAtLevel)
+    val crafts = new Crafts
+    // init
+    for (natureCategory <- NatureType.values) {
+      val categoryRoot = (new CategoryBuilder).addNatureCategory(natureCategory)
+      val itemTypeRoot = createItemType(categoryRoot, config.getLevelMin)
+      itemTypeRoot.setName(createDescription(categoryRoot).getDescription)
+      craftItemType(CraftStep(itemTypeRoot, categoryRoot, crafts, new MaterialPool))
     }
-    craftAtLevel.crafts
+    crafts
   }
 }
