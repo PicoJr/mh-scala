@@ -20,7 +20,7 @@ case class CHARM_SLOT(slots: Int) extends SlotTypeRequirements
 /** Inventory slot requirement (implicitly 1 slot)
   *
   */
-case class INVENTORY_SLOT() extends SlotTypeRequirements
+case class MATERIAL_SLOT() extends SlotTypeRequirements
 
 /** Armor slot requirement (implicitely 1 slot) of armor part.
   *

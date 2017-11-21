@@ -1,7 +1,6 @@
 package game.item
 
 import game.item.ArmorPart.ArmorPart
-import game.item.Classification.Classification
 import game.item.ElementType.ElementType
 import game.item.StatusType.StatusType
 
@@ -13,20 +12,19 @@ import game.item.StatusType.StatusType
   * @param statusType           provided for attack if isWeapon, protection if isArmor
   * @param armor                provided >= 0
   * @param slotTypeRequirements in order to be equipped
-  * @param classifications      distinct, may be empty
   * @param elementType          provide for attack if isWeapon, protection if isArmor
   * @param charmSlots           provided >= 0
   */
-class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, armor: Int, slotTypeRequirements: SlotTypeRequirements, classifications: Set[Classification], elementType: ElementType, charmSlots: Int) {
+class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, armor: Int, slotTypeRequirements: SlotTypeRequirements, elementType: ElementType, charmSlots: Int) {
 
   var _name: String = name
 
   def this(name: String, level: Int) {
-    this(name, level, 0, StatusType.NONE, 0, INVENTORY_SLOT(), Set.empty, ElementType.NONE, 0)
+    this(name, level, 0, StatusType.NONE, 0, MATERIAL_SLOT(), ElementType.NONE, 0)
   }
 
   def this(level: Int) {
-    this("unnamed", level, 0, StatusType.NONE, 0, INVENTORY_SLOT(), Set.empty, ElementType.NONE, 0)
+    this("unnamed", level, 0, StatusType.NONE, 0, MATERIAL_SLOT(), ElementType.NONE, 0)
   }
 
 
@@ -69,12 +67,6 @@ class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, ar
     * @return slot type requirements
     */
   def getSlotTypeRequirement: SlotTypeRequirements = slotTypeRequirements
-
-  /** Get classifications
-    *
-    * @return classifications, may be empty
-    */
-  def getClassifications: Set[Classification] = classifications
 
   /** Get element type
     *
@@ -150,34 +142,28 @@ class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, ar
     *
     * @return classified as Charm
     */
-  def isCharm: Boolean = {
-    getSlotTypeRequirement match {
+  def isCharm: Boolean = getSlotTypeRequirement match {
       case CHARM_SLOT(_) => true
       case _ => false
-    }
   }
 
   /**
     *
-    * @param classifications to check
-    * @return true if classifications empty or all classifications are found in this.getClassifications.
-    *         false otherwise.
-    */
-  def isClassifiedAs(classifications: Classification*): Boolean = {
-    classifications.foldLeft(true)((found, c) => found & getClassifications.contains(c))
-  }
-
-  /** Same as isClassifiedAs(Classification.EQUIPMENT)
-    *
     * @return classified as Equipment
     */
-  def isEquipment: Boolean = isClassifiedAs(Classification.EQUIPMENT)
+  def isEquipment: Boolean = getSlotTypeRequirement match {
+    case CHARM_SLOT(_) | WEAPON_SLOT() | ARMOR_SLOT(_) => true
+    case _ => false
+  }
 
-  /** Same as isClassifiedAs(Classification.MATERIAL)
+  /**
     *
-    * @return classified as Material
+    * @return classified as Material (default: false)
     */
-  def isMaterial: Boolean = isClassifiedAs(Classification.MATERIAL)
+  def isMaterial: Boolean = getSlotTypeRequirement match {
+    case MATERIAL_SLOT() => true
+    case _ => false
+  }
 
   /** Test if classified as Weapon
     *
@@ -190,13 +176,13 @@ class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, ar
     }
   }
 
-  /**
+  /** Same as getCharmSlotsProvided > 0
     *
     * @return charm slots provided > 0
     */
   def providesSlot: Boolean = getCharmSlotsProvided > 0
 
-  /**
+  /** Same as getCharmSlotsRequired > 0
     *
     * @return charm slots required > 0
     */

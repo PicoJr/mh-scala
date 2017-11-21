@@ -6,7 +6,7 @@ import game.id.Identifiable
   *
   */
 class Item(itemType: ItemType)
-  extends ItemType(itemType.getName, itemType.getLevel, itemType.getDamage, itemType.getStatusType, itemType.getArmor, itemType.getSlotTypeRequirement, itemType.getClassifications, itemType.getElementType, itemType.getCharmSlotsProvided)
+  extends ItemType(itemType.getName, itemType.getLevel, itemType.getDamage, itemType.getStatusType, itemType.getArmor, itemType.getSlotTypeRequirement, itemType.getElementType, itemType.getCharmSlotsProvided)
     with Identifiable {
 
   private final val uniqueID = Item.getNewUniqueItemID
