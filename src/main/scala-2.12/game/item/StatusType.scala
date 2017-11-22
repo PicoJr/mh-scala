@@ -13,4 +13,10 @@ object StatusType extends Enumeration {
     StatusType(Random.nextInt(StatusType.maxId))
   }
 
+  def getAdjective(statusType: StatusType): String = statusType match {
+    case STUN => "stunning"
+    case SLEEP => "tranquilizing"
+    case NONE => "noble"
+  }
+
 }

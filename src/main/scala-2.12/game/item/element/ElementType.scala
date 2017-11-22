@@ -17,4 +17,10 @@ object ElementType extends Enumeration {
     ElementType(Random.nextInt(ElementType.maxId))
   }
 
+  def getAdjective(elementType: ElementType): String = elementType match {
+    case WATER => "flowing"
+    case FIRE => "burning"
+    case NONE => "pure"
+  }
+
 }

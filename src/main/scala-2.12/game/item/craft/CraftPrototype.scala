@@ -23,60 +23,75 @@ object CraftPrototype {
   object NatureType extends Enumeration {
     type NatureType = Value
     val WEAPON, HELMET, PLASTRON, GREAVE, SLEEVE, CHARM = Value
+
+    def getNature(natureType: NatureType): String = natureType match {
+      case WEAPON => "sword"
+      case HELMET => "helmet"
+      case PLASTRON => "plastron"
+      case GREAVE => "greave"
+      case SLEEVE => "sleeve"
+      case CHARM => "charm"
+    }
   }
 
   object BonusType extends Enumeration {
     type BonusType = Value
     val ARMOR, DAMAGE, NONE = Value
+
+    def getAdjective(bonusType: BonusType): String = bonusType match {
+      case ARMOR => "armored"
+      case DAMAGE => "brutal"
+      case NONE => "balanced"
+    }
   }
 
   class CategoryBuilder {
-    private var natureType: Option[NatureType] = Option.empty
-    private var elementType: Option[ElementType] = Option.empty
-    private var statusType: Option[StatusType] = Option.empty
-    private var bonusType: Option[BonusType] = Option.empty
+    private var natureType: NatureType = NatureType.WEAPON
+    private var elementType: ElementType = ElementType.NONE
+    private var statusType: StatusType = StatusType.NONE
+    private var bonusType: BonusType = BonusType.NONE
 
 
-    def getNatureCategory: Option[NatureType] = natureType
+    def getNatureCategory: NatureType = natureType
 
-    def getElementCategory: Option[ElementType] = elementType
+    def getElementCategory: ElementType = elementType
 
-    def getStatusCategory: Option[StatusType] = statusType
+    def getStatusCategory: StatusType = statusType
 
-    def getBonusCategory: Option[BonusType] = bonusType
+    def getBonusCategory: BonusType = bonusType
 
     def addNatureCategory(natureCategory: NatureType): CategoryBuilder = {
-      this.natureType = Some(natureCategory)
+      this.natureType = natureCategory
       this
     }
 
     def addElementCategory(elementCategory: ElementType): CategoryBuilder = {
-      this.elementType = Some(elementCategory)
+      this.elementType = elementCategory
       this
     }
 
     def addStatusCategory(statusCategory: StatusType): CategoryBuilder = {
-      this.statusType = Some(statusCategory)
+      this.statusType = statusCategory
       this
     }
 
     def addBonusCategory(bonusCategory: BonusType): CategoryBuilder = {
-      this.bonusType = Some(bonusCategory)
+      this.bonusType = bonusCategory
       this
     }
 
     def copy: CategoryBuilder = {
       val copy = new CategoryBuilder
-      if (natureType.nonEmpty) copy.addNatureCategory(natureType.get)
-      if (elementType.nonEmpty) copy.addElementCategory(elementType.get)
-      if (statusType.nonEmpty) copy.addStatusCategory(statusType.get)
-      if (bonusType.nonEmpty) copy.addBonusCategory(bonusType.get)
+      copy.addNatureCategory(natureType)
+      copy.addElementCategory(elementType)
+      copy.addStatusCategory(statusType)
+      copy.addBonusCategory(bonusType)
       copy
     }
   }
 
   def createItemType(categoryBuilder: CategoryBuilder, level: Int): DefaultItemType = {
-    var itemType = categoryBuilder.getNatureCategory.getOrElse(NatureType.WEAPON) match {
+    var itemType = categoryBuilder.getNatureCategory match {
       case NatureType.WEAPON => DefaultItemType.createWeapon(level, getRandomValue(level, config.getDamageBase))
       case NatureType.CHARM => DefaultItemType.createCharm(level, getRandomSlot)
       case NatureType.HELMET => DefaultItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.HEAD)
@@ -84,15 +99,15 @@ object CraftPrototype {
       case NatureType.SLEEVE => DefaultItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.ARMS)
       case NatureType.GREAVE => DefaultItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.LEGS)
     }
-    itemType = categoryBuilder.getElementCategory.getOrElse(ElementType.NONE) match {
+    itemType = categoryBuilder.getElementCategory match {
       case e if e != ElementType.NONE => Element(itemType, e)
       case _ => itemType
     }
-    itemType = categoryBuilder.getStatusCategory.getOrElse(StatusType.NONE) match {
+    itemType = categoryBuilder.getStatusCategory match {
       case s if s != StatusType.NONE => Status(itemType, s)
       case _ => itemType
     }
-    itemType = categoryBuilder.getBonusCategory.getOrElse(BonusType.NONE) match {
+    itemType = categoryBuilder.getBonusCategory match {
       case BonusType.DAMAGE if !itemType.isWeapon =>
         Damage(itemType, getRandomValue(level, config.getDamageBonusBase))
       case BonusType.ARMOR if !itemType.isArmor =>
@@ -104,44 +119,28 @@ object CraftPrototype {
 
   def createDescription(categoryBuilder: CategoryBuilder): DescriptionBuilder = {
     val descriptionBuilder = new DescriptionBuilder()
-    categoryBuilder.getNatureCategory.getOrElse(NatureType.WEAPON) match {
-      case NatureType.WEAPON => descriptionBuilder.addNature("sword")
-      case NatureType.CHARM => descriptionBuilder.addNature("charm")
-      case NatureType.HELMET => descriptionBuilder.addNature("helmet")
-      case NatureType.PLASTRON => descriptionBuilder.addNature("plastron")
-      case NatureType.SLEEVE => descriptionBuilder.addNature("sleeve")
-      case NatureType.GREAVE => descriptionBuilder.addNature("greave")
-    }
-    categoryBuilder.getElementCategory.getOrElse(ElementType.NONE) match {
-      case ElementType.FIRE => descriptionBuilder.addAdjective("burning")
-      case ElementType.WATER => descriptionBuilder.addAdjective("flowing")
-      case _ =>
-    }
-    categoryBuilder.getStatusCategory.getOrElse(StatusType.NONE) match {
-      case StatusType.SLEEP => descriptionBuilder.addAdjective("tranquilizing")
-      case StatusType.STUN => descriptionBuilder.addAdjective("stunning")
-      case _ =>
-    }
-    categoryBuilder.getBonusCategory.getOrElse(BonusType.NONE) match {
-      case BonusType.ARMOR => descriptionBuilder.addAdjective("armored")
-      case BonusType.DAMAGE => descriptionBuilder.addAdjective("brutal")
-      case _ =>
-    }
+    descriptionBuilder.addNature(NatureType.getNature(categoryBuilder.getNatureCategory))
+    descriptionBuilder.addElement(ElementType.getAdjective(categoryBuilder.getElementCategory))
+    descriptionBuilder.addAdjective(StatusType.getAdjective(categoryBuilder.getStatusCategory))
+    descriptionBuilder.addAdjective(BonusType.getAdjective(categoryBuilder.getBonusCategory))
     descriptionBuilder
   }
 
   object MaterialFactory {
 
     def createMaterialFromElement(elementType: ElementType, level: Int): DefaultItemType = {
-      DefaultItemType.createMaterial(elementType.toString + "material", level)
+      val descriptionBuilder = new DescriptionBuilder().addNature("material").addElement(ElementType.getAdjective(elementType))
+      DefaultItemType.createMaterial(descriptionBuilder.getDescription, level)
     }
 
     def createMaterialFromStatus(statusType: StatusType, level: Int): DefaultItemType = {
-      DefaultItemType.createMaterial(statusType.toString + "material", level)
+      val descriptionBuilder = new DescriptionBuilder().addNature("material").addElement(StatusType.getAdjective(statusType))
+      DefaultItemType.createMaterial(descriptionBuilder.getDescription, level)
     }
 
     def createMaterialFromBonus(bonusType: BonusType, level: Int): DefaultItemType = {
-      DefaultItemType.createMaterial(bonusType.toString + "material", level)
+      val descriptionBuilder = new DescriptionBuilder().addNature("material").addElement(BonusType.getAdjective(bonusType))
+      DefaultItemType.createMaterial(descriptionBuilder.getDescription, level)
     }
 
   }
