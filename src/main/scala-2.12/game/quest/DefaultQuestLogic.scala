@@ -28,7 +28,7 @@ class DefaultQuestLogic(eEResolver: EEResolver) extends QuestLogic {
 
   def processQuestResult(gameState: GameState, quest: Quest): QuestResult = {
     val questResult = computeQuestResult(gameState.getHunter, quest)
-    if (questResult.isSuccessful) gameState.getHunter.getInventory.addItems()
+    if (questResult.isSuccessful) gameState.getHunter.getInventory.addItems(quest.createLoot: _*)
     questResult
   }
 
