@@ -1,79 +1,28 @@
 package game
 
 import game.config.ConfigLoader
-import game.item.craft.{CraftPrototype, Crafts}
-import game.item.{Item, ItemType}
-import game.quest.Quest
-import game.unit.{Hunter, Monster}
+import game.item.craft.CraftPrototype
+import game.item.{CraftsTrait, Item, ItemType}
+import game.quest.{Quest, QuestTrait}
+import game.unit.Hunter
 
 /** Holds all game entities and states.
   * Created by nol on 11/11/17.
   */
-class GameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts) {
+class GameState(hunter: Hunter, quests: Seq[QuestTrait], crafts: CraftsTrait) extends GameStateTrait {
 
   private var questsCompletedIds: Set[Long] = Set.empty
 
-  /** Get hunter
-    *
-    * @return hunter
-    */
   def getHunter: Hunter = hunter
 
-  /** Get quests
-    *
-    * @return quests regardless of completion
-    */
-  def getQuests: Seq[Quest] = quests
+  def getQuests: Seq[QuestTrait] = quests
 
-  /** Get craft recipes
-    *
-    * @return craft recipes
-    */
-  def getCrafts: Crafts = crafts
+  def getCrafts: CraftsTrait = crafts
 
-  /** Find quest with id questId
-    *
-    * @param questID to find
-    * @return quest with id questId if any else None
-    */
-  def findQuest(questID: Long): Option[Quest] = {
-    getQuests.find(q => q.getUniqueId == questID)
-  }
-
-  /** Find monster with id monsterId
-    *
-    * @param monsterId to find
-    * @return monster with id monsterId if any else None
-    */
-  def findMonster(monsterId: Long): Option[Monster] = {
-    getQuests.find(q => q.getMonster.getUniqueId == monsterId) match {
-      case Some(q) => Some(q.getMonster)
-      case None => None
-    }
-  }
-
-  /** Find item with id itemId
-    *
-    * @param itemId to find
-    * @return item with id itemId if any else None
-    */
-  def findItem(itemId: Long): Option[Item] = {
-    getHunter.getInventory.findItem(itemId)
-  }
-
-  /** Set quest with id questId as completed
-    *
-    * @param questId of quest
-    */
   def setCompleted(questId: Long): Unit = {
     questsCompletedIds += questId
   }
 
-  /** Check quest with id questId is completed
-    *
-    * @param questId of quest
-    * @return true if quest is completed, false if not or invalid Id
-    */
   def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
 }
 
@@ -91,7 +40,7 @@ object GameState {
     val hunter = createHunter
     val crafts = CraftPrototype.generateCraft
     val quests = createQuests(crafts)
-    val itemTypesFirstLevel = crafts.getNonMaterial(config.getLevelMin).distinct
+    val itemTypesFirstLevel = crafts.getNonMaterials(config.getLevelMin).distinct
     hunter.getInventory.addItems(itemTypesFirstLevel.map(i => Item.createItem(i)): _*)
     new GameState(hunter, quests, crafts)
   }
@@ -104,8 +53,8 @@ object GameState {
     hunter
   }
 
-  private def createQuests(crafts: Crafts): Seq[Quest] = {
-    var quests: Seq[Quest] = Seq.empty
+  private def createQuests(crafts: CraftsTrait): Seq[QuestTrait] = {
+    var quests = Seq.empty[QuestTrait]
     for (level <- config.getLevelMin until config.getLevelMax) {
       val lootAtLevel = crafts.getMaterials(level).distinct
       val lootSizeAtLevel: Int = lootAtLevel.size

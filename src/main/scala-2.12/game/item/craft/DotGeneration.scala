@@ -3,7 +3,7 @@ package game.item.craft
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
-import game.item.ItemType
+import game.item.{CraftsTrait, ItemTypeTrait}
 
 import scalax.collection.Graph
 import scalax.collection.edge.LDiEdge
@@ -29,7 +29,7 @@ object DotGeneration extends App {
   val charmsDot = charms.toDot(dotRoot, edgeTransformer)
   Files.write(Paths.get("charms.dot"), charmsDot.getBytes(StandardCharsets.UTF_8))
 
-  def generateGraphFor(p: (ItemType, ItemType, ItemType) => Boolean, crafts: Crafts): Graph[String, LDiEdge] = {
+  def generateGraphFor(p: (ItemTypeTrait, ItemTypeTrait, ItemTypeTrait) => Boolean, crafts: CraftsTrait): Graph[String, LDiEdge] = {
     var g = Graph[String, LDiEdge]()
     for (recipe <- crafts.getRecipes) {
       recipe match {

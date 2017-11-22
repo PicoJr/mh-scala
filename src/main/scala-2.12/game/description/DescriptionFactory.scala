@@ -1,7 +1,7 @@
 package game.description
 
 import game.item.{ArmorPart, _}
-import game.quest.{Quest, QuestResult}
+import game.quest.{QuestResult, QuestTrait}
 import game.unit.{Hunter, Monster}
 
 /**
@@ -10,7 +10,7 @@ import game.unit.{Hunter, Monster}
 object DescriptionFactory {
 
 
-  def description(recipes: Map[(ItemType, ItemType), ItemType]): String = {
+  def description(recipes: Map[(ItemTypeTrait, ItemTypeTrait), ItemTypeTrait]): String = {
     val desc = new StringBuilder()
     for (m <- recipes) {
       m match {
@@ -22,7 +22,7 @@ object DescriptionFactory {
     desc.toString()
   }
 
-  def description(i: ItemType): String = {
+  def description(i: ItemTypeTrait): String = {
     val desc = new StringBuilder()
     desc.append(i.getName)
     desc.append("[" + i.getLevel + "]")
@@ -35,14 +35,14 @@ object DescriptionFactory {
     desc.toString()
   }
 
-  def description(i: Item): String = {
+  def description(i: ItemTrait): String = {
     val desc = new StringBuilder()
     desc.append("[").append(i.getUniqueId).append("]")
-    desc.append(description(i.asInstanceOf[ItemType]))
+    desc.append(description(i.asInstanceOf[ItemTypeTrait]))
     desc.toString()
   }
 
-  def description(inventory: Inventory): String = {
+  def description(inventory: InventoryTrait): String = {
     val desc = new StringBuilder()
     desc.append("\nweapon\n")
     inventory.getWeaponEquipped match {
@@ -87,7 +87,7 @@ object DescriptionFactory {
     desc.toString()
   }
 
-  def description(quest: Quest): String = {
+  def description(quest: QuestTrait): String = {
     val desc = new StringBuilder()
     desc.append("quest[").append(quest.getUniqueId).append("]")
     desc.append("\n")

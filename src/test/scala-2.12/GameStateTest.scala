@@ -13,7 +13,7 @@ class GameStateTest extends FlatSpec {
   }
 
   "All quests" should "provide loot" in {
-    assert(gameState.getQuests.forall(q => q.getLoot.nonEmpty))
+    assert(gameState.getQuests.forall(q => q.createLoot.nonEmpty))
   }
 
 }

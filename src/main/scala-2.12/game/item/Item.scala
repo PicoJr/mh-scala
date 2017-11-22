@@ -1,32 +1,36 @@
 package game.item
 
-import game.id.Identifiable
+import game.item.ElementType.ElementType
+import game.item.StatusType.StatusType
 
 /** A unique instance of an ItemType identified by an Id
   *
   */
-class Item(itemType: ItemType)
-  extends ItemType(itemType.getName, itemType.getLevel, itemType.getDamage, itemType.getStatusType, itemType.getArmor, itemType.getSlotTypeRequirement, itemType.getElementType, itemType.getCharmSlotsProvided)
-    with Identifiable {
+class Item(itemType: ItemTypeTrait) extends ItemTrait {
 
   private final val uniqueID = Item.getNewUniqueItemID
 
-  /** Get item type
-    *
-    * @return item type
-    */
-  def getItemType: ItemType = itemType
-
-  /** Same as getItemType == itemType
-    *
-    * @param itemType checked
-    * @return getItemType == itemType
-    */
-  def isItemType(itemType: ItemType): Boolean = {
-    getItemType == itemType
-  }
+  def getItemType: ItemTypeTrait = itemType
 
   def getUniqueId: Long = uniqueID
+
+  override def getLevel: Int = itemType.getLevel
+
+  override def getName: String = itemType.getName
+
+  override def setName(newName: String): Unit = itemType.setName(newName)
+
+  override def getDamage: Int = itemType.getDamage
+
+  override def getStatusType: StatusType = itemType.getStatusType
+
+  override def getArmor: Int = itemType.getArmor
+
+  override def getSlotTypeRequirement: SlotTypeRequirements = itemType.getSlotTypeRequirement
+
+  override def getElementType: ElementType = itemType.getElementType
+
+  override def getCharmSlotsProvided: Int = itemType.getCharmSlotsProvided
 }
 
 object Item {
@@ -38,7 +42,7 @@ object Item {
     * @param itemType of item
     * @return item from itemType
     */
-  def createItem(itemType: ItemType): Item = {
+  def createItem(itemType: ItemTypeTrait): ItemTrait = {
     new Item(itemType)
   }
 

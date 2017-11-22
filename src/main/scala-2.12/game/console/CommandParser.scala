@@ -1,6 +1,6 @@
 package game.console
 
-import game.GameState
+import game.GameStateTrait
 import org.docopt.{Docopt, DocoptExitException}
 
 /**
@@ -25,7 +25,7 @@ class CommandParser(command: Command) {
       |  --version    Show version
     """.stripMargin
 
-  def runCommand(args: Seq[String], gameState: GameState): Unit = {
+  def runCommand(args: Seq[String], gameState: GameStateTrait): Unit = {
     val docopt = new Docopt(doc).withVersion("MH 1.0").withExit(false).withHelp(false)
     try {
       val opts = docopt.parse(args: _*)
