@@ -1,4 +1,4 @@
-package game.item
+package game.item.element
 
 import game.config.ConfigLoader
 

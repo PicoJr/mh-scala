@@ -1,7 +1,7 @@
 package game.description
 
 import game.item.{ArmorPart, _}
-import game.quest.{QuestResult, QuestTrait}
+import game.quest.{Quest, QuestResult}
 import game.unit.{Hunter, Monster}
 
 /**
@@ -10,7 +10,7 @@ import game.unit.{Hunter, Monster}
 object DescriptionFactory {
 
 
-  def description(recipes: Map[(ItemTypeTrait, ItemTypeTrait), ItemTypeTrait]): String = {
+  def description(recipes: Map[(ItemType, ItemType), ItemType]): String = {
     val desc = new StringBuilder()
     for (m <- recipes) {
       m match {
@@ -22,7 +22,7 @@ object DescriptionFactory {
     desc.toString()
   }
 
-  def description(i: ItemTypeTrait): String = {
+  def description(i: ItemType): String = {
     val desc = new StringBuilder()
     desc.append(i.getName)
     desc.append("[" + i.getLevel + "]")
@@ -35,14 +35,14 @@ object DescriptionFactory {
     desc.toString()
   }
 
-  def description(i: ItemTrait): String = {
+  def description(i: Item): String = {
     val desc = new StringBuilder()
     desc.append("[").append(i.getUniqueId).append("]")
-    desc.append(description(i.asInstanceOf[ItemTypeTrait]))
+    desc.append(description(i.asInstanceOf[ItemType]))
     desc.toString()
   }
 
-  def description(inventory: InventoryTrait): String = {
+  def description(inventory: Inventory): String = {
     val desc = new StringBuilder()
     desc.append("\nweapon\n")
     inventory.getWeaponEquipped match {
@@ -80,18 +80,18 @@ object DescriptionFactory {
     desc.toString()
   }
 
-  def description(monster: Monster): String = {
+  def descriptionMonster(monster: Monster): String = {
     val desc = new StringBuilder()
     desc.append(monster.getName)
     desc.append("[").append(monster.getUniqueId).append("]")
     desc.toString()
   }
 
-  def description(quest: QuestTrait): String = {
+  def description(quest: Quest): String = {
     val desc = new StringBuilder()
     desc.append("quest[").append(quest.getUniqueId).append("]")
     desc.append("\n")
-    desc.append(description(quest.getMonster))
+    desc.append(descriptionMonster(quest.getMonster))
     desc.toString()
   }
 }

@@ -1,11 +1,12 @@
 package game.item.craft
 
 import game.config.ConfigLoader
-import game.item.ElementType.ElementType
 import game.item.StatusType.StatusType
 import game.item._
 import game.item.craft.CraftPrototype.BonusType.BonusType
 import game.item.craft.CraftPrototype.NatureType.NatureType
+import game.item.element.ElementType
+import game.item.element.ElementType.ElementType
 import game.util.Procedural
 
 /**
@@ -74,14 +75,14 @@ object CraftPrototype {
     }
   }
 
-  def createItemType(categoryBuilder: CategoryBuilder, level: Int): ItemType = {
+  def createItemType(categoryBuilder: CategoryBuilder, level: Int): DefaultItemType = {
     var itemType = categoryBuilder.getNatureCategory.getOrElse(NatureType.WEAPON) match {
-      case NatureType.WEAPON => ItemType.createWeapon(level, getRandomValue(level, config.getDamageBase))
-      case NatureType.CHARM => ItemType.createCharm(level, getRandomSlot)
-      case NatureType.HELMET => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.HEAD)
-      case NatureType.PLASTRON => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.BODY)
-      case NatureType.SLEEVE => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.ARMS)
-      case NatureType.GREAVE => ItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.LEGS)
+      case NatureType.WEAPON => DefaultItemType.createWeapon(level, getRandomValue(level, config.getDamageBase))
+      case NatureType.CHARM => DefaultItemType.createCharm(level, getRandomSlot)
+      case NatureType.HELMET => DefaultItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.HEAD)
+      case NatureType.PLASTRON => DefaultItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.BODY)
+      case NatureType.SLEEVE => DefaultItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.ARMS)
+      case NatureType.GREAVE => DefaultItemType.createArmor(level, getRandomValue(level, config.getArmorBase), ArmorPart.LEGS)
     }
     itemType = categoryBuilder.getElementCategory.getOrElse(ElementType.NONE) match {
       case e if e != ElementType.NONE => Element(itemType, e)
@@ -131,29 +132,29 @@ object CraftPrototype {
 
   object MaterialFactory {
 
-    def createMaterialFromElement(elementType: ElementType, level: Int): ItemType = {
-      ItemType.createMaterial(elementType.toString + "material", level)
+    def createMaterialFromElement(elementType: ElementType, level: Int): DefaultItemType = {
+      DefaultItemType.createMaterial(elementType.toString + "material", level)
     }
 
-    def createMaterialFromStatus(statusType: StatusType, level: Int): ItemType = {
-      ItemType.createMaterial(statusType.toString + "material", level)
+    def createMaterialFromStatus(statusType: StatusType, level: Int): DefaultItemType = {
+      DefaultItemType.createMaterial(statusType.toString + "material", level)
     }
 
-    def createMaterialFromBonus(bonusType: BonusType, level: Int): ItemType = {
-      ItemType.createMaterial(bonusType.toString + "material", level)
+    def createMaterialFromBonus(bonusType: BonusType, level: Int): DefaultItemType = {
+      DefaultItemType.createMaterial(bonusType.toString + "material", level)
     }
 
   }
 
 
-  case class CraftStep(itemTypeRoot: ItemTypeTrait, categoryRoot: CategoryBuilder, crafts: CraftsTrait, materialPool: MaterialPool)
+  case class CraftStep(itemTypeRoot: ItemType, categoryRoot: CategoryBuilder, crafts: Crafts, materialPool: MaterialPool)
 
   class MaterialPool {
-    private var elementMaterial = Map.empty[ElementType, ItemTypeTrait]
-    private var statusMaterial = Map.empty[StatusType, ItemTypeTrait]
-    private var bonusMaterial = Map.empty[BonusType, ItemTypeTrait]
+    private var elementMaterial = Map.empty[ElementType, ItemType]
+    private var statusMaterial = Map.empty[StatusType, ItemType]
+    private var bonusMaterial = Map.empty[BonusType, ItemType]
 
-    def getElementMaterial(elementType: ElementType, level: Int): ItemTypeTrait = {
+    def getElementMaterial(elementType: ElementType, level: Int): ItemType = {
       elementMaterial.get(elementType) match {
         case Some(e) => e
         case None =>
@@ -163,7 +164,7 @@ object CraftPrototype {
       }
     }
 
-    def getStatusMaterial(statusType: StatusType, level: Int): ItemTypeTrait = {
+    def getStatusMaterial(statusType: StatusType, level: Int): ItemType = {
       statusMaterial.get(statusType) match {
         case Some(e) => e
         case None =>
@@ -173,7 +174,7 @@ object CraftPrototype {
       }
     }
 
-    def getBonusMaterial(bonusType: BonusType, level: Int): ItemTypeTrait = {
+    def getBonusMaterial(bonusType: BonusType, level: Int): ItemType = {
       bonusMaterial.get(bonusType) match {
         case Some(e) => e
         case None =>
@@ -218,8 +219,8 @@ object CraftPrototype {
     }
   }
 
-  def generateCraft: CraftsTrait = {
-    val crafts = new Crafts
+  def generateCraft: Crafts = {
+    val crafts = new DefaultCrafts
     // init
     for (natureCategory <- NatureType.values) {
       val categoryRoot = (new CategoryBuilder).addNatureCategory(natureCategory)

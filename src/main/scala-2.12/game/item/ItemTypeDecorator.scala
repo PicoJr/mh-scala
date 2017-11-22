@@ -1,7 +1,7 @@
 package game.item
 
-import game.item.ElementType.ElementType
 import game.item.StatusType.StatusType
+import game.item.element.ElementType.ElementType
 
 /**
   * Note: if an item is decorated twice by the same decorator class,
@@ -9,8 +9,8 @@ import game.item.StatusType.StatusType
   *
   * @param i wrapped
   */
-abstract class ItemTypeDecorator(i: ItemTypeTrait) extends ItemType(i.getName, i.getLevel) {
-  val item: ItemTypeTrait = i
+abstract class ItemTypeDecorator(i: ItemType) extends DefaultItemType(i.getName, i.getLevel) {
+  val item: ItemType = i
 
   override def getDamage: Int = i.getDamage
 
@@ -25,28 +25,28 @@ abstract class ItemTypeDecorator(i: ItemTypeTrait) extends ItemType(i.getName, i
   override def getCharmSlotsProvided: Int = i.getCharmSlotsProvided
 }
 
-case class Damage(wrapped: ItemTypeTrait, damage: Int) extends ItemTypeDecorator(wrapped) {
+case class Damage(wrapped: ItemType, damage: Int) extends ItemTypeDecorator(wrapped) {
   override def getDamage: Int = damage
 }
 
-case class Status(wrapped: ItemTypeTrait, statusType: StatusType) extends ItemTypeDecorator(wrapped) {
+case class Status(wrapped: ItemType, statusType: StatusType) extends ItemTypeDecorator(wrapped) {
   override def getStatusType: StatusType = statusType
 }
 
-case class Protection(wrapped: ItemTypeTrait, armor: Int) extends ItemTypeDecorator(wrapped) {
+case class Protection(wrapped: ItemType, armor: Int) extends ItemTypeDecorator(wrapped) {
   override def getArmor: Int = armor
 }
 
-case class Equipment(wrapped: ItemTypeTrait, slotTypeRequirement: SlotTypeRequirements) extends ItemTypeDecorator(wrapped) {
+case class Equipment(wrapped: ItemType, slotTypeRequirement: SlotTypeRequirements) extends ItemTypeDecorator(wrapped) {
 
   override def getSlotTypeRequirement: SlotTypeRequirements = slotTypeRequirement
 }
 
-case class Element(wrapped: ItemTypeTrait, elementType: ElementType) extends ItemTypeDecorator(wrapped) {
+case class Element(wrapped: ItemType, elementType: ElementType) extends ItemTypeDecorator(wrapped) {
   override def getElementType: ElementType = elementType
 }
 
-case class Material(wrapped: ItemTypeTrait) extends ItemTypeDecorator(wrapped) {
+case class Material(wrapped: ItemType) extends ItemTypeDecorator(wrapped) {
   override def getSlotTypeRequirement: SlotTypeRequirements = MATERIAL_SLOT()
 }
 
@@ -55,7 +55,7 @@ case class Material(wrapped: ItemTypeTrait) extends ItemTypeDecorator(wrapped) {
   * @param wrapped            item
   * @param charmSlotsProvided >= 1
   */
-case class CharmSlot(wrapped: ItemTypeTrait, charmSlotsProvided: Int) extends ItemTypeDecorator(wrapped) {
+case class CharmSlot(wrapped: ItemType, charmSlotsProvided: Int) extends ItemTypeDecorator(wrapped) {
   override def getCharmSlotsProvided: Int = charmSlotsProvided
 }
 

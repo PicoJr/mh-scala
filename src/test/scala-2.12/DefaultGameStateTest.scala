@@ -1,12 +1,12 @@
-import game.gamestate.GameState
+import game.gamestate.DefaultGameState
 import org.scalatest.FlatSpec
 
 /**
   * Created by nol on 15/11/17.
   */
-class GameStateTest extends FlatSpec {
+class DefaultGameStateTest extends FlatSpec {
 
-  private val gameState: GameState = GameState.createNewGameState
+  private val gameState: DefaultGameState = DefaultGameState.createNewGameState
 
   "GameState" should "have quests" in {
     assert(gameState.getQuests.nonEmpty)

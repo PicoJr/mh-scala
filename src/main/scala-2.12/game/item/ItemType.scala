@@ -1,103 +1,170 @@
 package game.item
 
 import game.item.ArmorPart.ArmorPart
-import game.item.ElementType.ElementType
 import game.item.StatusType.StatusType
+import game.item.element.ElementType
+import game.item.element.ElementType.ElementType
 
-/** A generic blueprint from which items are instantiated.
-  *
-  * @param name                 for display
-  * @param level                >= 0
-  * @param damage               provided >= 0
-  * @param statusType           provided for attack if isWeapon, protection if isArmor
-  * @param armor                provided >= 0
-  * @param slotTypeRequirements in order to be equipped
-  * @param elementType          provide for attack if isWeapon, protection if isArmor
-  * @param charmSlots           provided >= 0
+/**
+  * Created by nol on 21/11/17.
   */
-class ItemType(name: String, level: Int, damage: Int, statusType: StatusType, armor: Int, slotTypeRequirements: SlotTypeRequirements, elementType: ElementType, charmSlots: Int) extends ItemTypeTrait {
+trait ItemType {
 
-  var _name: String = name
+  /** Get level
+    *
+    * @return level
+    */
+  def getLevel: Int
 
-  def this(name: String, level: Int) {
-    this(name, level, 0, StatusType.NONE, 0, MATERIAL_SLOT(), ElementType.NONE, 0)
+  /** Get name
+    *
+    * @return name
+    */
+  def getName: String
+
+  def setName(newName: String): Unit
+
+  /** Get damage provided
+    *
+    * @return damage provided >= 0
+    */
+  def getDamage: Int
+
+  /** Get status type
+    *
+    * @return StatusType, default: NONE
+    */
+  def getStatusType: StatusType
+
+  /** Get armor provided
+    *
+    * @return armor provided >= 0
+    */
+  def getArmor: Int
+
+  /** Get slot type requirements
+    *
+    * @return slot type requirements
+    */
+  def getSlotTypeRequirement: SlotTypeRequirements
+
+  /** Get element type
+    *
+    * @return ElementType, default : NONE
+    */
+  def getElementType: ElementType
+
+  /** Get charm slots provided
+    *
+    * @return charm slots provided >= 0
+    */
+  def getCharmSlotsProvided: Int
+
+  /** Get charm slots required
+    *
+    * @return charm slots required >= 0
+    */
+  def getCharmSlotsRequired: Int = {
+    getSlotTypeRequirement match {
+      case CHARM_SLOT(slot) => slot
+      case _ => 0
+    }
   }
 
-  def this(level: Int) {
-    this("unnamed", level, 0, StatusType.NONE, 0, MATERIAL_SLOT(), ElementType.NONE, 0)
+  /** Same as getArmor > 0
+    *
+    * @return getArmor > 0
+    */
+  def hasArmor: Boolean = getArmor > 0
+
+  /** Same as getRawDamage > 0
+    *
+    * @return getRawDamage > 0
+    */
+  def hasDamage: Boolean = getDamage > 0
+
+  /** Same as getElementType != ElementType.NONE
+    *
+    * @return getElementType != ElementType.NONE
+    */
+  def hasElementType: Boolean = getElementType != ElementType.NONE
+
+  /** Same as getStatusType != StatusType.NONE
+    *
+    * @return getStatusType != StatusType.NONE
+    */
+  def hasStatusType: Boolean = getStatusType != StatusType.NONE
+
+  /** Test if classified as Armor
+    *
+    * @return is classified as Armor
+    */
+  def isArmor: Boolean = {
+    getSlotTypeRequirement match {
+      case ARMOR_SLOT(_) => true
+      case _ => false
+    }
   }
 
-  def getLevel: Int = level
-
-  def getName: String = _name
-
-  def setName(newName: String): Unit = {
-    _name = newName
+  /** Test if armorPart slot is required to equip it
+    *
+    * @param armorPart tested
+    * @return true if and only if same armor part is required to equip it
+    */
+  def isArmorPartRequired(armorPart: ArmorPart): Boolean = {
+    getSlotTypeRequirement match {
+      case ARMOR_SLOT(part) if part == armorPart => true
+      case _ => false
+    }
   }
 
-  def getDamage: Int = damage
+  /** Test if classified as Charm
+    *
+    * @return classified as Charm
+    */
+  def isCharm: Boolean = getSlotTypeRequirement match {
+    case CHARM_SLOT(_) => true
+    case _ => false
+  }
 
-  def getStatusType: StatusType = statusType
+  /**
+    *
+    * @return classified as Equipment
+    */
+  def isEquipment: Boolean = getSlotTypeRequirement match {
+    case CHARM_SLOT(_) | WEAPON_SLOT() | ARMOR_SLOT(_) => true
+    case _ => false
+  }
 
-  def getArmor: Int = armor
+  /**
+    *
+    * @return classified as Material (default: false)
+    */
+  def isMaterial: Boolean = getSlotTypeRequirement match {
+    case MATERIAL_SLOT() => true
+    case _ => false
+  }
 
-  def getSlotTypeRequirement: SlotTypeRequirements = slotTypeRequirements
+  /** Test if classified as Weapon
+    *
+    * @return classified as Weapon
+    */
+  def isWeapon: Boolean = {
+    getSlotTypeRequirement match {
+      case WEAPON_SLOT() => true
+      case _ => false
+    }
+  }
 
-  def getElementType: ElementType = elementType
+  /** Same as getCharmSlotsProvided > 0
+    *
+    * @return charm slots provided > 0
+    */
+  def providesSlot: Boolean = getCharmSlotsProvided > 0
 
-  def getCharmSlotsProvided: Int = charmSlots
-
+  /** Same as getCharmSlotsRequired > 0
+    *
+    * @return charm slots required > 0
+    */
+  def requiresSlot: Boolean = getCharmSlotsRequired > 0
 }
-
-object ItemType {
-
-  /** Create weapon
-    *
-    * @param level  of weapon
-    * @param damage provided
-    * @return weapon s.t. weapon.isWeapon
-    */
-  def createWeapon(level: Int, damage: Int): ItemType = {
-    Damage(Equipment(new ItemType(level), WEAPON_SLOT()), damage)
-  }
-
-  /** Create armor
-    *
-    * @param level     of armor >= 0
-    * @param armor     provided >= 0
-    * @param armorPart of armor
-    * @return armor s.t. armor.isArmor
-    */
-  def createArmor(level: Int, armor: Int, armorPart: ArmorPart): ItemType = {
-    Protection(Equipment(new ItemType(level), ARMOR_SLOT(armorPart)), armor)
-  }
-
-  /** Create Charm
-    *
-    * @param level         of charm >= 0
-    * @param slotsRequired by charm >= 1
-    * @return charm s.t. charm.isCharm
-    */
-  def createCharm(level: Int, slotsRequired: Int): ItemType = {
-    Equipment(new ItemType(level), CHARM_SLOT(slotsRequired))
-  }
-
-  /** Create Material
-    *
-    * @param name  of material
-    * @param level of material >= 0
-    * @return material s.t. material.isMaterial
-    */
-  def createMaterial(name: String, level: Int): ItemType = {
-    Material(new ItemType(name, level: Int))
-  }
-
-
-}
-
-
-
-
-
-
-

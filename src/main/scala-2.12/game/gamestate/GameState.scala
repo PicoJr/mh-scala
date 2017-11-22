@@ -1,72 +1,80 @@
 package game.gamestate
 
-import game.config.ConfigLoader
-import game.item.craft.{CraftPrototype, CraftsTrait}
-import game.item.{Item, ItemType}
-import game.quest.{Quest, QuestTrait}
-import game.unit.Hunter
+import game.item.Item
+import game.item.craft.Crafts
+import game.quest.{Quest, QuestLogic}
+import game.unit.{Hunter, Monster}
 
-/** Holds all game entities and states.
-  * Created by nol on 11/11/17.
+/**
+  * Created by nol on 22/11/17.
   */
-class GameState(hunter: Hunter, quests: Seq[QuestTrait], crafts: CraftsTrait) extends GameStateTrait {
+trait GameState {
 
-  private var questsCompletedIds: Set[Long] = Set.empty
-
-  def getHunter: Hunter = hunter
-
-  def getQuests: Seq[QuestTrait] = quests
-
-  def getCrafts: CraftsTrait = crafts
-
-  def setCompleted(questId: Long): Unit = {
-    questsCompletedIds += questId
-  }
-
-  def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
-}
-
-
-object GameState {
-
-  private val config = ConfigLoader.loadGameConfig
-
-  /** Procedurally create a new GameState.
-    * may fail if config values are inconsistent.
+  /** Get hunter
     *
-    * @return new GameState
+    * @return hunter
     */
-  def createNewGameState: GameState = {
-    val hunter = createHunter
-    val crafts = CraftPrototype.generateCraft
-    val quests = createQuests(crafts)
-    val itemTypesFirstLevel = crafts.getNonMaterials(config.getLevelMin).distinct
-    hunter.getInventory.addItems(itemTypesFirstLevel.map(i => Item.createItem(i)): _*)
-    new GameState(hunter, quests, crafts)
+  def getHunter: Hunter
+
+  /** Get quests
+    *
+    * @return quests regardless of completion
+    */
+  def getQuests: Seq[Quest]
+
+  /** Get craft recipes
+    *
+    * @return craft recipes
+    */
+  def getCrafts: Crafts
+
+  /** Get quest logic
+    *
+    * @return quest logic
+    */
+  def getQuestLogic: QuestLogic
+
+  /** Find quest with id questId
+    *
+    * @param questID to find
+    * @return quest with id questId if any else None
+    */
+  def findQuest(questID: Long): Option[Quest] = {
+    getQuests.find(q => q.getUniqueId == questID)
   }
 
-  private def createHunter: Hunter = {
-    val hunter = new Hunter("unnamed")
-    val weapon = Item.createItem(ItemType.createWeapon(config.getLevelMin, 500))
-    hunter.getInventory.addItems(weapon)
-    hunter.getInventory.equipItem(weapon.getUniqueId)
-    hunter
-  }
-
-  private def createQuests(crafts: CraftsTrait): Seq[QuestTrait] = {
-    var quests = Seq.empty[QuestTrait]
-    for (level <- config.getLevelMin until config.getLevelMax) {
-      val lootAtLevel = crafts.getMaterials(level).distinct
-      val lootSizeAtLevel: Int = lootAtLevel.size
-      val questsAtLevel: Int = Math.min(lootSizeAtLevel, config.getQuestsPerLevel)
-      assert(questsAtLevel > 0, level)
-      val lootPerQuest: Int = lootSizeAtLevel / questsAtLevel
-      assert(lootPerQuest >= 1)
-      for (q <- 0 until questsAtLevel) {
-        val loot = lootAtLevel.slice(q * lootPerQuest, q * lootPerQuest + lootPerQuest)
-        quests = quests :+ Quest.createQuest(level, loot)
-      }
+  /** Find monster with id monsterId
+    *
+    * @param monsterId to find
+    * @return monster with id monsterId if any else None
+    */
+  def findMonster(monsterId: Long): Option[Monster] = {
+    getQuests.find(q => q.getMonster.getUniqueId == monsterId) match {
+      case Some(q) => Some(q.getMonster)
+      case None => None
     }
-    quests
   }
+
+  /** Find item with id itemId
+    *
+    * @param itemId to find
+    * @return item with id itemId if any else None
+    */
+  def findItem(itemId: Long): Option[Item] = {
+    getHunter.getInventory.findItem(itemId)
+  }
+
+  /** Set quest with id questId as completed
+    *
+    * @param questId of quest
+    */
+  def setCompleted(questId: Long): Unit
+
+  /** Check quest with id questId is completed
+    *
+    * @param questId of quest
+    * @return true if quest is completed, false if not or invalid Id
+    */
+  def isCompletedQuest(questId: Long): Boolean
+
 }

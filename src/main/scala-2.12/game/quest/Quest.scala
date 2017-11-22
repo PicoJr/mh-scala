@@ -1,32 +1,25 @@
 package game.quest
 
-import game.item.{Item, ItemTrait, ItemTypeTrait}
-import game.unit.{Monster, RandomMonsterFactory}
+import game.id.Identifiable
+import game.item.Item
+import game.unit.Monster
 
-/** Rewards hunter with loot when monster is slain
-  * Created by nol on 05/11/17.
+/**
+  * Created by nol on 22/11/17.
   */
-class Quest(monster: Monster, loot: Seq[ItemTypeTrait]) extends QuestTrait {
-  private final val uniqueID: Long = Quest.getNewUniqueQuestID
+trait Quest extends Identifiable {
 
-  def getUniqueId: Long = uniqueID
+  /** Return monster to hunt during quest
+    *
+    * @return monster to hunt during quest
+    */
+  def getMonster: Monster
 
-  def getMonster: Monster = monster
-
-  def createLoot: Seq[ItemTrait] = loot.map(i => Item.createItem(i))
-}
-
-object Quest {
-
-  private var questID: Long = 0
-
-  def getNewUniqueQuestID: Long = {
-    questID += 1
-    questID
-  }
-
-  def createQuest(level: Int, loot: Seq[ItemTypeTrait]): QuestTrait = {
-    val monster = RandomMonsterFactory.generateMonster(level)
-    new Quest(monster, loot)
-  }
+  /** Returns items obtained from quest if success
+    * Calling this method several times
+    * should give the same itemTypes but items with different id
+    *
+    * @return <b>items</b> obtained from quest if success
+    */
+  def createLoot: Seq[Item]
 }

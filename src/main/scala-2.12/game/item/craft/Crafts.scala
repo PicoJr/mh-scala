@@ -1,42 +1,58 @@
 package game.item.craft
 
-import game.item._
+import game.item.{Item, ItemType}
 
-/** Holds all craft recipes for all item types.
-  * Created by nol on 14/11/17.
+/** Holds recipes for crafts
+  * itemType + material -> itemType
+  * Created by nol on 21/11/17.
   */
-class Crafts extends CraftsTrait {
-  private var recipes: Map[(ItemTypeTrait, ItemTypeTrait), ItemTypeTrait] = Map.empty
+trait Crafts {
 
-  def addRecipe(i1: ItemTypeTrait, material: ItemTypeTrait, result: ItemTypeTrait): Unit = {
-    recipes += ((i1, material) -> result)
+  /** Returns all craft recipes
+    *
+    * @return all craft recipes
+    */
+  def getRecipes: Map[(ItemType, ItemType), ItemType]
+
+  /** Find craft result of itemType + material if any else None
+    *
+    * @param itemType non material
+    * @param material for the craft
+    * @return result of itemType+ material if any else None
+    */
+  def findCraftResult(itemType: ItemType, material: ItemType): Option[ItemType] = {
+    getRecipes.get((itemType, material))
   }
 
-  def getRecipes: Map[(ItemTypeTrait, ItemTypeTrait), ItemTypeTrait] = recipes
+  /** Add new recipe
+    *
+    * @param itemType non material
+    * @param material for the craft
+    * @param result   of the craft (non material)
+    */
+  def addRecipe(itemType: ItemType, material: ItemType, result: ItemType): Unit
 
-  def getMaterials(level: Int): Seq[ItemTypeTrait] = {
-    var materials = Seq.empty[ItemTypeTrait]
-    for (recipe <- getRecipes) {
-      recipe match {
-        case ((i1, i2), i3) =>
-          if (i1.isMaterial) materials = materials :+ i1
-          if (i2.isMaterial) materials = materials :+ i2
-          if (i3.isMaterial) materials = materials :+ i3
-      }
-    }
-    materials
+  /** Returns recipes with i as ingredient
+    *
+    * @param i item
+    * @return all recipes for which i is an ingredient (not a result)
+    */
+  def getRecipesWith(i: Item): Map[(ItemType, ItemType), ItemType] = {
+    getRecipes.filterKeys { case (i1, i2) => i.isItemType(i1) || i.isItemType(i2) }
   }
 
-  def getNonMaterials(level: Int): Seq[ItemTypeTrait] = {
-    var nonMaterials = Seq.empty[ItemTypeTrait]
-    for (recipe <- getRecipes) {
-      recipe match {
-        case ((i1, i2), i3) =>
-          if (!i1.isMaterial) nonMaterials = nonMaterials :+ i1
-          if (!i2.isMaterial) nonMaterials = nonMaterials :+ i2
-          if (!i3.isMaterial) nonMaterials = nonMaterials :+ i3
-      }
-    }
-    nonMaterials
-  }
+  /** Get all materials from recipes with 'level' level
+    *
+    * @param level of materials
+    * @return all materials from recipes with 'level' level
+    */
+  def getMaterials(level: Int): Seq[ItemType]
+
+  /** Get all non materials from recipes with 'level' level
+    *
+    * @param level of non materials
+    * @return all non materials from recipes with 'level' level
+    */
+  def getNonMaterials(level: Int): Seq[ItemType]
+
 }

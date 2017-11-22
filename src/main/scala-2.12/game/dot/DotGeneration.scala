@@ -1,16 +1,17 @@
-package game.item.craft
+package game.dot
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
-import game.item.ItemTypeTrait
+import game.item.ItemType
+import game.item.craft.{CraftPrototype, Crafts}
 
 import scalax.collection.Graph
 import scalax.collection.edge.LDiEdge
 import scalax.collection.io.dot._
 
 
-/**
+/** Generates 3 dot files (weapons, armors, charms) from crafts
   * Created by nol on 19/11/17.
   */
 object DotGeneration extends App {
@@ -29,7 +30,7 @@ object DotGeneration extends App {
   val charmsDot = charms.toDot(dotRoot, edgeTransformer)
   Files.write(Paths.get("charms.dot"), charmsDot.getBytes(StandardCharsets.UTF_8))
 
-  def generateGraphFor(p: (ItemTypeTrait, ItemTypeTrait, ItemTypeTrait) => Boolean, crafts: CraftsTrait): Graph[String, LDiEdge] = {
+  def generateGraphFor(p: (ItemType, ItemType, ItemType) => Boolean, crafts: Crafts): Graph[String, LDiEdge] = {
     var g = Graph[String, LDiEdge]()
     for (recipe <- crafts.getRecipes) {
       recipe match {
