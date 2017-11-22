@@ -1,4 +1,4 @@
-import game.GameState
+import game.gamestate.GameState
 import org.scalatest.FlatSpec
 
 /**

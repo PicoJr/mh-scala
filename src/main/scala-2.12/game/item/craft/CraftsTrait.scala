@@ -1,4 +1,6 @@
-package game.item
+package game.item.craft
+
+import game.item.{ItemTrait, ItemTypeTrait}
 
 /**
   * Created by nol on 21/11/17.

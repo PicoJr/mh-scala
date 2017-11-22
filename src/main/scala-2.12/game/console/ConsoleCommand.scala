@@ -1,7 +1,7 @@
 package game.console
 
-import game.GameStateTrait
 import game.description.DescriptionFactory
+import game.gamestate.GameStateTrait
 import game.item.{Item, ItemTrait}
 import game.quest.QuestLogic
 

@@ -1,6 +1,7 @@
 package game
 
 import game.console.{CommandParser, ConsoleCommand}
+import game.gamestate.GameState
 
 /**
   * Created by nol on 04/11/17.

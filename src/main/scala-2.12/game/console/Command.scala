@@ -1,6 +1,6 @@
 package game.console
 
-import game.GameStateTrait
+import game.gamestate.GameStateTrait
 
 /**
   * Created by nol on 11/11/17.

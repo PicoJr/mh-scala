@@ -1,6 +1,7 @@
-package game
+package game.gamestate
 
-import game.item.{CraftsTrait, ItemTrait}
+import game.item.ItemTrait
+import game.item.craft.CraftsTrait
 import game.quest.QuestTrait
 import game.unit.{Hunter, Monster}
 

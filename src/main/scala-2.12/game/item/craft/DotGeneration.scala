@@ -3,7 +3,7 @@ package game.item.craft
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
-import game.item.{CraftsTrait, ItemTypeTrait}
+import game.item.ItemTypeTrait
 
 import scalax.collection.Graph
 import scalax.collection.edge.LDiEdge

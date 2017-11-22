@@ -1,9 +1,14 @@
 package game.item
 
+import game.config.ConfigLoader
+
 /** Attack effectiveness
   * Created by nol on 05/11/17.
   */
 object Effectiveness extends Enumeration {
+
+  private final val conf = ConfigLoader.loadEffectivenessConfig
+
   type Effectiveness = Value
   val INEFFECTIVE, NORMAL, EFFECTIVE = Value
 
@@ -15,8 +20,8 @@ object Effectiveness extends Enumeration {
     * @return multiplier >= 0.0
     */
   def multiplier(effectiveness: Effectiveness): Double = effectiveness match {
-    case Effectiveness.NORMAL => 1.0
-    case Effectiveness.INEFFECTIVE => 0.5
-    case Effectiveness.EFFECTIVE => 2.0
+    case Effectiveness.NORMAL => conf.getNormalMultiplier
+    case Effectiveness.INEFFECTIVE => conf.getIneffectiveMultiplier
+    case Effectiveness.EFFECTIVE => conf.getEffectiveMultiplier
   }
 }

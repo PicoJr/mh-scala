@@ -1,8 +1,8 @@
-package game
+package game.gamestate
 
 import game.config.ConfigLoader
-import game.item.craft.CraftPrototype
-import game.item.{CraftsTrait, Item, ItemType}
+import game.item.craft.{CraftPrototype, CraftsTrait}
+import game.item.{Item, ItemType}
 import game.quest.{Quest, QuestTrait}
 import game.unit.Hunter
 

@@ -12,6 +12,7 @@ import game.util.Procedural
 object RandomMonsterFactory {
 
   private final val config = ConfigLoader.loadGameConfig
+  private final val nameConfig = ConfigLoader.loadNameConfig
 
   private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, config.getStatsGrowth, config.getPercentageVariation)
 
@@ -50,7 +51,7 @@ object RandomMonsterFactory {
   }
 
   def generateMonster(level: Int): Monster = {
-    val name = generateName(level)
+    val name = Procedural.pickRandomFromSeq(nameConfig.getMonsters).get
     val life = getRandomValue(level, config.getMonsterLifeBase)
     val armor = getRandomValue(level, config.getMonsterArmorBase)
     val damage = getRandomValue(level, config.getMonsterDamageBase)

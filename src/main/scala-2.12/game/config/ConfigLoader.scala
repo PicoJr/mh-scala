@@ -10,13 +10,15 @@ import scala.collection.JavaConverters
 object ConfigLoader {
 
   def loadGameConfig: GameConfig = {
-    val conf = ConfigFactory.load()
-    GameConfig(conf)
+    GameConfig(ConfigFactory.load())
   }
 
   def loadNameConfig: NameConfig = {
-    val conf = ConfigFactory.load()
-    NameConfig(conf)
+    NameConfig(ConfigFactory.load())
+  }
+
+  def loadEffectivenessConfig: EffectivenessConfig = {
+    EffectivenessConfig(ConfigFactory.load())
   }
 
   case class GameConfig(conf: Config) {
@@ -62,29 +64,17 @@ object ConfigLoader {
 
   }
 
+  case class EffectivenessConfig(conf: Config) {
+    def getNormalMultiplier: Double = conf.getDouble("game.effectiveness.normal")
+
+    def getIneffectiveMultiplier: Double = conf.getDouble("game.effectiveness.ineffective")
+
+    def getEffectiveMultiplier: Double = conf.getDouble("game.effectiveness.effective")
+  }
+
   case class NameConfig(conf: Config) {
 
-    def getWeaponNatures: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.weaponNatures"))
-
-    def getCharmNatures: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.charmNatures"))
-
-    def getMaterialNatures: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.materialNatures"))
-
-    def getProtectionAdjectives: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.protectionAdjectives"))
-
-    def getDamageAdjectives: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.damageAdjectives"))
-
-    def getFireAdjectives: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.fireAdjectives"))
-
-    def getWaterAdjectives: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.waterAdjectives"))
-
-    def getArmorHeadNatures: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.armorHeadNatures"))
-
-    def getArmorBodyNatures: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.armorBodyNatures"))
-
-    def getArmorArmsNatures: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.armorArmsNatures"))
-
-    def getArmorLegsNatures: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.armorLegsNatures"))
+    def getMonsters: Seq[String] = JavaConverters.asScalaBuffer(conf.getStringList("game.name.monsters"))
 
   }
 

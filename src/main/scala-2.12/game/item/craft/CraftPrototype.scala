@@ -146,14 +146,14 @@ object CraftPrototype {
   }
 
 
-  case class CraftStep(itemTypeRoot: ItemType, categoryRoot: CategoryBuilder, crafts: Crafts, materialPool: MaterialPool)
+  case class CraftStep(itemTypeRoot: ItemTypeTrait, categoryRoot: CategoryBuilder, crafts: CraftsTrait, materialPool: MaterialPool)
 
   class MaterialPool {
-    private var elementMaterial = Map.empty[ElementType, ItemType]
-    private var statusMaterial = Map.empty[StatusType, ItemType]
-    private var bonusMaterial = Map.empty[BonusType, ItemType]
+    private var elementMaterial = Map.empty[ElementType, ItemTypeTrait]
+    private var statusMaterial = Map.empty[StatusType, ItemTypeTrait]
+    private var bonusMaterial = Map.empty[BonusType, ItemTypeTrait]
 
-    def getElementMaterial(elementType: ElementType, level: Int): ItemType = {
+    def getElementMaterial(elementType: ElementType, level: Int): ItemTypeTrait = {
       elementMaterial.get(elementType) match {
         case Some(e) => e
         case None =>
@@ -163,7 +163,7 @@ object CraftPrototype {
       }
     }
 
-    def getStatusMaterial(statusType: StatusType, level: Int): ItemType = {
+    def getStatusMaterial(statusType: StatusType, level: Int): ItemTypeTrait = {
       statusMaterial.get(statusType) match {
         case Some(e) => e
         case None =>
@@ -173,7 +173,7 @@ object CraftPrototype {
       }
     }
 
-    def getBonusMaterial(bonusType: BonusType, level: Int): ItemType = {
+    def getBonusMaterial(bonusType: BonusType, level: Int): ItemTypeTrait = {
       bonusMaterial.get(bonusType) match {
         case Some(e) => e
         case None =>
@@ -218,7 +218,7 @@ object CraftPrototype {
     }
   }
 
-  def generateCraft: Crafts = {
+  def generateCraft: CraftsTrait = {
     val crafts = new Crafts
     // init
     for (natureCategory <- NatureType.values) {

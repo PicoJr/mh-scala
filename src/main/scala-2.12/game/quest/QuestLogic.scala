@@ -1,7 +1,7 @@
 package game.quest
 
-import game.GameStateTrait
 import game.config.ConfigLoader
+import game.gamestate.GameStateTrait
 import game.item.ElementType
 import game.unit.{GameUnitTrait, Hunter}
 

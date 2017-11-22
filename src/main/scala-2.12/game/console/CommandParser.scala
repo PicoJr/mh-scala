@@ -1,6 +1,6 @@
 package game.console
 
-import game.GameStateTrait
+import game.gamestate.GameStateTrait
 import org.docopt.{Docopt, DocoptExitException}
 
 /**
