@@ -47,7 +47,7 @@ case class Element(wrapped: ItemType, elementType: ElementType) extends ItemType
 }
 
 case class Material(wrapped: ItemType) extends ItemTypeDecorator(wrapped) {
-  override def getSlotTypeRequirement: SlotTypeRequirements = MATERIAL_SLOT()
+  override def getSlotTypeRequirement: SlotTypeRequirements = MATERIAL_SLOT
 }
 
 /**

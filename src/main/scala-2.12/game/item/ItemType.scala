@@ -132,7 +132,7 @@ trait ItemType {
     * @return classified as Equipment
     */
   def isEquipment: Boolean = getSlotTypeRequirement match {
-    case CHARM_SLOT(_) | WEAPON_SLOT() | ARMOR_SLOT(_) => true
+    case CHARM_SLOT(_) | WEAPON_SLOT | ARMOR_SLOT(_) => true
     case _ => false
   }
 
@@ -141,7 +141,7 @@ trait ItemType {
     * @return classified as Material (default: false)
     */
   def isMaterial: Boolean = getSlotTypeRequirement match {
-    case MATERIAL_SLOT() => true
+    case MATERIAL_SLOT => true
     case _ => false
   }
 
@@ -151,7 +151,7 @@ trait ItemType {
     */
   def isWeapon: Boolean = {
     getSlotTypeRequirement match {
-      case WEAPON_SLOT() => true
+      case WEAPON_SLOT => true
       case _ => false
     }
   }

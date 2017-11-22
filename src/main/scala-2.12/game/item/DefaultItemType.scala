@@ -21,11 +21,11 @@ class DefaultItemType(name: String, level: Int, damage: Int, statusType: StatusT
   var _name: String = name
 
   def this(name: String, level: Int) {
-    this(name, level, 0, StatusType.NONE, 0, MATERIAL_SLOT(), ElementType.NONE, 0)
+    this(name, level, 0, StatusType.NONE, 0, MATERIAL_SLOT, ElementType.NONE, 0)
   }
 
   def this(level: Int) {
-    this("unnamed", level, 0, StatusType.NONE, 0, MATERIAL_SLOT(), ElementType.NONE, 0)
+    this("unnamed", level, 0, StatusType.NONE, 0, MATERIAL_SLOT, ElementType.NONE, 0)
   }
 
   def getLevel: Int = level
@@ -59,7 +59,7 @@ object DefaultItemType {
     * @return weapon s.t. weapon.isWeapon
     */
   def createWeapon(level: Int, damage: Int): DefaultItemType = {
-    Damage(Equipment(new DefaultItemType(level), WEAPON_SLOT()), damage)
+    Damage(Equipment(new DefaultItemType(level), WEAPON_SLOT), damage)
   }
 
   /** Create armor

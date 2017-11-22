@@ -9,7 +9,7 @@ import scala.util.Random
   */
 sealed abstract class SlotTypeRequirements
 
-case class WEAPON_SLOT() extends SlotTypeRequirements
+case object WEAPON_SLOT extends SlotTypeRequirements
 
 /** Charm slot requirement
   *
@@ -20,7 +20,7 @@ case class CHARM_SLOT(slots: Int) extends SlotTypeRequirements
 /** Inventory slot requirement (implicitly 1 slot)
   *
   */
-case class MATERIAL_SLOT() extends SlotTypeRequirements
+case object MATERIAL_SLOT extends SlotTypeRequirements
 
 /** Armor slot requirement (implicitely 1 slot) of armor part.
   *

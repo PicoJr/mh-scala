@@ -36,7 +36,7 @@ class ItemTest extends FlatSpec {
   }
 
   "An equipment" should "be an equipment" in {
-    val equipment = Equipment(new DefaultItemType(0), WEAPON_SLOT())
+    val equipment = Equipment(new DefaultItemType(0), WEAPON_SLOT)
     assert(equipment.isEquipment)
   }
 
