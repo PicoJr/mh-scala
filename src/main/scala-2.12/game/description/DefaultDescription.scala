@@ -1,5 +1,6 @@
 package game.description
 
+import game.gamestate.GameState
 import game.item.{ArmorPart, _}
 import game.quest.{Quest, QuestResult}
 import game.unit.{Hunter, Monster}
@@ -7,22 +8,10 @@ import game.unit.{Hunter, Monster}
 /**
   * Created by nol on 11/11/17.
   */
-object DescriptionFactory {
+class DefaultDescription extends Description {
 
 
-  def description(recipes: Map[(ItemType, ItemType), ItemType]): String = {
-    val desc = new StringBuilder()
-    for (m <- recipes) {
-      m match {
-        case ((i1, i2), result) =>
-          desc.append(i1.getName).append(" + ").append(i2.getName)
-          desc.append(" -> ").append(description(result)).append("\n")
-      }
-    }
-    desc.toString()
-  }
-
-  def description(i: ItemType): String = {
+  private def description(i: ItemType): String = {
     val desc = new StringBuilder()
     desc.append(i.getName)
     desc.append("[" + i.getLevel + "]")
@@ -35,14 +24,14 @@ object DescriptionFactory {
     desc.toString()
   }
 
-  def description(i: Item): String = {
+  private def description(i: Item): String = {
     val desc = new StringBuilder()
     desc.append("[").append(i.getUniqueId).append("]")
     desc.append(description(i.asInstanceOf[ItemType]))
     desc.toString()
   }
 
-  def description(inventory: Inventory): String = {
+  private def descriptionInventory(inventory: Inventory): String = {
     val desc = new StringBuilder()
     desc.append("\nweapon\n")
     inventory.getWeaponEquipped match {
@@ -50,7 +39,7 @@ object DescriptionFactory {
       case None =>
     }
     desc.append("\narmor\n")
-    for (armorPart <- Seq(ArmorPart.HEAD, ArmorPart.BODY, ArmorPart.ARMS, ArmorPart.LEGS)) {
+    for (armorPart <- ArmorPart.values) {
       inventory.getArmorEquipped(armorPart) match {
         case Some(a) => desc.append(description(a)).append("\n")
         case None =>
@@ -63,7 +52,7 @@ object DescriptionFactory {
     desc.toString()
   }
 
-  def description(hunter: Hunter): String = {
+  private def descriptionHunter(hunter: Hunter): String = {
     val desc = new StringBuilder()
     desc.append(hunter.getName)
     desc.append("\n")
@@ -72,7 +61,7 @@ object DescriptionFactory {
     desc.toString()
   }
 
-  def description(questResult: QuestResult): String = {
+  private def descriptionQuestResult(questResult: QuestResult): String = {
     val desc = new StringBuilder()
     if (questResult.isMonsterSlain) desc.append("monster slain")
     if (questResult.isHunterDefeated) desc.append("hunter defeated")
@@ -80,18 +69,68 @@ object DescriptionFactory {
     desc.toString()
   }
 
-  def descriptionMonster(monster: Monster): String = {
+  private def descriptionMonster(monster: Monster): String = {
     val desc = new StringBuilder()
     desc.append(monster.getName)
     desc.append("[").append(monster.getUniqueId).append("]")
     desc.toString()
   }
 
-  def description(quest: Quest): String = {
+  private def descriptionQuest(quest: Quest): String = {
     val desc = new StringBuilder()
     desc.append("quest[").append(quest.getUniqueId).append("]")
     desc.append("\n")
     desc.append(descriptionMonster(quest.getMonster))
     desc.toString()
+  }
+
+  override def descriptionRecipesWith(gameState: GameState, itemId: Long): String = {
+    val desc = new StringBuilder()
+    gameState.findItem(itemId) match {
+      case Some(i) =>
+        val recipes = gameState.getCrafts.getRecipesWith(i)
+        for (m <- recipes) {
+          m match {
+            case ((i1, i2), result) =>
+              desc.append(description(i1)).append(" + ").append(description(i2))
+              desc.append(" -> ").append(description(result)).append("\n")
+          }
+        }
+        desc.toString()
+      case None => s"item with id $itemId not found"
+    }
+  }
+
+  override def descriptionItem(gameState: GameState, itemId: Long): String = {
+    gameState.findItem(itemId) match {
+      case Some(i) => description(i)
+      case None => s"item with id $itemId not found"
+    }
+  }
+
+  override def descriptionInventory(gameState: GameState): String = {
+    descriptionInventory(gameState.getHunter.getInventory)
+  }
+
+  override def descriptionHunter(gameState: GameState): String = {
+    descriptionHunter(gameState.getHunter)
+  }
+
+  override def descriptionMonster(gameState: GameState, monsterId: Long): String = {
+    gameState.findMonster(monsterId) match {
+      case Some(m) => descriptionMonster(m)
+      case None => s"monster with id $monsterId not found"
+    }
+  }
+
+  override def descriptionQuest(gameState: GameState, questId: Long): String = {
+    gameState.findQuest(questId) match {
+      case Some(q) => descriptionQuest(q)
+      case None => s"quest with id $questId not found"
+    }
+  }
+
+  override def descriptionQuestResult(gameState: GameState, questResult: QuestResult): String = {
+    descriptionQuestResult(questResult)
   }
 }

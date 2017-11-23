@@ -1,13 +1,14 @@
 package game
 
-import game.console.{CommandParser, ConsoleCommand}
+import game.console.{CommandParser, DefaultCommand}
+import game.description.DefaultDescription
 import game.gamestate.DefaultGameState
 
 /**
   * Created by nol on 04/11/17.
   */
 object Game extends App {
-  val commandParser = new CommandParser(new ConsoleCommand())
+  val commandParser = new CommandParser(new DefaultCommand(new DefaultDescription))
   val gameState = DefaultGameState.createNewGameState
   var quit: Boolean = false
   println("Game started")

@@ -1,60 +1,61 @@
 package game.console
 
-import game.description.DescriptionFactory
+import game.description.Description
 import game.gamestate.GameState
-import game.item.{DefaultItem, Item}
+import game.item.DefaultItem
 
 /**
   * Created by nol on 12/11/17.
   */
-class ConsoleCommand extends Command {
-
-  private def tryActionOnItem(gameState: GameState, itemId: Long, action: Item => Unit): Unit = {
-    gameState.findItem(itemId) match {
-      case Some(i) => action(i)
-      case None => println(s"item with id $itemId not found")
-    }
-  }
+class DefaultCommand(description: Description) extends Command {
 
   def listQuests(gameState: GameState): Unit = {
     for (q <- gameState.getQuests) {
-      println(DescriptionFactory.description(q))
+      println(description.descriptionQuest(gameState, q.getUniqueId))
     }
   }
 
   def listInventory(gameState: GameState): Unit = {
-    println(DescriptionFactory.description(gameState.getHunter.getInventory))
+    println(description.descriptionInventory(gameState))
   }
 
   def showQuest(gameState: GameState, questId: Long): Unit = {
     gameState.findQuest(questId) match {
-      case Some(q) => println(DescriptionFactory.description(q))
+      case Some(q) => println(description.descriptionQuest(gameState, q.getUniqueId))
       case None => println(s"quest with id $questId not found")
     }
   }
 
   def showMonster(gameState: GameState, monsterId: Long): Unit = {
     gameState.findMonster(monsterId) match {
-      case Some(m) => println(DescriptionFactory.descriptionMonster(m))
+      case Some(m) => println(description.descriptionMonster(gameState, m.getUniqueId))
       case None => println(s"monster with id $monsterId not found")
     }
   }
 
   def showHunter(gameState: GameState): Unit = {
-    println(DescriptionFactory.description(gameState.getHunter))
+    println(description.descriptionHunter(gameState))
   }
 
   def equipItem(gameState: GameState, itemId: Long): Unit = {
     val inventory = gameState.getHunter.getInventory
-    tryActionOnItem(gameState, itemId, i => if (inventory.canBeEquipped(i)) inventory.equipItem(i.getUniqueId))
+    gameState.findItem(itemId) match {
+      case Some(i) if inventory.canBeEquipped(i) => inventory.equipItem(i.getUniqueId)
+      case Some(_) => println(s"item with id $itemId cannot be equipped")
+      case None => println(s"item with id $itemId not found")
+    }
   }
 
   def unEquipItem(gameState: GameState, itemId: Long): Unit = {
-    tryActionOnItem(gameState, itemId, i => gameState.getHunter.getInventory.unEquipItem(i.getUniqueId))
+    val inventory = gameState.getHunter.getInventory
+    gameState.findItem(itemId) match {
+      case Some(i) => inventory.unEquipItem(i.getUniqueId)
+      case None => println(s"item with id $itemId not found")
+    }
   }
 
   def showItem(gameState: GameState, itemId: Long): Unit = {
-    tryActionOnItem(gameState, itemId, i => println(DescriptionFactory.description(i)))
+    println(description.descriptionItem(gameState, itemId))
   }
 
   def renameHunter(gameState: GameState, newName: String): Unit = {
@@ -66,13 +67,13 @@ class ConsoleCommand extends Command {
     gameState.findQuest(questId) match {
       case Some(quest) =>
         val questResult = gameState.getQuestLogic.processQuestResult(gameState, quest)
-        println(DescriptionFactory.description(questResult))
+        println(description.descriptionQuestResult(gameState, questResult))
       case None => println(s"quest with id $questId not found")
     }
   }
 
   def showCraft(gameState: GameState, itemId: Long): Unit = {
-    tryActionOnItem(gameState, itemId, i => println(DescriptionFactory.description(gameState.getCrafts.getRecipesWith(i))))
+    println(description.descriptionRecipesWith(gameState, itemId))
   }
 
   def craftItem(gameState: GameState, itemId1: Long, itemId2: Long): Unit = {
@@ -82,7 +83,9 @@ class ConsoleCommand extends Command {
       case (Some(i1), Some(i2)) =>
         gameState.getCrafts.getRecipes.get((i1, i2)) match {
           case Some(result) =>
-            gameState.getHunter.getInventory.addItems(DefaultItem.createItem(result))
+            val itemResult = DefaultItem.createItem(result)
+            gameState.getHunter.getInventory.addItems(itemResult)
+            println("obtained: " + description.descriptionItem(gameState, itemResult.getUniqueId))
           case None => println("no matching craft recipe found")
         }
       case _ => println(s"item with id $itemId1 or $itemId2 not found")
