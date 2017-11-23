@@ -3,6 +3,8 @@ package game.console
 import game.gamestate.GameState
 import org.docopt.{Docopt, DocoptExitException}
 
+import scala.collection.JavaConverters
+
 /**
   * Created by nol on 18/11/17.
   */
@@ -13,9 +15,9 @@ class CommandParser(command: Command) {
       |Usage:
       |  mh hunter show
       |  mh item ls
-      |  mh item (equip | unequip | show) <itemId>
-      |  mh quest (ls | start <questId>)
-      |  mh craft show <itemId>
+      |  mh item (equip | unequip | show) <itemId>...
+      |  mh quest (ls | start <questId>...)
+      |  mh craft show <itemId>...
       |  mh craft new <itemId1> <itemId2>
       |  mh quit
       |  mh (-h | --help)
@@ -28,44 +30,64 @@ class CommandParser(command: Command) {
   def runCommand(args: Seq[String], gameState: GameState): Unit = {
     val docopt = new Docopt(doc).withVersion("MH 1.0").withExit(false).withHelp(false)
     try {
-      val opts = docopt.parse(args: _*)
-      if (opts.get("--help").asInstanceOf[Boolean]) {
+      val simpleOpts = new SimpleOpts(docopt.parse(args: _*))
+      if (simpleOpts.asBoolean("--help")) {
         println(doc)
-      } else if (opts.get("hunter").asInstanceOf[Boolean]) {
-        if (opts.get("show").asInstanceOf[Boolean]) {
+      } else if (simpleOpts.asBoolean("hunter")) {
+        if (simpleOpts.asBoolean("show")) {
           command.showHunter(gameState)
         }
-      } else if (opts.get("item").asInstanceOf[Boolean]) {
-        if (opts.get("show").asInstanceOf[Boolean]) {
-          command.showItem(gameState, opts.get("<itemId>").toString.toLong)
+      } else if (simpleOpts.asBoolean("item")) {
+        if (simpleOpts.asBoolean("show")) {
+          command.showItem(gameState, simpleOpts.asLong("<itemId>"))
         }
-        if (opts.get("equip").asInstanceOf[Boolean]) {
-          command.equipItem(gameState, opts.get("<itemId>").toString.toLong)
+        if (simpleOpts.asBoolean("equip")) {
+          for (itemId <- simpleOpts.asSeq("<itemId>")) {
+            command.equipItem(gameState, itemId.toString.toLong)
+          }
         }
-        if (opts.get("unequip").asInstanceOf[Boolean]) {
-          command.unEquipItem(gameState, opts.get("<itemId>").toString.toLong)
+        if (simpleOpts.asBoolean("unequip")) {
+          command.unEquipItem(gameState, simpleOpts.asLong("<itemId>"))
         }
-        if (opts.get("ls").asInstanceOf[Boolean]) {
+        if (simpleOpts.asBoolean("ls")) {
           command.listInventory(gameState)
         }
-      } else if (opts.get("craft").asInstanceOf[Boolean]) {
-        if (opts.get("show").asInstanceOf[Boolean]) {
-          command.showCraft(gameState, opts.get("<itemId>").toString.toLong)
+      } else if (simpleOpts.asBoolean("craft")) {
+        if (simpleOpts.asBoolean("show")) {
+          for (itemId <- simpleOpts.asSeq("<itemId>")) {
+            command.showCraft(gameState, itemId.toString.toLong)
+          }
         }
-        if (opts.get("new").asInstanceOf[Boolean]) {
-          command.craftItem(gameState, opts.get("<itemId1>").toString.toLong, opts.get("<itemId2>").toString.toLong)
+        if (simpleOpts.asBoolean("new")) {
+          command.craftItem(gameState, simpleOpts.asLong("<itemId1>"), simpleOpts.asLong("<itemId2>"))
         }
-      } else if (opts.get("quest").asInstanceOf[Boolean]) {
-        if (opts.get("start").asInstanceOf[Boolean]) {
-          command.startQuest(gameState, opts.get("<questId>").toString.toLong)
+      } else if (simpleOpts.asBoolean("quest")) {
+        if (simpleOpts.asBoolean("start")) {
+          for (questId <- simpleOpts.asSeq("<questId>")) {
+            command.startQuest(gameState, questId.toString.toLong)
+          }
         }
-        if (opts.get("ls").asInstanceOf[Boolean]) {
+        if (simpleOpts.asBoolean("ls")) {
           command.listQuests(gameState)
         }
       }
     } catch {
       case _: DocoptExitException =>
       case e: IllegalArgumentException => System.err.println(e.getMessage)
+    }
+  }
+
+  private class SimpleOpts(opts: java.util.Map[String, AnyRef]) {
+    def asSeq(paramName: String): Seq[AnyRef] = {
+      JavaConverters.asScalaBuffer(opts.get(paramName).asInstanceOf[java.util.List[String]])
+    }
+
+    def asBoolean(paramName: String): Boolean = {
+      opts.get(paramName).asInstanceOf[Boolean]
+    }
+
+    def asLong(paramName: String): Long = {
+      opts.get(paramName).toString.toLong
     }
   }
 
