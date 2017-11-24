@@ -82,12 +82,18 @@ class DefaultCommand(description: Description) extends Command {
     val optI2 = gameState.findItem(itemId2)
     (optI1, optI2) match {
       case (Some(i1), Some(i2)) =>
-        gameState.getCrafts.getRecipes.get((i1, i2)) match {
-          case Some(result) =>
+        val result_i1_i2 = gameState.getCrafts.getRecipes.get((i1.getItemType, i2.getItemType))
+        val result_i2_i1 = gameState.getCrafts.getRecipes.get((i2.getItemType, i1.getItemType))
+        (result_i1_i2, result_i2_i1) match {
+          case (Some(result), _) =>
             val itemResult = DefaultItem.createItem(result)
             gameState.getHunter.getInventory.addItems(itemResult)
             println("obtained: " + description.descriptionItem(gameState, itemResult.getUniqueId))
-          case None => println("no matching craft recipe found")
+          case (_, Some(result)) =>
+            val itemResult = DefaultItem.createItem(result)
+            gameState.getHunter.getInventory.addItems(itemResult)
+            println("obtained: " + description.descriptionItem(gameState, itemResult.getUniqueId))
+          case _ => println("no matching craft recipe found")
         }
       case _ => println(s"item with id $itemId1 or $itemId2 not found")
     }

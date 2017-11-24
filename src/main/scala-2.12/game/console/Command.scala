@@ -27,9 +27,12 @@ trait Command {
 
   /** Craft item result of itemId1 and itemId2, add it to hunter inventory
     *
+    * Note: id order should not be taken into account
+    * craftItem(gameState, i1, i2) equivalent to craftItem(gameState, i2, i1)
+    *
     * @param gameState containing items
-    * @param itemId1   1st item id
-    * @param itemId2   2nd item id
+    * @param itemId1   one item id
+    * @param itemId2   other item id
     */
   def craftItem(gameState: GameState, itemId1: Long, itemId2: Long): Unit
 
