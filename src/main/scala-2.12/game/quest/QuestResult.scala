@@ -11,11 +11,29 @@ trait QuestResult {
     */
   def isMonsterSlain: Boolean
 
+  /** Returns damage dealt by Monster to Hunter during quest
+    *
+    * @return damage dealt by Monster during quest
+    */
+  def getDamageDealtByMonster: Double
+
+  /** Returns damage dealt by Hunter to Monster during quest
+    *
+    * @return damage dealt by Hunter during quest
+    */
+  def getDamageDealtByHunter: Double
+
   /** Test if hunter is defeated
     *
     * @return hunter was defeated during quest
     */
   def isHunterDefeated: Boolean
+
+  /** Get time elapsed during quest
+    *
+    * @return time elapsed (>0)
+    */
+  def getTimeElapsed: Double
 
   /** Same as isMonsterSlain && !isHunterDefeated
     *

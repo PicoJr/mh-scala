@@ -16,14 +16,20 @@ class DefaultQuestLogic(eEResolver: EEResolver) extends QuestLogic {
   }
 
   private def computeQuestResult(hunter: Hunter, quest: Quest): QuestResult = {
-    val durationMaxHunter = hunter.getLife / computeDamageDealt(quest.getMonster, hunter)
-    val durationMaxMonster = quest.getMonster.getLife / computeDamageDealt(hunter, quest.getMonster)
-    val questShortEnoughForHunterToSurvive = durationMaxHunter > DefaultQuestLogic.config.getQuestDurationMax
-    val questShortEnoughForMonsterToSurvive = durationMaxMonster > DefaultQuestLogic.config.getQuestDurationMax
-    val hunterWeakerThanMonster = durationMaxHunter < durationMaxMonster
-    val hunterDefeated = hunterWeakerThanMonster && !questShortEnoughForHunterToSurvive
-    val monsterSlain = !hunterWeakerThanMonster && !questShortEnoughForMonsterToSurvive
-    new QuestResultDefault(monsterSlain, hunterDefeated)
+    val questResultDefault = new QuestResultDefault
+    val damageDealtByHunter = computeDamageDealt(hunter, quest.getMonster)
+    questResultDefault.withDamageDealtByHunter(damageDealtByHunter)
+    val damageDealtByMonster = computeDamageDealt(quest.getMonster, hunter)
+    questResultDefault.withDamageDealtByMonster(damageDealtByMonster)
+    val durationMaxHunter = hunter.getLife / damageDealtByMonster
+    val durationMaxMonster = quest.getMonster.getLife / damageDealtByHunter
+    val timeElapsed = math.min(DefaultQuestLogic.config.getQuestDurationMax, math.min(durationMaxHunter, durationMaxMonster))
+    questResultDefault.withTimeElapsed(timeElapsed)
+    val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxHunter < DefaultQuestLogic.config.getQuestDurationMax
+    questResultDefault.withHunterDefeated(hunterDefeated)
+    val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxMonster < DefaultQuestLogic.config.getQuestDurationMax
+    questResultDefault.withMonsterSlain(monsterSlain)
+    questResultDefault
   }
 
   override def processQuestResult(gameState: GameState, quest: Quest): QuestResult = {
