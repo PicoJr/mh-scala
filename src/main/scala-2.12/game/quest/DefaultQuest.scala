@@ -7,7 +7,7 @@ import game.unit.{Monster, RandomMonsterFactory}
 /** Rewards hunter with loot when monster is slain
   * Created by nol on 05/11/17.
   */
-class DefaultQuest(monster: Monster, loot: Seq[ItemType]) extends Quest {
+class DefaultQuest(monster: Monster, loot: Seq[ItemType], level: Int) extends Quest {
   private final val uniqueID: Long = DefaultQuest.questIdSupplier.getNextUniqueId
 
   override def getUniqueId: Long = uniqueID
@@ -15,6 +15,8 @@ class DefaultQuest(monster: Monster, loot: Seq[ItemType]) extends Quest {
   override def getMonster: Monster = monster
 
   override def createLoot: Seq[Item] = loot.map(i => DefaultItem.createItem(i))
+
+  override def getLevel: Int = level
 }
 
 object DefaultQuest {
@@ -23,6 +25,6 @@ object DefaultQuest {
 
   def createQuest(level: Int, loot: Seq[ItemType]): Quest = {
     val monster = RandomMonsterFactory.generateMonster(level)
-    new DefaultQuest(monster, loot)
+    new DefaultQuest(monster, loot, level)
   }
 }

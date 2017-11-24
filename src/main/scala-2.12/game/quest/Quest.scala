@@ -22,4 +22,10 @@ trait Quest extends Identifiable {
     * @return <b>items</b> obtained from quest if success
     */
   def createLoot: Seq[Item]
+
+  /** Returns quest level (how tough the quest is to complete)
+    *
+    * @return quest level
+    */
+  def getLevel: Int
 }

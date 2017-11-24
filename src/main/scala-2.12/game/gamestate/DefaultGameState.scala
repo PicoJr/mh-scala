@@ -1,9 +1,9 @@
 package game.gamestate
 
 import game.config.ConfigLoader
+import game.item.DefaultItem
 import game.item.craft.{CraftPrototype, Crafts}
 import game.item.element.DefaultEEResolver
-import game.item.{DefaultItem, DefaultItemType}
 import game.quest._
 import game.unit.{DefaultHunter, Hunter}
 
@@ -50,11 +50,7 @@ object DefaultGameState {
   }
 
   private def createHunter: Hunter = {
-    val hunter = new DefaultHunter(config.getHunterName)
-    val weapon = DefaultItem.createItem(DefaultItemType.createWeapon(config.getLevelMin, 500))
-    hunter.getInventory.addItems(weapon)
-    hunter.getInventory.equipItem(weapon.getUniqueId)
-    hunter
+    new DefaultHunter(config.getHunterName)
   }
 
   private def createQuests(crafts: Crafts): Seq[Quest] = {

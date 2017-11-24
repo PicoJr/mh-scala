@@ -18,7 +18,7 @@ object CraftPrototype {
 
   private def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
 
-  private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, config.getStatsGrowth, config.getPercentageVariation)
+  private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, config.getHunterStatsGrowth, config.getPercentageVariation)
 
   object NatureType extends Enumeration {
     type NatureType = Value

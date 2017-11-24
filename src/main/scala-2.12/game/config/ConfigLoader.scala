@@ -26,7 +26,9 @@ object ConfigLoader {
 
     def getLevelMax: Int = conf.getInt("game.level.max")
 
-    def getStatsGrowth: Double = conf.getDouble("game.level.statsGrowth")
+    def getHunterStatsGrowth: Double = conf.getDouble("game.hunter.statsGrowth")
+
+    def getMonsterStatsGrowth: Double = conf.getDouble("game.monster.statsGrowth")
 
     def getHunterName: String = conf.getString("game.hunter.name")
 

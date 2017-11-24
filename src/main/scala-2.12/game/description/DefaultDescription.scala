@@ -84,15 +84,16 @@ class DefaultDescription extends Description {
     if (questResult.isMonsterSlain) desc.append("monster slain\n")
     if (questResult.isHunterDefeated) desc.append("hunter defeated\n")
     if (!questResult.isMonsterSlain & !questResult.isHunterDefeated) desc.append("quest max duration reached\n")
-    desc.append("time elapsed: ").append(questResult.getTimeElapsed).append("\n")
-    desc.append("hunter dmg dealt ").append(questResult.getDamageDealtByHunter).append("\n")
-    desc.append("hunter dmg received ").append(questResult.getDamageDealtByMonster).append("\n")
+    desc.append("time elapsed: ").append(questResult.getTimeElapsed.toInt).append("\n")
+    desc.append("hunter dmg dealt ").append(questResult.getDamageDealtByHunter.toInt).append("\n")
+    desc.append("hunter dmg received ").append(questResult.getDamageDealtByMonster.toInt).append("\n")
     desc.toString()
   }
 
   private def descriptionQuest(quest: Quest): String = {
     val desc = new StringBuilder()
     desc.append("quest[").append(quest.getUniqueId).append("]")
+    desc.append(" level: ").append(quest.getLevel)
     desc.append("\n")
     desc.append(descriptionMonster(quest.getMonster))
     desc.toString()
