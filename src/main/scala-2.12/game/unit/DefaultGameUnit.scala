@@ -13,9 +13,9 @@ sealed abstract class DefaultGameUnit(name: String) extends GameUnit {
 
   private var _name: String = name
 
-  def getName: String = _name
+  override def getName: String = _name
 
-  def setName(newName: String): Unit = {
+  override def setName(newName: String): Unit = {
     _name = newName
   }
 
@@ -24,7 +24,7 @@ sealed abstract class DefaultGameUnit(name: String) extends GameUnit {
 case class DefaultMonster(name: String, life: Int, armor: Int, damage: Int, attackStatusType: StatusType, attackElementType: ElementType, armorStatusTypes: Seq[StatusType], armorElementTypes: Seq[ElementType]) extends DefaultGameUnit(name) with Monster {
   private final val uniqueID = DefaultMonster.monsterIdSupplier.getNextUniqueId
 
-  def getUniqueId: Long = uniqueID
+  override def getUniqueId: Long = uniqueID
 
   override def getLife: Int = life
 
@@ -51,21 +51,21 @@ case class DefaultHunter(name: String, inventory: Inventory) extends DefaultGame
     this(name, new DefaultInventory)
   }
 
-  def getInventory: Inventory = inventory
+  override def getInventory: Inventory = inventory
 
-  def getLife: Int = DefaultHunter.config.getHunterLifeMax
+  override def getLife: Int = DefaultHunter.config.getHunterLifeMax
 
-  def getArmor: Int = getInventory.getArmorProvided
+  override def getArmor: Int = getInventory.getArmorProvided
 
-  def getDamage: Int = getInventory.getDamageProvided
+  override def getDamage: Int = getInventory.getDamageProvided
 
-  def getAttackElementType: ElementType = getInventory.getAttackElementType
+  override def getAttackElementType: ElementType = getInventory.getAttackElementType
 
-  def getArmorElementTypes: Seq[ElementType] = getInventory.getArmorElementTypes
+  override def getArmorElementTypes: Seq[ElementType] = getInventory.getArmorElementTypes
 
-  def getAttackStatusType: StatusType = getInventory.getAttackStatusType
+  override def getAttackStatusType: StatusType = getInventory.getAttackStatusType
 
-  def getArmorStatusTypes: Seq[StatusType] = getInventory.getArmorStatusTypes
+  override def getArmorStatusTypes: Seq[StatusType] = getInventory.getArmorStatusTypes
 }
 
 object DefaultHunter {

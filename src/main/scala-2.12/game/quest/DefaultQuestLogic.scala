@@ -26,7 +26,7 @@ class DefaultQuestLogic(eEResolver: EEResolver) extends QuestLogic {
     new QuestResultDefault(monsterSlain, hunterDefeated)
   }
 
-  def processQuestResult(gameState: GameState, quest: Quest): QuestResult = {
+  override def processQuestResult(gameState: GameState, quest: Quest): QuestResult = {
     val questResult = computeQuestResult(gameState.getHunter, quest)
     if (questResult.isSuccessful) gameState.getHunter.getInventory.addItems(quest.createLoot: _*)
     questResult

@@ -28,25 +28,25 @@ class DefaultItemType(name: String, level: Int, damage: Int, statusType: StatusT
     this("unnamed", level, 0, StatusType.NONE, 0, MATERIAL_SLOT, ElementType.NONE, 0)
   }
 
-  def getLevel: Int = level
+  override def getLevel: Int = level
 
-  def getName: String = _name
+  override def getName: String = _name
 
-  def setName(newName: String): Unit = {
+  override def setName(newName: String): Unit = {
     _name = newName
   }
 
-  def getDamage: Int = damage
+  override def getDamage: Int = damage
 
-  def getStatusType: StatusType = statusType
+  override def getStatusType: StatusType = statusType
 
-  def getArmor: Int = armor
+  override def getArmor: Int = armor
 
-  def getSlotTypeRequirement: SlotTypeRequirements = slotTypeRequirements
+  override def getSlotTypeRequirement: SlotTypeRequirements = slotTypeRequirements
 
-  def getElementType: ElementType = elementType
+  override def getElementType: ElementType = elementType
 
-  def getCharmSlotsProvided: Int = charmSlots
+  override def getCharmSlotsProvided: Int = charmSlots
 
 }
 

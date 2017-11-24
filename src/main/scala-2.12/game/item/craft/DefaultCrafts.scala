@@ -8,17 +8,17 @@ import game.item._
 class DefaultCrafts extends Crafts {
   private var recipes: Map[(ItemType, ItemType), ItemType] = Map.empty
 
-  def addRecipe(i1: ItemType, material: ItemType, result: ItemType): Unit = {
+  override def addRecipe(i1: ItemType, material: ItemType, result: ItemType): Unit = {
     recipes += ((i1, material) -> result)
   }
 
-  def getRecipes: Map[(ItemType, ItemType), ItemType] = recipes
+  override def getRecipes: Map[(ItemType, ItemType), ItemType] = recipes
 
-  def getMaterials(level: Int): Seq[ItemType] = {
+  override def getMaterials(level: Int): Seq[ItemType] = {
     filterAll(i => i.isMaterial && i.getLevel == level)
   }
 
-  def getNonMaterials(level: Int): Seq[ItemType] = {
+  override def getNonMaterials(level: Int): Seq[ItemType] = {
     filterAll(i => !i.isMaterial && i.getLevel == level)
   }
 

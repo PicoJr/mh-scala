@@ -14,17 +14,17 @@ class DefaultGameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts, quest
 
   private var questsCompletedIds: Set[Long] = Set.empty
 
-  def getHunter: Hunter = hunter
+  override def getHunter: Hunter = hunter
 
-  def getQuests: Seq[Quest] = quests
+  override def getQuests: Seq[Quest] = quests
 
-  def getCrafts: Crafts = crafts
+  override def getCrafts: Crafts = crafts
 
-  def setCompleted(questId: Long): Unit = {
+  override def setCompleted(questId: Long): Unit = {
     questsCompletedIds += questId
   }
 
-  def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
+  override def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
 
   override def getQuestLogic: QuestLogic = questLogic
 }

@@ -11,9 +11,9 @@ class DefaultItem(itemType: ItemType) extends Item {
 
   private final val uniqueID = DefaultItem.itemIdSupplier.getNextUniqueId
 
-  def getItemType: ItemType = itemType
+  override def getItemType: ItemType = itemType
 
-  def getUniqueId: Long = uniqueID
+  override def getUniqueId: Long = uniqueID
 
   override def getLevel: Int = itemType.getLevel
 

@@ -6,7 +6,7 @@ package game.id
 class DefaultIdSupplier extends IdSupplier {
   private var id: Long = 0
 
-  def getNextUniqueId: Long = {
+  override def getNextUniqueId: Long = {
     id += 1
     id
   }

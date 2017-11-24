@@ -5,8 +5,8 @@ package game.quest
   */
 class QuestResultDefault(monsterSlain: Boolean, hunterDefeated: Boolean) extends QuestResult {
 
-  def isMonsterSlain: Boolean = monsterSlain
+  override def isMonsterSlain: Boolean = monsterSlain
 
-  def isHunterDefeated: Boolean = hunterDefeated
+  override def isHunterDefeated: Boolean = hunterDefeated
 
 }

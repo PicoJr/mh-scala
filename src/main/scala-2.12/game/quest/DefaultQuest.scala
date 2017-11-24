@@ -10,11 +10,11 @@ import game.unit.{Monster, RandomMonsterFactory}
 class DefaultQuest(monster: Monster, loot: Seq[ItemType]) extends Quest {
   private final val uniqueID: Long = DefaultQuest.questIdSupplier.getNextUniqueId
 
-  def getUniqueId: Long = uniqueID
+  override def getUniqueId: Long = uniqueID
 
-  def getMonster: Monster = monster
+  override def getMonster: Monster = monster
 
-  def createLoot: Seq[Item] = loot.map(i => DefaultItem.createItem(i))
+  override def createLoot: Seq[Item] = loot.map(i => DefaultItem.createItem(i))
 }
 
 object DefaultQuest {
