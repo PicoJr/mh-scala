@@ -68,6 +68,7 @@ class DefaultCommand(description: Description) extends Command {
       case Some(quest) =>
         val questResult = gameState.getQuestLogic.processQuestResult(gameState, quest)
         println(description.descriptionQuestResult(gameState, questResult))
+        if (questResult.isSuccessful) gameState.setCompleted(quest.getUniqueId)
       case None => println(s"quest with id $questId not found")
     }
   }
