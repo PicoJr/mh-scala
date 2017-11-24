@@ -9,35 +9,35 @@ import game.item.DefaultItem
   */
 class DefaultCommand(description: Description) extends Command {
 
-  def listQuests(gameState: GameState): Unit = {
+  override def listQuests(gameState: GameState): Unit = {
     for (q <- gameState.getQuests) {
       println(description.descriptionQuest(gameState, q.getUniqueId))
     }
   }
 
-  def listInventory(gameState: GameState): Unit = {
+  override def listInventory(gameState: GameState): Unit = {
     println(description.descriptionInventory(gameState))
   }
 
-  def showQuest(gameState: GameState, questId: Long): Unit = {
+  override def showQuest(gameState: GameState, questId: Long): Unit = {
     gameState.findQuest(questId) match {
       case Some(q) => println(description.descriptionQuest(gameState, q.getUniqueId))
       case None => println(s"quest with id $questId not found")
     }
   }
 
-  def showMonster(gameState: GameState, monsterId: Long): Unit = {
+  override def showMonster(gameState: GameState, monsterId: Long): Unit = {
     gameState.findMonster(monsterId) match {
       case Some(m) => println(description.descriptionMonster(gameState, m.getUniqueId))
       case None => println(s"monster with id $monsterId not found")
     }
   }
 
-  def showHunter(gameState: GameState): Unit = {
+  override def showHunter(gameState: GameState): Unit = {
     println(description.descriptionHunter(gameState))
   }
 
-  def equipItem(gameState: GameState, itemId: Long): Unit = {
+  override def equipItem(gameState: GameState, itemId: Long): Unit = {
     val inventory = gameState.getHunter.getInventory
     gameState.findItem(itemId) match {
       case Some(i) if inventory.canBeEquipped(i) => inventory.equipItem(i.getUniqueId)
@@ -46,7 +46,7 @@ class DefaultCommand(description: Description) extends Command {
     }
   }
 
-  def unEquipItem(gameState: GameState, itemId: Long): Unit = {
+  override def unEquipItem(gameState: GameState, itemId: Long): Unit = {
     val inventory = gameState.getHunter.getInventory
     gameState.findItem(itemId) match {
       case Some(i) => inventory.unEquipItem(i.getUniqueId)
@@ -54,16 +54,16 @@ class DefaultCommand(description: Description) extends Command {
     }
   }
 
-  def showItem(gameState: GameState, itemId: Long): Unit = {
+  override def showItem(gameState: GameState, itemId: Long): Unit = {
     println(description.descriptionItem(gameState, itemId))
   }
 
-  def renameHunter(gameState: GameState, newName: String): Unit = {
+  override def renameHunter(gameState: GameState, newName: String): Unit = {
     gameState.getHunter.setName(newName)
     println(s"new name: $newName")
   }
 
-  def startQuest(gameState: GameState, questId: Long): Unit = {
+  override def startQuest(gameState: GameState, questId: Long): Unit = {
     gameState.findQuest(questId) match {
       case Some(quest) =>
         val questResult = gameState.getQuestLogic.processQuestResult(gameState, quest)
@@ -72,11 +72,11 @@ class DefaultCommand(description: Description) extends Command {
     }
   }
 
-  def showCraft(gameState: GameState, itemId: Long): Unit = {
+  override def showCraft(gameState: GameState, itemId: Long): Unit = {
     println(description.descriptionRecipesWith(gameState, itemId))
   }
 
-  def craftItem(gameState: GameState, itemId1: Long, itemId2: Long): Unit = {
+  override def craftItem(gameState: GameState, itemId1: Long, itemId2: Long): Unit = {
     val optI1 = gameState.findItem(itemId1)
     val optI2 = gameState.findItem(itemId2)
     (optI1, optI2) match {
