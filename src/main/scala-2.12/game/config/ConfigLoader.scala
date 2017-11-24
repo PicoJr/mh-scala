@@ -28,6 +28,8 @@ object ConfigLoader {
 
     def getStatsGrowth: Double = conf.getDouble("game.level.statsGrowth")
 
+    def getHunterName: String = conf.getString("game.hunter.name")
+
     def getHunterLifeMax: Int = conf.getInt("game.hunter.lifeMax")
 
     def getDamageMin: Int = conf.getInt("game.hunter.damageMin")

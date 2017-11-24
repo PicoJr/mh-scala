@@ -47,7 +47,9 @@ class CommandParser(command: Command) {
           }
         }
         if (simpleOpts.asBoolean("unequip")) {
-          command.unEquipItem(gameState, simpleOpts.asLong("<itemId>"))
+          for (itemId <- simpleOpts.asSeq("<itemId>")) {
+            command.unEquipItem(gameState, itemId.toString.toLong)
+          }
         }
         if (simpleOpts.asBoolean("ls")) {
           command.listInventory(gameState)

@@ -50,7 +50,7 @@ object DefaultGameState {
   }
 
   private def createHunter: Hunter = {
-    val hunter = new DefaultHunter("unnamed")
+    val hunter = new DefaultHunter(config.getHunterName)
     val weapon = DefaultItem.createItem(DefaultItemType.createWeapon(config.getLevelMin, 500))
     hunter.getInventory.addItems(weapon)
     hunter.getInventory.equipItem(weapon.getUniqueId)

@@ -18,13 +18,13 @@ class DefaultQuestLogic(eEResolver: EEResolver) extends QuestLogic {
   private def computeQuestResult(hunter: Hunter, quest: Quest): QuestResult = {
     val questResultDefault = new QuestResultDefault
     val damageDealtByHunter = computeDamageDealt(hunter, quest.getMonster)
-    questResultDefault.withDamageDealtByHunter(damageDealtByHunter)
     val damageDealtByMonster = computeDamageDealt(quest.getMonster, hunter)
-    questResultDefault.withDamageDealtByMonster(damageDealtByMonster)
     val durationMaxHunter = hunter.getLife / damageDealtByMonster
     val durationMaxMonster = quest.getMonster.getLife / damageDealtByHunter
     val timeElapsed = math.min(DefaultQuestLogic.config.getQuestDurationMax, math.min(durationMaxHunter, durationMaxMonster))
     questResultDefault.withTimeElapsed(timeElapsed)
+    questResultDefault.withDamageDealtByHunter(damageDealtByHunter * timeElapsed)
+    questResultDefault.withDamageDealtByMonster(damageDealtByMonster * timeElapsed)
     val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxHunter < DefaultQuestLogic.config.getQuestDurationMax
     questResultDefault.withHunterDefeated(hunterDefeated)
     val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxMonster < DefaultQuestLogic.config.getQuestDurationMax
