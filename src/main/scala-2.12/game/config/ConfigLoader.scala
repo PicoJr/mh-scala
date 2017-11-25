@@ -40,14 +40,6 @@ object ConfigLoader {
 
     def getQuestsPerLevel: Int = conf.getInt("game.quest.perLevel")
 
-    def getWeaponsPerLevel: Int = conf.getInt("game.craft.weaponsPerLevel")
-
-    def getArmorsPerLevel: Int = conf.getInt("game.craft.armorsPerLevel")
-
-    def getCharmsPerLevel: Int = conf.getInt("game.craft.charmsPerLevel")
-
-    def getMaterialsPerLevel: Int = conf.getInt("game.craft.materialsPerLevel")
-
     def getPercentageVariation: Int = conf.getInt("game.random.percentageVariation")
 
     def getPercentageBonus: Int = conf.getInt("game.random.percentageBonus")

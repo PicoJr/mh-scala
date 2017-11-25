@@ -17,13 +17,17 @@ case object FIRE extends ElementType {
   override val name: String = "burning"
 }
 
+case object ELECTRIC extends ElementType {
+  override val name: String = "thundering"
+}
+
 case object NORMAL extends ElementType {
   override val name: String = "pure"
 }
 
 object ElementType {
 
-  final val values = Seq(WATER, FIRE, NORMAL)
+  final val values = Seq(WATER, FIRE, ELECTRIC, NORMAL)
 
   /** Get random element type
     *
