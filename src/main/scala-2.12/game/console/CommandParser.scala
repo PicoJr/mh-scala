@@ -19,6 +19,7 @@ class CommandParser(command: Command) {
       |  mh quest (ls | start <questId>...)
       |  mh craft show <itemId>...
       |  mh craft new <itemId1> <itemId2>
+      |  mh score
       |  mh quit
       |  mh (-h | --help)
       |  mh --version
@@ -72,6 +73,8 @@ class CommandParser(command: Command) {
         if (simpleOpts.asBoolean("ls")) {
           command.listQuests(gameState)
         }
+      } else if (simpleOpts.asBoolean("score")) {
+        command.showScore(gameState)
       }
     } catch {
       case _: DocoptExitException =>

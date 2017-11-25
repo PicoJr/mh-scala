@@ -13,6 +13,7 @@ import game.unit.{DefaultHunter, Hunter}
 class DefaultGameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts, questLogic: QuestLogic) extends GameState {
 
   private var questsCompletedIds: Set[Long] = Set.empty
+  private val defaultScore: DefaultScore = new DefaultScore
 
   override def getHunter: Hunter = hunter
 
@@ -27,6 +28,8 @@ class DefaultGameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts, quest
   override def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
 
   override def getQuestLogic: QuestLogic = questLogic
+
+  override def getScore: Score = defaultScore
 }
 
 

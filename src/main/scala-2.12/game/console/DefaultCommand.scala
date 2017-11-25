@@ -68,7 +68,13 @@ class DefaultCommand(description: Description) extends Command {
       case Some(quest) =>
         val questResult = gameState.getQuestLogic.processQuestResult(gameState, quest)
         println(description.descriptionQuestResult(gameState, questResult))
-        if (questResult.isSuccessful) gameState.setCompleted(quest.getUniqueId)
+        gameState.getScore.incrQuestAttempts()
+        if (questResult.isSuccessful) {
+          gameState.setCompleted(quest.getUniqueId)
+          gameState.getScore.incrQuestSuccesses()
+        } else {
+          gameState.getScore.incrQuestFailures()
+        }
       case None => println(s"quest with id $questId not found")
     }
   }
@@ -97,5 +103,9 @@ class DefaultCommand(description: Description) extends Command {
         }
       case _ => println(s"item with id $itemId1 or $itemId2 not found")
     }
+  }
+
+  override def showScore(gameState: GameState): Unit = {
+    println(description.descriptionScore(gameState))
   }
 }

@@ -21,4 +21,6 @@ trait Description {
   def descriptionQuest(gameState: GameState, questId: Long): String
 
   def descriptionQuestResult(gameState: GameState, questResult: QuestResult): String
+
+  def descriptionScore(gameState: GameState): String
 }

@@ -34,6 +34,12 @@ trait GameState {
     */
   def getQuestLogic: QuestLogic
 
+  /** Get player (hunter) score
+    *
+    * @return score
+    */
+  def getScore: Score
+
   /** Find quest with id questId
     *
     * @param questID to find
@@ -76,5 +82,21 @@ trait GameState {
     * @return true if quest is completed, false if not or invalid Id
     */
   def isCompletedQuest(questId: Long): Boolean
+
+  /** Same as getQuests.filter(q => isCompletedQuest(q.getUniqueId))
+    *
+    * @return quest completed
+    */
+  def getCompletedQuests: Seq[Quest] = {
+    getQuests.filter(q => isCompletedQuest(q.getUniqueId))
+  }
+
+  /** Same as getCompletedQuests.size == getQuests.size
+    *
+    * @return all quests are completed
+    */
+  def allQuestsCompleted: Boolean = {
+    getCompletedQuests.size == getQuests.size
+  }
 
 }

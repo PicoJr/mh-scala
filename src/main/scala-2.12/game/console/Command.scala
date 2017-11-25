@@ -56,6 +56,12 @@ trait Command {
     */
   def showHunter(gameState: GameState): Unit
 
+  /** Show player (hunter) score
+    *
+    * @param gameState containing score
+    */
+  def showScore(gameState: GameState): Unit
+
   /** Equip item from hunter inventory with id itemId if any and possible
     *
     * @param gameState containing inventory

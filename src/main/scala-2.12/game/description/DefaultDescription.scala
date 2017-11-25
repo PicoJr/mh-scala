@@ -155,4 +155,15 @@ class DefaultDescription extends Description {
   override def descriptionQuestResult(gameState: GameState, questResult: QuestResult): String = {
     descriptionQuestResult(questResult)
   }
+
+  override def descriptionScore(gameState: GameState): String = {
+    val desc = new StringBuilder()
+    if (gameState.allQuestsCompleted) desc.append("All Quests Completed!\n")
+    desc.append("quests completed:").append(gameState.getCompletedQuests.size)
+    desc.append("/").append(gameState.getQuests.size).append("\n")
+    desc.append("quests failures: ").append(gameState.getScore.getQuestsFailures).append("\n")
+    desc.append("quests successes: ").append(gameState.getScore.getQuestsSuccesses).append("\n")
+    desc.append("quests attempts: ").append(gameState.getScore.getQuestAttempts).append("\n")
+    desc.toString()
+  }
 }
