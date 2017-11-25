@@ -4,8 +4,8 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
 import game.description.DefaultDescription
-import game.item.ItemType
 import game.item.craft.{CraftPrototype, Crafts}
+import game.item.{ArmorPart, ItemType}
 
 import scalax.collection.Graph
 import scalax.collection.edge.LDiEdge
@@ -19,15 +19,27 @@ object DotGeneration extends App {
   val defaultDescription = new DefaultDescription()
   val crafts = CraftPrototype.generateCraft
   val weapons = generateGraphFor((i1, i2, _) => i1.isWeapon || i2.isWeapon, crafts)
-  val armors = generateGraphFor((i1, i2, _) => i1.isArmor || i2.isArmor, crafts)
+  val armorsHead = generateGraphFor((i1, i2, _) => i1.isArmorPartRequired(ArmorPart.HEAD) || i2.isArmorPartRequired(ArmorPart.HEAD), crafts)
+  val armorsBody = generateGraphFor((i1, i2, _) => i1.isArmorPartRequired(ArmorPart.BODY) || i2.isArmorPartRequired(ArmorPart.BODY), crafts)
+  val armorsArms = generateGraphFor((i1, i2, _) => i1.isArmorPartRequired(ArmorPart.ARMS) || i2.isArmorPartRequired(ArmorPart.ARMS), crafts)
+  val armorsLegs = generateGraphFor((i1, i2, _) => i1.isArmorPartRequired(ArmorPart.LEGS) || i2.isArmorPartRequired(ArmorPart.LEGS), crafts)
   val charms = generateGraphFor((i1, i2, _) => i1.isCharm || i2.isCharm, crafts)
   val dotRoot = DotRootGraph(directed = true, id = Some(Id("Crafts")))
 
   val weaponsDot = weapons.toDot(dotRoot, edgeTransformer)
   Files.write(Paths.get("weapons.dot"), weaponsDot.getBytes(StandardCharsets.UTF_8))
 
-  val armorsDot = armors.toDot(dotRoot, edgeTransformer)
-  Files.write(Paths.get("armors.dot"), armorsDot.getBytes(StandardCharsets.UTF_8))
+  val armorsHeadDot = armorsHead.toDot(dotRoot, edgeTransformer)
+  Files.write(Paths.get("armorsHead.dot"), armorsHeadDot.getBytes(StandardCharsets.UTF_8))
+
+  val armorsBodyDot = armorsBody.toDot(dotRoot, edgeTransformer)
+  Files.write(Paths.get("armorsBody.dot"), armorsBodyDot.getBytes(StandardCharsets.UTF_8))
+
+  val armorsArmsDot = armorsArms.toDot(dotRoot, edgeTransformer)
+  Files.write(Paths.get("armorsArms.dot"), armorsArmsDot.getBytes(StandardCharsets.UTF_8))
+
+  val armorsLegsDot = armorsHead.toDot(dotRoot, edgeTransformer)
+  Files.write(Paths.get("armorsLegs.dot"), armorsHeadDot.getBytes(StandardCharsets.UTF_8))
 
   val charmsDot = charms.toDot(dotRoot, edgeTransformer)
   Files.write(Paths.get("charms.dot"), charmsDot.getBytes(StandardCharsets.UTF_8))

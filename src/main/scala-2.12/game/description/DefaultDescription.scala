@@ -19,8 +19,8 @@ class DefaultDescription extends Description {
     if (i.hasArmor) desc.append(" armor:").append(i.getArmor)
     if (i.requiresSlot) desc.append("-:").append(i.getCharmSlotsRequired)
     if (i.providesSlot) desc.append("+:").append(i.getCharmSlotsProvided)
-    desc.append("{").append(i.getElementType).append("}")
-    desc.append("<").append(i.getStatusType).append(">")
+    if (!i.isMaterial) desc.append("{").append(i.getElementType).append("}")
+    if (!i.isMaterial) desc.append("<").append(i.getStatusType).append(">")
     desc.toString()
   }
 
