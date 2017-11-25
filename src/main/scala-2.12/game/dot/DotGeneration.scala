@@ -3,6 +3,7 @@ package game.dot
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
+import game.description.DefaultDescription
 import game.item.ItemType
 import game.item.craft.{CraftPrototype, Crafts}
 
@@ -15,6 +16,7 @@ import scalax.collection.io.dot._
   * Created by nol on 19/11/17.
   */
 object DotGeneration extends App {
+  val defaultDescription = new DefaultDescription()
   val crafts = CraftPrototype.generateCraft
   val weapons = generateGraphFor((i1, i2, _) => i1.isWeapon || i2.isWeapon, crafts)
   val armors = generateGraphFor((i1, i2, _) => i1.isArmor || i2.isArmor, crafts)
@@ -36,9 +38,9 @@ object DotGeneration extends App {
       recipe match {
         case ((i1, i2), result) =>
           if (p(i1, i2, result)) {
-            val i1Name = i1.getName + "[" + i1.getUniqueId + "]"
-            val i2Name = i2.getName + "[" + i2.getUniqueId + "]"
-            val resultName = result.getName + "[" + result.getUniqueId + "]"
+            val i1Name = defaultDescription.descriptionItemType(i1)
+            val i2Name = defaultDescription.descriptionItemType(i2)
+            val resultName = defaultDescription.descriptionItemType(result)
             g = g + LDiEdge(i1Name, resultName)(i2Name)
           }
       }

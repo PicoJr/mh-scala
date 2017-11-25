@@ -2,9 +2,7 @@ package game.item
 
 import game.id.Identifiable
 import game.item.ArmorPart.ArmorPart
-import game.item.StatusType.StatusType
 import game.item.element.ElementType
-import game.item.element.ElementType.ElementType
 
 /**
   * Created by nol on 21/11/17.
@@ -83,18 +81,6 @@ trait ItemType extends Identifiable {
     * @return getRawDamage > 0
     */
   def hasDamage: Boolean = getDamage > 0
-
-  /** Same as getElementType != ElementType.NONE
-    *
-    * @return getElementType != ElementType.NONE
-    */
-  def hasElementType: Boolean = getElementType != ElementType.NONE
-
-  /** Same as getStatusType != StatusType.NONE
-    *
-    * @return getStatusType != StatusType.NONE
-    */
-  def hasStatusType: Boolean = getStatusType != StatusType.NONE
 
   /** Test if classified as Armor
     *

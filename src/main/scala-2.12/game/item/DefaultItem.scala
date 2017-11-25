@@ -1,8 +1,7 @@
 package game.item
 
 import game.id.DefaultIdSupplier
-import game.item.StatusType.StatusType
-import game.item.element.ElementType.ElementType
+import game.item.element.ElementType
 
 /** A unique instance of an ItemType identified by an Id
   *

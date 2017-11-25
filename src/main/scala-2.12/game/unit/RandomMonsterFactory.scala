@@ -1,10 +1,8 @@
 package game.unit
 
 import game.config.ConfigLoader
-import game.item.StatusType
-import game.item.StatusType.StatusType
-import game.item.element.ElementType
-import game.item.element.ElementType.ElementType
+import game.item.element.{ElementType, NORMAL}
+import game.item.{NEUTRAL, StatusType}
 import game.util.Procedural
 
 /**
@@ -18,11 +16,11 @@ object RandomMonsterFactory {
   private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, config.getMonsterStatsGrowth, config.getPercentageVariation)
 
   private def getRandomAttackStatusType(level: Int): StatusType = {
-    if (level >= config.getLevelMin + 2) StatusType.getRandomStatusType else StatusType.NONE
+    if (level >= config.getLevelMin + 2) StatusType.getRandomStatusType else NEUTRAL
   }
 
   private def getRandomAttackElementType(level: Int): ElementType = {
-    if (level >= config.getLevelMin + 3) ElementType.getRandomElementType else ElementType.NONE
+    if (level >= config.getLevelMin + 3) ElementType.getRandomElementType else NORMAL
   }
 
   private def getRandomArmorStatusTypes(level: Int): Seq[StatusType] = {

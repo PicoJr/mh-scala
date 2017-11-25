@@ -2,9 +2,7 @@ package game.item
 
 import game.id.DefaultIdSupplier
 import game.item.ArmorPart.ArmorPart
-import game.item.StatusType.StatusType
-import game.item.element.ElementType
-import game.item.element.ElementType.ElementType
+import game.item.element.{ElementType, NORMAL}
 
 /** A generic blueprint from which items are instantiated.
   *
@@ -24,11 +22,11 @@ class DefaultItemType(name: String, level: Int, damage: Int, statusType: StatusT
   var _name: String = name
 
   def this(name: String, level: Int) {
-    this(name, level, 0, StatusType.NONE, 0, MATERIAL_SLOT, ElementType.NONE, 0)
+    this(name, level, 0, NEUTRAL, 0, MATERIAL_SLOT, NORMAL, 0)
   }
 
   def this(level: Int) {
-    this("unnamed", level, 0, StatusType.NONE, 0, MATERIAL_SLOT, ElementType.NONE, 0)
+    this("unnamed", level, 0, NEUTRAL, 0, MATERIAL_SLOT, NORMAL, 0)
   }
 
   override def getLevel: Int = level

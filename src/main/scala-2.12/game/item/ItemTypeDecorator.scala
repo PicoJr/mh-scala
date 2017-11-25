@@ -1,7 +1,6 @@
 package game.item
 
-import game.item.StatusType.StatusType
-import game.item.element.ElementType.ElementType
+import game.item.element.ElementType
 
 /**
   * Note: if an item is decorated twice by the same decorator class,
@@ -26,7 +25,7 @@ abstract class ItemTypeDecorator(i: ItemType) extends DefaultItemType(i.getName,
 }
 
 case class Damage(wrapped: ItemType, damage: Int) extends ItemTypeDecorator(wrapped) {
-  override def getDamage: Int = damage
+  override def getDamage: Int = super.getDamage + damage
 }
 
 case class Status(wrapped: ItemType, statusType: StatusType) extends ItemTypeDecorator(wrapped) {
@@ -34,7 +33,7 @@ case class Status(wrapped: ItemType, statusType: StatusType) extends ItemTypeDec
 }
 
 case class Protection(wrapped: ItemType, armor: Int) extends ItemTypeDecorator(wrapped) {
-  override def getArmor: Int = armor
+  override def getArmor: Int = super.getArmor + armor
 }
 
 case class Equipment(wrapped: ItemType, slotTypeRequirement: SlotTypeRequirements) extends ItemTypeDecorator(wrapped) {

@@ -1,26 +1,36 @@
 package game.item.element
 
-import scala.util.Random
+import game.util.Procedural
 
 /** Element for Attack or Armor
   * Created by nol on 05/11/17.
   */
-object ElementType extends Enumeration {
-  type ElementType = Value
-  val NONE, WATER, FIRE = Value
+sealed trait ElementType {
+  val name: String
+}
+
+case object WATER extends ElementType {
+  override val name: String = "flowing"
+}
+
+case object FIRE extends ElementType {
+  override val name: String = "burning"
+}
+
+case object NORMAL extends ElementType {
+  override val name: String = "pure"
+}
+
+object ElementType {
+
+  final val values = Seq(WATER, FIRE, NORMAL)
 
   /** Get random element type
     *
     * @return random element type, may be NONE
     */
   def getRandomElementType: ElementType = {
-    ElementType(Random.nextInt(ElementType.maxId))
-  }
-
-  def getAdjective(elementType: ElementType): String = elementType match {
-    case WATER => "flowing"
-    case FIRE => "burning"
-    case NONE => "pure"
+    Procedural.pickRandomFromSeq(values).get
   }
 
 }

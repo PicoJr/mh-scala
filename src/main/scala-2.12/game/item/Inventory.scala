@@ -1,9 +1,7 @@
 package game.item
 
 import game.item.ArmorPart.ArmorPart
-import game.item.StatusType.StatusType
-import game.item.element.ElementType
-import game.item.element.ElementType.ElementType
+import game.item.element.{ElementType, NORMAL}
 
 /**
   * Created by nol on 21/11/17.
@@ -97,14 +95,14 @@ trait Inventory {
   }
 
   /** Get attack element type provided by equipped weapon if any
-    * if no weapon equipped => NONE
+    * if no weapon equipped => NORMAL
     *
     * @return attack element type provided by equipped weapon if any
     */
   def getAttackElementType: ElementType = {
     getWeaponEquipped match {
       case Some(w) => w.getElementType
-      case None => ElementType.NONE
+      case None => NORMAL
     }
   }
 
@@ -119,14 +117,14 @@ trait Inventory {
   }
 
   /** Get attack status type provided by equipped weapon if any
-    * if no weapon equipped => NONE
+    * if no weapon equipped => NEUTRAL
     *
     * @return attack status type provided by equipped weapon if any
     */
   def getAttackStatusType: StatusType = {
     getWeaponEquipped match {
       case Some(w) => w.getStatusType
-      case None => StatusType.NONE
+      case None => NEUTRAL
     }
   }
 

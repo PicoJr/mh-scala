@@ -1,7 +1,6 @@
 package game.item.element
 
 import game.item.element.Effectiveness.Effectiveness
-import game.item.element.ElementType.ElementType
 
 /** Element Effectiveness Resolver (EEResolver)
   * Created by nol on 22/11/17.

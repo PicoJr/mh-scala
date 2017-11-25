@@ -10,7 +10,7 @@ import game.unit.{GameUnit, Hunter, Monster}
   */
 class DefaultDescription extends Description {
 
-  private def descriptionItemType(i: ItemType): String = {
+  def descriptionItemType(i: ItemType): String = {
     val desc = new StringBuilder()
     desc.append("[").append(i.getUniqueId).append("]")
     desc.append(i.getName)
@@ -19,8 +19,8 @@ class DefaultDescription extends Description {
     if (i.hasArmor) desc.append(" armor:").append(i.getArmor)
     if (i.requiresSlot) desc.append("-:").append(i.getCharmSlotsRequired)
     if (i.providesSlot) desc.append("+:").append(i.getCharmSlotsProvided)
-    if (i.hasElementType) desc.append("{").append(i.getElementType).append("}")
-    if (i.hasStatusType) desc.append("<").append(i.getStatusType).append(">")
+    desc.append("{").append(i.getElementType).append("}")
+    desc.append("<").append(i.getStatusType).append(">")
     desc.toString()
   }
 

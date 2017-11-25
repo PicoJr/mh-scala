@@ -1,7 +1,7 @@
 package game.unit
 
-import game.item.StatusType.StatusType
-import game.item.element.ElementType.ElementType
+import game.item.StatusType
+import game.item.element.ElementType
 
 /**
   * Created by nol on 22/11/17.
