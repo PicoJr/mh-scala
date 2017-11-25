@@ -14,6 +14,18 @@ class DefaultCrafts extends Crafts {
 
   override def getRecipes: Map[(ItemType, ItemType), ItemType] = recipes
 
+  override def findCraftResult(itemType: ItemType, material: ItemType): Option[ItemType] = {
+    val p = (key: ((ItemType, ItemType), ItemType)) => key match {
+      case ((i1, i2), _) =>
+        (i1.getUniqueId == itemType.getUniqueId) && (i2.getUniqueId == material.getUniqueId)
+      case _ => false
+    }
+    getRecipes.find(p) match {
+      case Some(((_, _), result)) => Some(result)
+      case _ => Option.empty
+    }
+  }
+
   override def getMaterials(level: Int): Seq[ItemType] = {
     filterAll(i => i.isMaterial && i.getLevel == level)
   }

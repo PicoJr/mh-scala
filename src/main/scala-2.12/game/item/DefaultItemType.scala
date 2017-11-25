@@ -1,5 +1,6 @@
 package game.item
 
+import game.id.DefaultIdSupplier
 import game.item.ArmorPart.ArmorPart
 import game.item.StatusType.StatusType
 import game.item.element.ElementType
@@ -17,6 +18,8 @@ import game.item.element.ElementType.ElementType
   * @param charmSlots           provided >= 0
   */
 class DefaultItemType(name: String, level: Int, damage: Int, statusType: StatusType, armor: Int, slotTypeRequirements: SlotTypeRequirements, elementType: ElementType, charmSlots: Int) extends ItemType {
+
+  private final val uniqueID = DefaultItemType.itemIdSupplier.getNextUniqueId
 
   var _name: String = name
 
@@ -48,9 +51,12 @@ class DefaultItemType(name: String, level: Int, damage: Int, statusType: StatusT
 
   override def getCharmSlotsProvided: Int = charmSlots
 
+  override def getUniqueId: Long = uniqueID
 }
 
 object DefaultItemType {
+
+  private val itemIdSupplier = new DefaultIdSupplier
 
   /** Create weapon
     *

@@ -158,7 +158,7 @@ object CraftPrototype {
         case Some(e) => e
         case None =>
           val e = MaterialFactory.createMaterialFromElement(elementType, level)
-          elementMaterial = elementMaterial + (elementType -> e)
+          elementMaterial += (elementType -> e)
           e
       }
     }
@@ -168,7 +168,7 @@ object CraftPrototype {
         case Some(e) => e
         case None =>
           val e = MaterialFactory.createMaterialFromStatus(statusType, level)
-          statusMaterial = statusMaterial + (statusType -> e)
+          statusMaterial += (statusType -> e)
           e
       }
     }
@@ -178,7 +178,7 @@ object CraftPrototype {
         case Some(e) => e
         case None =>
           val e = MaterialFactory.createMaterialFromBonus(bonusType, level)
-          bonusMaterial = bonusMaterial + (bonusType -> e)
+          bonusMaterial += (bonusType -> e)
           e
       }
     }
@@ -220,12 +220,13 @@ object CraftPrototype {
 
   def generateCraft: Crafts = {
     val crafts = new DefaultCrafts
+    val materialPool = new MaterialPool
     // init
     for (natureCategory <- NatureType.values) {
       val categoryRoot = (new CategoryBuilder).addNatureCategory(natureCategory)
       val itemTypeRoot = createItemType(categoryRoot, config.getLevelMin)
       itemTypeRoot.setName(createDescription(categoryRoot).getDescription)
-      craftItemType(CraftStep(itemTypeRoot, categoryRoot, crafts, new MaterialPool))
+      craftItemType(CraftStep(itemTypeRoot, categoryRoot, crafts, materialPool))
     }
     crafts
   }

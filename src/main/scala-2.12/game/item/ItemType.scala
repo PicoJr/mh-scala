@@ -1,5 +1,6 @@
 package game.item
 
+import game.id.Identifiable
 import game.item.ArmorPart.ArmorPart
 import game.item.StatusType.StatusType
 import game.item.element.ElementType
@@ -8,7 +9,7 @@ import game.item.element.ElementType.ElementType
 /**
   * Created by nol on 21/11/17.
   */
-trait ItemType {
+trait ItemType extends Identifiable {
 
   /** Get level
     *

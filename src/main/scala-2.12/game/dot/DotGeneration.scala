@@ -36,9 +36,9 @@ object DotGeneration extends App {
       recipe match {
         case ((i1, i2), result) =>
           if (p(i1, i2, result)) {
-            val i1Name = i1.getName + "[" + i1.getLevel + "]"
-            val i2Name = i2.getName + "[" + i2.getLevel + "]"
-            val resultName = result.getName + "[" + result.getLevel + "]"
+            val i1Name = i1.getName + "[" + i1.getUniqueId + "]"
+            val i2Name = i2.getName + "[" + i2.getUniqueId + "]"
+            val resultName = result.getName + "[" + result.getUniqueId + "]"
             g = g + LDiEdge(i1Name, resultName)(i2Name)
           }
       }

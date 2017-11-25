@@ -13,13 +13,13 @@ trait Item extends ItemType with Identifiable {
     */
   def getItemType: ItemType
 
-  /** Same as getItemType == itemType
+  /** Same as getItemType.getUniqueId == itemType.getUniqueId
     *
     * @param itemType checked
     * @return getItemType == itemType
     */
   def isItemType(itemType: ItemType): Boolean = {
-    getItemType == itemType
+    getItemType.getUniqueId == itemType.getUniqueId
   }
 
 }

@@ -20,9 +20,7 @@ trait Crafts {
     * @param material for the craft
     * @return result of itemType+ material if any else None
     */
-  def findCraftResult(itemType: ItemType, material: ItemType): Option[ItemType] = {
-    getRecipes.get((itemType, material))
-  }
+  def findCraftResult(itemType: ItemType, material: ItemType): Option[ItemType]
 
   /** Add new recipe
     *
