@@ -34,11 +34,13 @@ class CommandParser(command: Command) {
       val simpleOpts = new SimpleOpts(docopt.parse(args: _*))
       if (simpleOpts.asBoolean("--help")) {
         println(doc)
-      } else if (simpleOpts.asBoolean("hunter")) {
+      }
+      else if (simpleOpts.asBoolean("hunter")) {
         if (simpleOpts.asBoolean("show")) {
           command.showHunter(gameState)
         }
-      } else if (simpleOpts.asBoolean("item")) {
+      }
+      else if (simpleOpts.asBoolean("item")) {
         if (simpleOpts.asBoolean("show")) {
           command.showItem(gameState, simpleOpts.asLong("<itemId>"))
         }
@@ -55,7 +57,8 @@ class CommandParser(command: Command) {
         if (simpleOpts.asBoolean("ls")) {
           command.listInventory(gameState)
         }
-      } else if (simpleOpts.asBoolean("craft")) {
+      }
+      else if (simpleOpts.asBoolean("craft")) {
         if (simpleOpts.asBoolean("show")) {
           for (itemId <- simpleOpts.asSeq("<itemId>")) {
             command.showCraft(gameState, itemId.toString.toLong)
@@ -64,7 +67,8 @@ class CommandParser(command: Command) {
         if (simpleOpts.asBoolean("new")) {
           command.craftItem(gameState, simpleOpts.asLong("<itemId1>"), simpleOpts.asLong("<itemId2>"))
         }
-      } else if (simpleOpts.asBoolean("quest")) {
+      }
+      else if (simpleOpts.asBoolean("quest")) {
         if (simpleOpts.asBoolean("start")) {
           for (questId <- simpleOpts.asSeq("<questId>")) {
             command.startQuest(gameState, questId.toString.toLong)
@@ -73,7 +77,8 @@ class CommandParser(command: Command) {
         if (simpleOpts.asBoolean("ls")) {
           command.listQuests(gameState)
         }
-      } else if (simpleOpts.asBoolean("score")) {
+      }
+      else if (simpleOpts.asBoolean("score")) {
         command.showScore(gameState)
       }
     } catch {
