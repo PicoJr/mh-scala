@@ -1,4 +1,6 @@
-package game.item
+package game.item.inventory
+
+import game.item._
 
 /** Holds items
   * Created by nol on 06/11/17.

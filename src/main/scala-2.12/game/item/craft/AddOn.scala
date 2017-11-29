@@ -9,11 +9,10 @@ import game.item.element.ElementType
 sealed trait AddOn {
 }
 
-case class ElementAddOn(elementType: ElementType) extends AddOn {
-}
+case object CharmSlotAddOn extends AddOn
 
-case class StatusAddOn(statusType: StatusType) extends AddOn {
-}
+case class ElementAddOn(elementType: ElementType) extends AddOn
 
-case class BonusAddOn(bonusType: BonusType) extends AddOn {
-}
+case class StatusAddOn(statusType: StatusType) extends AddOn
+
+case class BonusAddOn(bonusType: BonusType) extends AddOn

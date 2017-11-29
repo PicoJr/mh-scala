@@ -1,6 +1,7 @@
 package game.description
 
 import game.gamestate.GameState
+import game.item.inventory.Inventory
 import game.item.{ArmorPart, _}
 import game.quest.{Quest, QuestResult}
 import game.unit.{GameUnit, Hunter, Monster}

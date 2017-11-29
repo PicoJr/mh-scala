@@ -1,6 +1,6 @@
 package game.unit
 
-import game.item.Inventory
+import game.item.inventory.Inventory
 
 /**
   * Created by nol on 22/11/17.

@@ -1,5 +1,6 @@
 import game.config.ConfigLoader
 import game.item._
+import game.item.inventory.DefaultInventory
 import org.scalatest.FlatSpec
 
 /**

@@ -1,7 +1,8 @@
-package game.item
+package game.item.inventory
 
 import game.item.ArmorPart.ArmorPart
 import game.item.element.{ElementType, NORMAL}
+import game.item.{Item, NEUTRAL, StatusType}
 
 /**
   * Created by nol on 21/11/17.

@@ -2,8 +2,9 @@ package game.unit
 
 import game.config.ConfigLoader
 import game.id.DefaultIdSupplier
+import game.item.StatusType
 import game.item.element.ElementType
-import game.item.{DefaultInventory, Inventory, StatusType}
+import game.item.inventory.{DefaultInventory, Inventory}
 
 /** Game units are either hunters or monsters.
   * Created by nol on 05/11/17.
