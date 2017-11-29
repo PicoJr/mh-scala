@@ -1,6 +1,6 @@
 package game.gamestate
 
-/**
+/** Holds scoring data. Updated during game.
   * Created by nol on 25/11/17.
   */
 trait Score {

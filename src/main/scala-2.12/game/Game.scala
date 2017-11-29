@@ -4,7 +4,7 @@ import game.console.{CommandParser, DefaultCommand}
 import game.description.DefaultDescription
 import game.gamestate.DefaultGameState
 
-/**
+/** Game launcher.
   * Created by nol on 04/11/17.
   */
 object Game extends App {

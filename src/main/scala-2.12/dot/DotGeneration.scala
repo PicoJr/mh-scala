@@ -1,4 +1,4 @@
-package game.dot
+package dot
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
@@ -12,7 +12,7 @@ import scalax.collection.edge.LDiEdge
 import scalax.collection.io.dot._
 
 
-/** Generates 3 dot files (weapons, armors, charms) from crafts
+/** Generates dot files for items categories from crafts
   * Created by nol on 19/11/17.
   */
 object DotGeneration extends App {

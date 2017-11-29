@@ -2,7 +2,7 @@ package game.console
 
 import game.gamestate.GameState
 
-/**
+/** Commands available to the player
   * Created by nol on 11/11/17.
   */
 trait Command {

@@ -2,7 +2,7 @@ package game.util
 
 import scala.collection.mutable
 
-/**
+/** Random Pool backed up by a mutable buffer.
   * Created by nol on 29/11/17.
   */
 class DefaultRandomPool[T](values: Seq[T]) extends RandomPool[T] {

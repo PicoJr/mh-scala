@@ -5,7 +5,7 @@ import game.item.craft.Crafts
 import game.quest.{Quest, QuestLogic}
 import game.unit.{Hunter, Monster}
 
-/**
+/** Holds all game instances and states.
   * Created by nol on 22/11/17.
   */
 trait GameState {

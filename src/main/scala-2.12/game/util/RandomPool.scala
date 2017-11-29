@@ -5,7 +5,7 @@ package game.util
   */
 trait RandomPool[T] {
 
-  /** Returns next random object from pool if any else None
+  /** Returns next random object from pool if any and remove it from pool else None
     *
     * @return next object from pool if any else None
     */
