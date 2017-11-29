@@ -6,6 +6,7 @@ import game.item.craft.{CraftPrototype, Crafts}
 import game.item.element.DefaultEEResolver
 import game.quest._
 import game.unit.{DefaultHunter, Hunter}
+import game.util.DefaultRandomPool
 
 /** Holds all game entities and states.
   * Created by nol on 11/11/17.
@@ -36,6 +37,7 @@ class DefaultGameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts, quest
 object DefaultGameState {
 
   private val config = ConfigLoader.loadGameConfig
+  private val nameConfig = ConfigLoader.loadNameConfig
 
   /** Procedurally create a new GameState.
     * may fail if config values are inconsistent.
@@ -57,6 +59,7 @@ object DefaultGameState {
   }
 
   private def createQuests(crafts: Crafts): Seq[Quest] = {
+    val monsterNamePool = new DefaultRandomPool[String](nameConfig.getMonsters)
     var quests = Seq.empty[Quest]
     for (level <- config.getLevelMin until config.getLevelMax) {
       val lootAtLevel = crafts.getMaterials(level).distinct
@@ -67,7 +70,7 @@ object DefaultGameState {
       assert(lootPerQuest >= 1)
       for (q <- 0 until questsAtLevel) {
         val loot = lootAtLevel.slice(q * lootPerQuest, q * lootPerQuest + lootPerQuest)
-        quests = quests :+ DefaultQuest.createQuest(level, loot)
+        quests = quests :+ DefaultQuest.createQuest(level, loot, monsterNamePool.next.getOrElse("name pool empty"))
       }
     }
     quests

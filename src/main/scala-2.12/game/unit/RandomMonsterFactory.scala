@@ -27,8 +27,7 @@ object RandomMonsterFactory {
     if (level >= config.getLevelMin + 4) Seq(StatusType.getRandomStatusType) else Seq.empty
   }
 
-  def generateMonster(level: Int): Monster = {
-    val name = Procedural.pickRandomFromSeq(nameConfig.getMonsters).get
+  def generateMonster(level: Int, name: String): Monster = {
     val life = getRandomValue(level, config.getMonsterLifeBase)
     val armor = getRandomValue(level, config.getMonsterArmorBase)
     val damage = getRandomValue(level, config.getMonsterDamageBase)

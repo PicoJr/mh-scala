@@ -23,8 +23,8 @@ object DefaultQuest {
 
   private val questIdSupplier = new DefaultIdSupplier
 
-  def createQuest(level: Int, loot: Seq[ItemType]): Quest = {
-    val monster = RandomMonsterFactory.generateMonster(level)
+  def createQuest(level: Int, loot: Seq[ItemType], monsterName: String): Quest = {
+    val monster = RandomMonsterFactory.generateMonster(level, monsterName)
     new DefaultQuest(monster, loot, level)
   }
 }

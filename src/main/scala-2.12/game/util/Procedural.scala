@@ -14,7 +14,7 @@ object Procedural {
     * @return Some(random element from seq) if seq non empty else None
     */
   def pickRandomFromSeq[T](seq: Seq[T]): Option[T] = {
-    seq.lift(Random.nextInt(seq.size))
+    if (seq.nonEmpty) seq.lift(Random.nextInt(seq.size)) else Option.empty
   }
 
   def takeRandomFromSeq[T](seq: Seq[T], n: Int): Seq[T] = {
