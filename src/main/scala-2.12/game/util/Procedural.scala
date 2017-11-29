@@ -17,6 +17,14 @@ object Procedural {
     if (seq.nonEmpty) seq.lift(Random.nextInt(seq.size)) else Option.empty
   }
 
+  /** Pick n random elements from sequence if possible.
+    * If seq contains less than n elements, then return seq in a random order.
+    *
+    * @param seq elements to choose from
+    * @param n   >= 0, to take if possible (n < 0 is unspecified =P)
+    * @tparam T any
+    * @return n random elements from seq if possible else seq in a random order.
+    */
   def takeRandomFromSeq[T](seq: Seq[T], n: Int): Seq[T] = {
     Random.shuffle(seq).take(n)
   }
