@@ -71,6 +71,14 @@ trait Inventory {
     getItemsEquipped.find(i => i.isArmorPartRequired(armorPart))
   }
 
+  /** Get all charms equipped
+    *
+    * @return charms equipped
+    */
+  def getCharmsEquipped: Seq[Item] = {
+    getItemsEquipped.filter(i => i.isCharm)
+  }
+
   /** Get items equipped
     *
     * @return items equipped

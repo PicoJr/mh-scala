@@ -34,17 +34,18 @@ class DefaultDescription extends Description {
 
   private def descriptionInventory(inventory: Inventory): String = {
     val desc = new StringBuilder()
-    desc.append("\nweapon\n")
     inventory.getWeaponEquipped match {
       case Some(w) => desc.append(descriptionItem(w)).append("\n")
       case None =>
     }
-    desc.append("\narmor\n")
     for (armorPart <- ArmorPart.values) {
       inventory.getArmorEquipped(armorPart) match {
         case Some(a) => desc.append(descriptionItem(a)).append("\n")
         case None =>
       }
+    }
+    for (c <- inventory.getCharmsEquipped) {
+      desc.append(descriptionItem(c)).append("\n")
     }
     desc.append("\n-----\n")
     for (i <- inventory.getItems.filter(i => !inventory.isEquipped(i))) {
