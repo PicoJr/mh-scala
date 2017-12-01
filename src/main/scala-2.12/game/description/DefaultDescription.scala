@@ -13,7 +13,6 @@ class DefaultDescription extends Description {
 
   def descriptionItemType(i: ItemType): String = {
     val desc = new StringBuilder()
-    desc.append("[").append(i.getUniqueId).append("]")
     desc.append(i.getName)
     desc.append("[" + i.getLevel + "]")
     if (i.hasDamage) desc.append(" dmg:").append(i.getDamage)
@@ -27,13 +26,15 @@ class DefaultDescription extends Description {
 
   private def descriptionItem(i: Item): String = {
     val desc = new StringBuilder()
-    desc.append("[").append(i.getItemType.getUniqueId).append("]")
+    desc.append("[").append(i.getUniqueId).append("]")
     desc.append(descriptionItemType(i))
     desc.toString()
   }
 
   private def descriptionInventory(inventory: Inventory): String = {
     val desc = new StringBuilder()
+    desc.append("slots: ").append(inventory.getCharmSlotsUsed)
+    desc.append("/").append(inventory.getCharmSlotsProvided).append("\n")
     inventory.getWeaponEquipped match {
       case Some(w) => desc.append(descriptionItem(w)).append("\n")
       case None =>
