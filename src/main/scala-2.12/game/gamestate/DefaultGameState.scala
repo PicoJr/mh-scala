@@ -45,17 +45,22 @@ object DefaultGameState {
     * @return new GameState
     */
   def createNewGameState: DefaultGameState = {
-    val hunter = createHunter
     val crafts = CraftPrototype.generateCraft
     val quests = createQuests(crafts)
-    val itemTypesFirstLevel = crafts.getNonMaterials(config.getLevelMin).distinct
-    hunter.getInventory.addItems(itemTypesFirstLevel.map(i => DefaultItem.createItem(i)): _*)
+    val hunter = createHunter(crafts)
     val questLogic = new DefaultQuestLogic(new DefaultEEResolver)
     new DefaultGameState(hunter, quests, crafts, questLogic)
   }
 
-  private def createHunter: Hunter = {
-    new DefaultHunter(config.getHunterName)
+  private def createHunter(crafts: Crafts): Hunter = {
+    val hunter = new DefaultHunter(config.getHunterName)
+    val itemTypesFirstLevel = crafts.getNonMaterials(config.getLevelMin).distinct
+    val items = itemTypesFirstLevel.map(i => DefaultItem.createItem(i))
+    hunter.getInventory.addItems(items: _*)
+    for (item <- items) {
+      hunter.getInventory.equipItem(item.getUniqueId)
+    }
+    hunter
   }
 
   private def createQuests(crafts: Crafts): Seq[Quest] = {
