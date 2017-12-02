@@ -5,7 +5,7 @@ import org.scalatest.FlatSpec
 /**
   * Created by nol on 08/11/17.
   */
-class ItemTest extends FlatSpec {
+class DefaultItemTypeTest extends FlatSpec {
 
   private val config = ConfigLoader.loadGameConfig
 
@@ -33,6 +33,16 @@ class ItemTest extends FlatSpec {
     val armor = DefaultItemType.createArmor(config.getLevelMin, 42, ArmorPart.HEAD)
     assert(armor.isArmor)
     assert(armor.isArmorPartRequired(ArmorPart.HEAD))
+  }
+
+  "An armor" should "provide armor" in {
+    val armor = DefaultItemType.createArmor(config.getLevelMin, 42, ArmorPart.HEAD)
+    assert(armor.hasArmor)
+  }
+
+  "A weapon" should "provide damage" in {
+    val weapon = DefaultItemType.createWeapon(config.getLevelMin, 42)
+    assert(weapon.hasDamage)
   }
 
   "An equipment" should "be an equipment" in {
