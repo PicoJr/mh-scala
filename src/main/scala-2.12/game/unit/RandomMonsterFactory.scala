@@ -27,6 +27,23 @@ object RandomMonsterFactory {
     if (level >= config.getLevelMin + 4) Seq(StatusType.getRandomStatusType) else Seq.empty
   }
 
+  private def getRandomArmorElementTypes(level: Int): Seq[ElementType] = {
+    var armorElementTypes = Seq.empty[ElementType]
+    if (level >= config.getLevelMin) {
+      armorElementTypes = armorElementTypes :+ ElementType.getRandomElementType
+    }
+    if (level >= config.getLevelMin + 1) {
+      armorElementTypes = armorElementTypes :+ ElementType.getRandomElementType
+    }
+    if (level >= config.getLevelMin + 2) {
+      armorElementTypes = armorElementTypes :+ ElementType.getRandomElementType
+    }
+    if (level >= config.getLevelMin + 3) {
+      armorElementTypes = armorElementTypes :+ ElementType.getRandomElementType
+    }
+    armorElementTypes
+  }
+
   def generateMonster(level: Int, name: String): Monster = {
     val life = getRandomValue(level, config.getMonsterLifeBase)
     val armor = getRandomValue(level, config.getMonsterArmorBase)
@@ -34,7 +51,7 @@ object RandomMonsterFactory {
     val attackStatusType = getRandomAttackStatusType(level)
     val attackElementType = getRandomAttackElementType(level)
     val armorStatusTypes = getRandomArmorStatusTypes(level)
-    val armorElementTypes = Seq(attackElementType, ElementType.getRandomElementType)
+    val armorElementTypes = getRandomArmorElementTypes(level)
     DefaultMonster(name, life, armor, damage, attackStatusType, attackElementType, armorStatusTypes, armorElementTypes)
   }
 

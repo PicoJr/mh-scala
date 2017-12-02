@@ -31,7 +31,7 @@ object ElementType {
 
   /** Get random element type
     *
-    * @return random element type, may be NONE
+    * @return random element type
     */
   def getRandomElementType: ElementType = {
     Procedural.pickRandomFromSeq(values).get
