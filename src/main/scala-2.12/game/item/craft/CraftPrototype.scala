@@ -36,6 +36,10 @@ object CraftPrototype {
       for (bonus <- BonusType.values) {
         craftWithAddOn(craftStep, BonusAddOn(bonus))
       }
+    } else if (craftStep.itemTypeRoot.getLevel == config.getLevelMin + 3) {
+      for (bonus <- BonusType.values) {
+        craftWithAddOn(craftStep, BonusAddOn(bonus))
+      }
     }
   }
 
