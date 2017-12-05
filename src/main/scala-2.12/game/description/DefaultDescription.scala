@@ -63,10 +63,10 @@ class DefaultDescription extends Description {
     desc.append("{").append(gameUnit.getAttackElementType).append("}")
     desc.append("<").append(gameUnit.getAttackStatusType).append(">")
     desc.append(" armor: ").append(gameUnit.getArmor)
-    for (element <- gameUnit.getArmorElementTypes) {
+    for (element <- gameUnit.getElementalResistances) {
       desc.append("{").append(element).append("}")
     }
-    for (status <- gameUnit.getArmorStatusTypes) {
+    for (status <- gameUnit.getStatusResistances) {
       desc.append("<").append(status).append(">")
     }
     desc.toString()

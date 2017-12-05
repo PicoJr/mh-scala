@@ -32,11 +32,11 @@ case class DefaultMonster(name: String, life: Int, armor: Int, damage: Int, atta
 
   override def getDamage: Int = damage
 
-  override def getArmorElementTypes: Seq[ElementType] = armorElementTypes
+  override def getElementalResistances: Seq[ElementType] = armorElementTypes
 
   override def getAttackStatusType: StatusType = attackStatusType
 
-  override def getArmorStatusTypes: Seq[StatusType] = armorStatusTypes
+  override def getStatusResistances: Seq[StatusType] = armorStatusTypes
 
   override def getAttackElementType: ElementType = attackElementType
 }
@@ -61,11 +61,11 @@ case class DefaultHunter(name: String, inventory: Inventory) extends DefaultGame
 
   override def getAttackElementType: ElementType = getInventory.getAttackElementType
 
-  override def getArmorElementTypes: Seq[ElementType] = getInventory.getArmorElementTypes
+  override def getElementalResistances: Seq[ElementType] = getInventory.getArmorElementTypes ++ getInventory.getCharmsElementTypes
 
   override def getAttackStatusType: StatusType = getInventory.getAttackStatusType
 
-  override def getArmorStatusTypes: Seq[StatusType] = getInventory.getArmorStatusTypes
+  override def getStatusResistances: Seq[StatusType] = getInventory.getArmorStatusTypes ++ getInventory.getCharmsStatusTypes
 }
 
 object DefaultHunter {

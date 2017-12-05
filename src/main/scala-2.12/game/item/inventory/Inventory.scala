@@ -125,6 +125,26 @@ trait Inventory {
     armorPartsEquipped.map(i => i.getElementType)
   }
 
+  /** Get charms element types provided by equipped charms
+    * if no charms equipped => Seq.empty
+    *
+    * @return charms element types provided by equipped charms
+    */
+  def getCharmsElementTypes: Seq[ElementType] = {
+    val charmsEquipped = getCharmsEquipped
+    charmsEquipped.map(i => i.getElementType)
+  }
+
+  /** Get charms status types provided by equipped charms
+    * if no charms equipped => Seq.empty
+    *
+    * @return charms status types provided by equipped charms
+    */
+  def getCharmsStatusTypes: Seq[StatusType] = {
+    val charmsEquipped = getCharmsEquipped
+    charmsEquipped.map(i => i.getStatusType)
+  }
+
   /** Get attack status type provided by equipped weapon if any
     * if no weapon equipped => NEUTRAL
     *

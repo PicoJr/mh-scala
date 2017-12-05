@@ -11,7 +11,7 @@ import game.unit.{GameUnit, Hunter}
 class DefaultQuestLogic(eEResolver: EEResolver) extends QuestLogic {
 
   private def computeDamageDealt(attacker: GameUnit, defender: GameUnit): Double = {
-    val multiplier = defender.getArmorElementTypes.foldLeft(1.0)((m, e) => m * eEResolver.multiplier(attacker.getAttackElementType, e))
+    val multiplier = defender.getElementalResistances.foldLeft(1.0)((m, e) => m * eEResolver.multiplier(attacker.getAttackElementType, e))
     math.max(DefaultQuestLogic.config.getDamageMin, attacker.getDamage * multiplier - defender.getArmor)
   }
 

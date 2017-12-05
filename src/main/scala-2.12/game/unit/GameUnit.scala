@@ -35,17 +35,17 @@ trait GameUnit {
     */
   def getDamage: Int
 
-  /** Get unit armor element types
+  /** Get unit elemental resistances
     *
-    * @return unit armor element types (may be empty)
+    * @return unit elemental resistances (may be empty)
     */
-  def getArmorElementTypes: Seq[ElementType]
+  def getElementalResistances: Seq[ElementType]
 
-  /** Get armor status types
+  /** Get unit status resistances
     *
-    * @return unit armor status types (may be empty)
+    * @return unit status resistances (may be empty)
     */
-  def getArmorStatusTypes: Seq[StatusType]
+  def getStatusResistances: Seq[StatusType]
 
   /** Get attack element type
     *
