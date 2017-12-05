@@ -1,6 +1,7 @@
 package game.description
 
 import game.gamestate.GameState
+import game.item.element._
 import game.item.inventory.Inventory
 import game.item.{ArmorPart, _}
 import game.quest.{Quest, QuestResult}
@@ -11,6 +12,19 @@ import game.unit.{GameUnit, Hunter, Monster}
   */
 class DefaultDescription extends Description {
 
+  def descriptionElementType(elementType: ElementType): String = elementType match {
+    case ELECTRIC => "E"
+    case FIRE => "F"
+    case NORMAL => "N"
+    case WATER => "W"
+  }
+
+  def descriptionStatusType(statusType: StatusType): String = statusType match {
+    case NEUTRAL => "N"
+    case SLEEP => "Sl"
+    case STUN => "St"
+  }
+
   def descriptionItemType(i: ItemType): String = {
     val desc = new StringBuilder()
     desc.append(i.getName)
@@ -19,8 +33,8 @@ class DefaultDescription extends Description {
     if (i.hasArmor) desc.append(" armor:").append(i.getArmor)
     if (i.requiresSlot) desc.append("-:").append(i.getCharmSlotsRequired)
     if (i.providesSlot) desc.append("+:").append(i.getCharmSlotsProvided)
-    if (!i.isMaterial) desc.append("{").append(i.getElementType).append("}")
-    if (!i.isMaterial) desc.append("<").append(i.getStatusType).append(">")
+    if (!i.isMaterial) desc.append("{").append(descriptionElementType(i.getElementType)).append("}")
+    if (!i.isMaterial) desc.append("<").append(descriptionStatusType(i.getStatusType)).append(">")
     desc.toString()
   }
 
@@ -62,15 +76,15 @@ class DefaultDescription extends Description {
     desc.append("life:  ").append(gameUnit.getLife)
     desc.append("\n")
     desc.append("dmg:   ").append(gameUnit.getDamage).append(" ")
-    desc.append("{").append(gameUnit.getAttackElementType).append("}")
-    desc.append("<").append(gameUnit.getAttackStatusType).append(">")
+    desc.append("{").append(descriptionElementType(gameUnit.getAttackElementType)).append("}")
+    desc.append("<").append(descriptionStatusType(gameUnit.getAttackStatusType)).append(">")
     desc.append("\n")
     desc.append("armor: ").append(gameUnit.getArmor).append(" ")
     for (element <- gameUnit.getElementalResistances) {
-      desc.append("{").append(element).append("}")
+      desc.append("{").append(descriptionElementType(element)).append("}")
     }
     for (status <- gameUnit.getStatusResistances) {
-      desc.append("<").append(status).append(">")
+      desc.append("<").append(descriptionStatusType(status)).append(">")
     }
     desc.toString()
   }
