@@ -1,12 +1,12 @@
 package game.gamestate
 
 import game.config.ConfigLoader
-import game.item.DefaultItem
 import game.item.craft.{CraftPrototype, Crafts}
 import game.item.element.DefaultEEResolver
+import game.item.{DefaultItem, ItemType}
 import game.quest._
 import game.unit.{DefaultHunter, Hunter}
-import game.util.DefaultRandomPool
+import game.util.DefaultLoopingRandomPool
 
 /** Holds all game entities and states.
   * Created by nol on 11/11/17.
@@ -63,20 +63,27 @@ object DefaultGameState {
     hunter
   }
 
+  private def createQuests(crafts: Crafts, level: Int): Seq[Quest] = {
+    val monsterNamePool = new DefaultLoopingRandomPool[String](nameConfig.getMonsters)
+    var quests = Seq.empty[Quest]
+    val lootAtLevel = crafts.getMaterials(level).distinct
+    val lootPool = new DefaultLoopingRandomPool[ItemType](lootAtLevel)
+    // +1 => lootPerQuest * quests >= lootAtLevel
+    val lootPerQuest = math.max(1, (lootAtLevel.size / config.getQuestsPerLevel) + 1)
+    for (_ <- 0 until config.getQuestsPerLevel) {
+      var loot = Seq.empty[ItemType]
+      for (_ <- 0 until lootPerQuest) {
+        loot = loot :+ lootPool.next
+      }
+      quests = quests :+ DefaultQuest.createQuest(level, loot, monsterNamePool.next)
+    }
+    quests
+  }
+
   private def createQuests(crafts: Crafts): Seq[Quest] = {
-    val monsterNamePool = new DefaultRandomPool[String](nameConfig.getMonsters)
     var quests = Seq.empty[Quest]
     for (level <- config.getLevelMin until config.getLevelMax) {
-      val lootAtLevel = crafts.getMaterials(level).distinct
-      val lootSizeAtLevel: Int = lootAtLevel.size
-      val questsAtLevel: Int = Math.min(lootSizeAtLevel, config.getQuestsPerLevel)
-      assert(questsAtLevel > 0, level)
-      val lootPerQuest: Int = lootSizeAtLevel / questsAtLevel
-      assert(lootPerQuest >= 1)
-      for (q <- 0 until questsAtLevel) {
-        val loot = lootAtLevel.slice(q * lootPerQuest, q * lootPerQuest + lootPerQuest)
-        quests = quests :+ DefaultQuest.createQuest(level, loot, monsterNamePool.next.getOrElse("name pool empty"))
-      }
+      quests = quests ++ createQuests(crafts, level)
     }
     quests
   }

@@ -8,7 +8,7 @@ import scala.collection.mutable
 class DefaultRandomPool[T](values: Seq[T]) extends RandomPool[T] {
   private var pool: mutable.Buffer[T] = mutable.Buffer(values: _*)
 
-  def next: Option[T] = {
+  override def next: Option[T] = {
     Procedural.pickRandomFromSeq(pool) match {
       case Some(v) =>
         pool -= v
