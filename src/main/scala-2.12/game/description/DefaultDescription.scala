@@ -58,11 +58,14 @@ class DefaultDescription extends Description {
   private def descriptionGameUnit(gameUnit: GameUnit): String = {
     val desc = new StringBuilder()
     desc.append(gameUnit.getName)
-    desc.append(" life: ").append(gameUnit.getLife)
-    desc.append(" dmg: ").append(gameUnit.getDamage)
+    desc.append("\n")
+    desc.append("life:  ").append(gameUnit.getLife)
+    desc.append("\n")
+    desc.append("dmg:   ").append(gameUnit.getDamage).append(" ")
     desc.append("{").append(gameUnit.getAttackElementType).append("}")
     desc.append("<").append(gameUnit.getAttackStatusType).append(">")
-    desc.append(" armor: ").append(gameUnit.getArmor)
+    desc.append("\n")
+    desc.append("armor: ").append(gameUnit.getArmor).append(" ")
     for (element <- gameUnit.getElementalResistances) {
       desc.append("{").append(element).append("}")
     }
