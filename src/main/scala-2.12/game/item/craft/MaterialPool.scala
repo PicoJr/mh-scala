@@ -6,14 +6,14 @@ import game.item.{DefaultItemType, ItemType}
   * Created by nol on 29/11/17.
   */
 class MaterialPool {
-  private var materials = Map.empty[AddOn, ItemType]
+  private var materials = Map.empty[(AddOn, Int), ItemType]
 
   def getMaterial(addOn: AddOn, level: Int): ItemType = {
-    materials.get(addOn) match {
+    materials.get(addOn, level) match {
       case Some(m) => m
       case None =>
         val m = createMaterialFromAddOn(addOn, level)
-        materials += (addOn -> m)
+        materials += ((addOn, level) -> m)
         m
     }
   }
