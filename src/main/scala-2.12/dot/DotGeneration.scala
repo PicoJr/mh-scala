@@ -26,23 +26,25 @@ object DotGeneration extends App {
   val charms = generateGraphFor((i1, i2, _) => i1.isCharm || i2.isCharm, crafts)
   val dotRoot = DotRootGraph(directed = true, id = Some(Id("Crafts")))
 
+  val destination = "res/"
+
   val weaponsDot = weapons.toDot(dotRoot, edgeTransformer)
-  Files.write(Paths.get("weapons.dot"), weaponsDot.getBytes(StandardCharsets.UTF_8))
+  Files.write(Paths.get(destination + "weapons.dot"), weaponsDot.getBytes(StandardCharsets.UTF_8))
 
   val armorsHeadDot = armorsHead.toDot(dotRoot, edgeTransformer)
-  Files.write(Paths.get("armorsHead.dot"), armorsHeadDot.getBytes(StandardCharsets.UTF_8))
+  Files.write(Paths.get(destination + "armorsHead.dot"), armorsHeadDot.getBytes(StandardCharsets.UTF_8))
 
   val armorsBodyDot = armorsBody.toDot(dotRoot, edgeTransformer)
-  Files.write(Paths.get("armorsBody.dot"), armorsBodyDot.getBytes(StandardCharsets.UTF_8))
+  Files.write(Paths.get(destination + "armorsBody.dot"), armorsBodyDot.getBytes(StandardCharsets.UTF_8))
 
   val armorsArmsDot = armorsArms.toDot(dotRoot, edgeTransformer)
-  Files.write(Paths.get("armorsArms.dot"), armorsArmsDot.getBytes(StandardCharsets.UTF_8))
+  Files.write(Paths.get(destination + "armorsArms.dot"), armorsArmsDot.getBytes(StandardCharsets.UTF_8))
 
   val armorsLegsDot = armorsHead.toDot(dotRoot, edgeTransformer)
-  Files.write(Paths.get("armorsLegs.dot"), armorsHeadDot.getBytes(StandardCharsets.UTF_8))
+  Files.write(Paths.get(destination + "armorsLegs.dot"), armorsHeadDot.getBytes(StandardCharsets.UTF_8))
 
   val charmsDot = charms.toDot(dotRoot, edgeTransformer)
-  Files.write(Paths.get("charms.dot"), charmsDot.getBytes(StandardCharsets.UTF_8))
+  Files.write(Paths.get(destination + "charms.dot"), charmsDot.getBytes(StandardCharsets.UTF_8))
 
   def generateGraphFor(p: (ItemType, ItemType, ItemType) => Boolean, crafts: Crafts): Graph[String, LDiEdge] = {
     var g = Graph[String, LDiEdge]()
