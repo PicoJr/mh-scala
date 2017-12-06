@@ -22,7 +22,7 @@ case class CHARM_SLOT(slots: Int) extends SlotTypeRequirements
   */
 case object MATERIAL_SLOT extends SlotTypeRequirements
 
-/** Armor slot requirement (implicitely 1 slot) of armor part.
+/** Armor slot requirement (implicitly 1 slot) of armor part.
   *
   * @param part of armor
   */
