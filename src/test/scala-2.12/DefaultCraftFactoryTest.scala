@@ -1,13 +1,13 @@
-import game.item.craft.CraftPrototype
+import game.item.craft.DefaultCraftFactory
 import org.scalatest.FlatSpec
 
 /**
   * Created by nol on 20/11/17.
   */
-class CraftPrototypeTest extends FlatSpec {
+class DefaultCraftFactoryTest extends FlatSpec {
 
   it should "generate non empty crafts" in {
-    val crafts = CraftPrototype.generateCraft
+    val crafts = new DefaultCraftFactory().generateCraft
     assert(crafts.getRecipes.nonEmpty)
   }
 

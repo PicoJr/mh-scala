@@ -1,7 +1,7 @@
 package game.gamestate
 
 import game.config.ConfigLoader
-import game.item.craft.{CraftPrototype, Crafts}
+import game.item.craft.{Crafts, DefaultCraftFactory}
 import game.item.element.DefaultEEResolver
 import game.item.{DefaultItem, ItemType}
 import game.quest._
@@ -46,7 +46,7 @@ object DefaultGameState {
     * @return new GameState
     */
   def createNewGameState: DefaultGameState = {
-    val crafts = CraftPrototype.generateCraft
+    val crafts = new DefaultCraftFactory().generateCraft
     val quests = createQuests(crafts)
     val hunter = createHunter(crafts)
     val questLogic = new DefaultQuestLogic(new DefaultEEResolver)

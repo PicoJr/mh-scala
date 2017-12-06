@@ -3,6 +3,7 @@ package game.item
 import game.id.DefaultIdSupplier
 import game.item.ArmorPart.ArmorPart
 import game.item.element.{ElementType, NORMAL}
+import game.item.status.{NEUTRAL, StatusType}
 
 /** A generic blueprint from which items are instantiated.
   *

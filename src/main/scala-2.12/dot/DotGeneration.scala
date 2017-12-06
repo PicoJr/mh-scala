@@ -4,7 +4,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
 import game.description.DefaultDescription
-import game.item.craft.{CraftPrototype, Crafts}
+import game.item.craft.{Crafts, DefaultCraftFactory}
 import game.item.{ArmorPart, ItemType}
 
 import scalax.collection.Graph
@@ -17,7 +17,7 @@ import scalax.collection.io.dot._
   */
 object DotGeneration extends App {
   val defaultDescription = new DefaultDescription()
-  val crafts = CraftPrototype.generateCraft
+  val crafts = new DefaultCraftFactory().generateCraft
   val weapons = generateGraphFor((i1, i2, _) => i1.isWeapon || i2.isWeapon, crafts)
   val armorsHead = generateGraphFor((i1, i2, _) => i1.isArmorPartRequired(ArmorPart.HEAD) || i2.isArmorPartRequired(ArmorPart.HEAD), crafts)
   val armorsBody = generateGraphFor((i1, i2, _) => i1.isArmorPartRequired(ArmorPart.BODY) || i2.isArmorPartRequired(ArmorPart.BODY), crafts)

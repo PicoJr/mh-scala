@@ -1,12 +1,13 @@
 package game.item.craft
 
-import game.item.StatusType
+import game.item.craft.bonus.BonusType
 import game.item.element.ElementType
+import game.item.status.StatusType
 
 /**
   * Created by nol on 29/11/17.
   */
-sealed trait AddOn {
+trait AddOn {
 }
 
 case object CharmSlotAddOn extends AddOn

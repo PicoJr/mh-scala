@@ -1,7 +1,7 @@
 package game.unit
 
-import game.item.StatusType
 import game.item.element.ElementType
+import game.item.status.StatusType
 
 /** Convenience base trait for game units.
   * Created by nol on 22/11/17.

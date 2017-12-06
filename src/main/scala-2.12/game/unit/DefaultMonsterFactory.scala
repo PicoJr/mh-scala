@@ -1,45 +1,58 @@
 package game.unit
 
 import game.config.ConfigLoader
-import game.item.element.{ElementType, NORMAL}
-import game.item.{NEUTRAL, StatusType}
+import game.item.OpenEnum
+import game.item.element.{DefaultElementTypeEnum, ElementType, NORMAL}
+import game.item.status.{DefaultStatusTypeEnum, NEUTRAL, StatusType}
 import game.util.Procedural
 
 /**
   * Created by nol on 17/11/17.
   */
-object RandomMonsterFactory {
+class DefaultMonsterFactory(
+                             elementTypeEnum: OpenEnum[ElementType],
+                             statusTypeEnum: OpenEnum[StatusType]
+                           ) extends MonsterFactory {
+
+  def this() {
+    this(new DefaultElementTypeEnum, new DefaultStatusTypeEnum)
+  }
 
   private final val config = ConfigLoader.loadGameConfig
   private final val monsterConfig = ConfigLoader.loadMonsterConfig
 
   private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, monsterConfig.getMonsterStatsGrowth, config.getPercentageVariation)
 
+  private def getRandomElementType: ElementType = Procedural.pickRandomFromSeq(elementTypeEnum.getValues).getOrElse(NORMAL)
+
+  private def getRandomStatusType: StatusType = Procedural.pickRandomFromSeq(statusTypeEnum.getValues).getOrElse(NEUTRAL)
+
+
   private def getRandomAttackStatusType(level: Int): StatusType = {
-    if (level >= config.getLevelMin + 2) StatusType.getRandomStatusType else NEUTRAL
+    if (level >= config.getLevelMin + 2) getRandomStatusType else NEUTRAL
   }
 
   private def getRandomAttackElementType(level: Int): ElementType = {
-    if (level >= config.getLevelMin + 3) ElementType.getRandomElementType else NORMAL
+    if (level >= config.getLevelMin + 3) getRandomElementType else NORMAL
   }
 
   private def getRandomArmorStatusTypes(level: Int): Seq[StatusType] = {
-    if (level >= config.getLevelMin + 4) Seq(StatusType.getRandomStatusType) else Seq.empty
+    if (level >= config.getLevelMin + 4) Seq(getRandomStatusType) else Seq.empty
   }
 
   private def getRandomArmorElementTypes(level: Int): Seq[ElementType] = {
     var armorElementTypes = Seq.empty[ElementType]
     if (level >= config.getLevelMin) {
-      armorElementTypes = armorElementTypes :+ ElementType.getRandomElementType
+      armorElementTypes = armorElementTypes :+ getRandomElementType
     }
     if (level >= config.getLevelMin + 1) {
-      armorElementTypes = armorElementTypes :+ ElementType.getRandomElementType
+      armorElementTypes = armorElementTypes :+ getRandomElementType
     }
     if (level >= config.getLevelMin + 2) {
-      armorElementTypes = armorElementTypes :+ ElementType.getRandomElementType
+      armorElementTypes = armorElementTypes :+ getRandomElementType
     }
     if (level >= config.getLevelMin + 3) {
-      armorElementTypes = armorElementTypes :+ ElementType.getRandomElementType
+      armorElementTypes = armorElementTypes :+ getRandomElementType
     }
     armorElementTypes
   }

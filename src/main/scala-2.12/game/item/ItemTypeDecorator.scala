@@ -1,6 +1,7 @@
 package game.item
 
 import game.item.element.ElementType
+import game.item.status.StatusType
 
 /**
   * Note: if an item is decorated twice by the same decorator class,

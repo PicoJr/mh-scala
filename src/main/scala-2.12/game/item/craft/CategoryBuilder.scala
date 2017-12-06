@@ -2,6 +2,8 @@ package game.item.craft
 
 import game.config.ConfigLoader
 import game.item._
+import game.item.craft.bonus.{DAMAGE, PROTECTION}
+import game.item.craft.nature.{ARMOR, CHARM, NatureType, WEAPON}
 import game.util.Procedural
 
 /**

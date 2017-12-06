@@ -1,14 +1,10 @@
-package game.item.craft
+package game.item.craft.bonus
 
 /**
   * Created by nol on 25/11/17.
   */
-sealed trait BonusType {
+trait BonusType {
   val name: String
-}
-
-object BonusType {
-  final val values = Seq(DAMAGE, PROTECTION)
 }
 
 case object DAMAGE extends BonusType {

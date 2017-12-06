@@ -3,6 +3,7 @@ package game.item
 import game.id.Identifiable
 import game.item.ArmorPart.ArmorPart
 import game.item.element.ElementType
+import game.item.status.StatusType
 
 /**
   * Created by nol on 21/11/17.

@@ -14,7 +14,6 @@ object Effectiveness extends Enumeration {
 
 
   /** Get multiplier from effectiveness
-    * TODO get values from Config instead of hard code
     *
     * @param effectiveness of attack
     * @return multiplier >= 0.0

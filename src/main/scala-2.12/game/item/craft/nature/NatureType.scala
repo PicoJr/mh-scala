@@ -1,4 +1,4 @@
-package game.item.craft
+package game.item.craft.nature
 
 import game.item.ArmorPart
 import game.item.ArmorPart.ArmorPart
@@ -8,12 +8,6 @@ import game.item.ArmorPart.ArmorPart
   */
 sealed trait NatureType {
   val name: String
-}
-
-object NatureType {
-  final val values = Seq(
-    WEAPON, ARMOR(ArmorPart.HEAD), ARMOR(ArmorPart.BODY),
-    ARMOR(ArmorPart.ARMS), ARMOR(ArmorPart.LEGS), CHARM)
 }
 
 case object WEAPON extends NatureType {
@@ -32,5 +26,4 @@ case class ARMOR(armorPart: ArmorPart) extends NatureType {
 case object CHARM extends NatureType {
   override val name = "charm"
 }
-
 
