@@ -12,7 +12,7 @@ class CategoryBuilder {
   private def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
 
   private def getRandomValue(level: Int, base: Int): Int = {
-    Procedural.getRandomValue(level, base, CategoryBuilder.config.getHunterStatsGrowth, CategoryBuilder.config.getPercentageVariation)
+    Procedural.getRandomValue(level, base, CategoryBuilder.hunterConfig.getHunterStatsGrowth, CategoryBuilder.config.getPercentageVariation)
   }
 
   private var natureType: NatureType = WEAPON
@@ -57,17 +57,17 @@ class CategoryBuilder {
 
   def createItemType(level: Int): DefaultItemType = {
     var itemType = getNature match {
-      case WEAPON => DefaultItemType.createWeapon(level, getRandomValue(level, CategoryBuilder.config.getDamageBase))
+      case WEAPON => DefaultItemType.createWeapon(level, getRandomValue(level, CategoryBuilder.itemConfig.getDamageBase))
       case CHARM => DefaultItemType.createCharm(level, getRandomSlot)
-      case ARMOR(armorPart) => DefaultItemType.createArmor(level, getRandomValue(level, CategoryBuilder.config.getArmorBase), armorPart)
+      case ARMOR(armorPart) => DefaultItemType.createArmor(level, getRandomValue(level, CategoryBuilder.itemConfig.getArmorBase), armorPart)
     }
     for (addOn <- getAddOns) {
       addOn match {
         case CharmSlotAddOn => itemType = CharmSlot(itemType, getRandomSlot)
         case ElementAddOn(e) => itemType = Element(itemType, e)
         case StatusAddOn(s) => itemType = Status(itemType, s)
-        case BonusAddOn(DAMAGE) => itemType = Damage(itemType, getRandomValue(level, CategoryBuilder.config.getDamageBonusBase))
-        case BonusAddOn(PROTECTION) => itemType = Protection(itemType, getRandomValue(level, CategoryBuilder.config.getArmorBonusBase))
+        case BonusAddOn(DAMAGE) => itemType = Damage(itemType, getRandomValue(level, CategoryBuilder.itemConfig.getDamageBonusBase))
+        case BonusAddOn(PROTECTION) => itemType = Protection(itemType, getRandomValue(level, CategoryBuilder.itemConfig.getArmorBonusBase))
       }
     }
     itemType
@@ -76,4 +76,6 @@ class CategoryBuilder {
 
 object CategoryBuilder {
   private final val config = ConfigLoader.loadGameConfig
+  private final val itemConfig = ConfigLoader.loadItemConfig
+  private final val hunterConfig = ConfigLoader.loadHunterConfig
 }

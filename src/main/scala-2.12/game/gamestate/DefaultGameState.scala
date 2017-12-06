@@ -38,6 +38,7 @@ object DefaultGameState {
 
   private val config = ConfigLoader.loadGameConfig
   private val nameConfig = ConfigLoader.loadNameConfig
+  private val hunterConfig = ConfigLoader.loadHunterConfig
 
   /** Procedurally create a new GameState.
     * may fail if config values are inconsistent.
@@ -53,7 +54,7 @@ object DefaultGameState {
   }
 
   private def createHunter(crafts: Crafts): Hunter = {
-    val hunter = new DefaultHunter(config.getHunterName)
+    val hunter = new DefaultHunter(hunterConfig.getHunterName)
     val itemTypesFirstLevel = crafts.getNonMaterials(config.getLevelMin).distinct
     val items = itemTypesFirstLevel.map(i => DefaultItem.createItem(i))
     hunter.getInventory.addItems(items: _*)

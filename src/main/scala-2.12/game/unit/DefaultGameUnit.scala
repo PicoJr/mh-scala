@@ -53,7 +53,7 @@ case class DefaultHunter(name: String, inventory: Inventory) extends DefaultGame
 
   override def getInventory: Inventory = inventory
 
-  override def getLife: Int = DefaultHunter.config.getHunterLifeMax
+  override def getLife: Int = DefaultHunter.hunterConfig.getHunterLifeMax
 
   override def getArmor: Int = getInventory.getArmorProvided
 
@@ -69,5 +69,5 @@ case class DefaultHunter(name: String, inventory: Inventory) extends DefaultGame
 }
 
 object DefaultHunter {
-  private final val config = ConfigLoader.loadGameConfig
+  private final val hunterConfig = ConfigLoader.loadHunterConfig
 }

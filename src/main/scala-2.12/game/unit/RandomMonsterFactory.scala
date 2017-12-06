@@ -11,9 +11,9 @@ import game.util.Procedural
 object RandomMonsterFactory {
 
   private final val config = ConfigLoader.loadGameConfig
-  private final val nameConfig = ConfigLoader.loadNameConfig
+  private final val monsterConfig = ConfigLoader.loadMonsterConfig
 
-  private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, config.getMonsterStatsGrowth, config.getPercentageVariation)
+  private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, monsterConfig.getMonsterStatsGrowth, config.getPercentageVariation)
 
   private def getRandomAttackStatusType(level: Int): StatusType = {
     if (level >= config.getLevelMin + 2) StatusType.getRandomStatusType else NEUTRAL
@@ -45,9 +45,9 @@ object RandomMonsterFactory {
   }
 
   def generateMonster(level: Int, name: String): Monster = {
-    val life = getRandomValue(level, config.getMonsterLifeBase)
-    val armor = getRandomValue(level, config.getMonsterArmorBase)
-    val damage = getRandomValue(level, config.getMonsterDamageBase)
+    val life = getRandomValue(level, monsterConfig.getMonsterLifeBase)
+    val armor = getRandomValue(level, monsterConfig.getMonsterArmorBase)
+    val damage = getRandomValue(level, monsterConfig.getMonsterDamageBase)
     val attackStatusType = getRandomAttackStatusType(level)
     val attackElementType = getRandomAttackElementType(level)
     val armorStatusTypes = getRandomArmorStatusTypes(level)
