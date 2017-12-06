@@ -2,7 +2,7 @@ package game
 
 import game.console.{CommandParser, DefaultCommand}
 import game.description.DefaultDescription
-import game.gamestate.DefaultGameState
+import game.gamestate.DefaultGameStateFactory
 
 /** Game launcher.
   * Created by nol on 04/11/17.
@@ -10,7 +10,7 @@ import game.gamestate.DefaultGameState
 object Game extends App {
   val defaultCommand = new DefaultCommand(new DefaultDescription)
   val commandParser = new CommandParser(defaultCommand)
-  val gameState = DefaultGameState.createNewGameState
+  val gameState = new DefaultGameStateFactory().createGameState
   var quit: Boolean = false
   println("Game started")
   while (!quit) {

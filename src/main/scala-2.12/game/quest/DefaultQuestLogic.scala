@@ -2,13 +2,17 @@ package game.quest
 
 import game.config.ConfigLoader
 import game.gamestate.GameState
-import game.item.element.EEResolver
+import game.item.element.{DefaultEEResolver, EEResolver}
 import game.unit.{GameUnit, Hunter}
 
 /**
   * Created by nol on 22/11/17.
   */
 class DefaultQuestLogic(eEResolver: EEResolver) extends QuestLogic {
+
+  def this() = {
+    this(new DefaultEEResolver)
+  }
 
   private def computeDamageDealt(attacker: GameUnit, defender: GameUnit): Double = {
     val multiplier = defender.getElementalResistances.foldLeft(1.0)((m, e) => m * eEResolver.multiplier(attacker.getAttackElementType, e))

@@ -1,6 +1,7 @@
 package game.unit
 
 import game.config.ConfigLoader
+import game.id.{DefaultIdSupplier, IdSupplier}
 import game.item.OpenEnum
 import game.item.element.{DefaultElementTypeEnum, ElementType, NORMAL}
 import game.item.status.{DefaultStatusTypeEnum, NEUTRAL, StatusType}
@@ -11,11 +12,12 @@ import game.util.Procedural
   */
 class DefaultMonsterFactory(
                              elementTypeEnum: OpenEnum[ElementType],
-                             statusTypeEnum: OpenEnum[StatusType]
+                             statusTypeEnum: OpenEnum[StatusType],
+                             idSupplier: IdSupplier
                            ) extends MonsterFactory {
 
   def this() {
-    this(new DefaultElementTypeEnum, new DefaultStatusTypeEnum)
+    this(new DefaultElementTypeEnum, new DefaultStatusTypeEnum, new DefaultIdSupplier)
   }
 
   private final val config = ConfigLoader.loadGameConfig
@@ -26,7 +28,6 @@ class DefaultMonsterFactory(
   private def getRandomElementType: ElementType = Procedural.pickRandomFromSeq(elementTypeEnum.getValues).getOrElse(NORMAL)
 
   private def getRandomStatusType: StatusType = Procedural.pickRandomFromSeq(statusTypeEnum.getValues).getOrElse(NEUTRAL)
-
 
   private def getRandomAttackStatusType(level: Int): StatusType = {
     if (level >= config.getLevelMin + 2) getRandomStatusType else NEUTRAL
@@ -57,7 +58,7 @@ class DefaultMonsterFactory(
     armorElementTypes
   }
 
-  def generateMonster(level: Int, name: String): Monster = {
+  def createMonster(level: Int, name: String): Monster = {
     val life = getRandomValue(level, monsterConfig.getMonsterLifeBase)
     val armor = getRandomValue(level, monsterConfig.getMonsterArmorBase)
     val damage = getRandomValue(level, monsterConfig.getMonsterDamageBase)
@@ -65,7 +66,7 @@ class DefaultMonsterFactory(
     val attackElementType = getRandomAttackElementType(level)
     val armorStatusTypes = getRandomArmorStatusTypes(level)
     val armorElementTypes = getRandomArmorElementTypes(level)
-    DefaultMonster(name, life, armor, damage, attackStatusType, attackElementType, armorStatusTypes, armorElementTypes)
+    DefaultMonster(name, idSupplier.getNextUniqueId, life, armor, damage, attackStatusType, attackElementType, armorStatusTypes, armorElementTypes)
   }
 
 }
