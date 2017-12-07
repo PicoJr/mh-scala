@@ -14,7 +14,7 @@ class DefaultCraftFactory(bonusTypes: Seq[BonusType],
                           elementTypes: Seq[ElementType],
                           natureTypes: Seq[NatureType],
                           statusTypes: Seq[StatusType]
-                         ) extends CraftFactory {
+                         ) {
 
   def this() {
     this(

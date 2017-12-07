@@ -13,7 +13,7 @@ class DefaultMonsterFactory(
                              elementTypes: Seq[ElementType],
                              statusTypes: Seq[StatusType],
                              idSupplier: IdSupplier
-                           ) extends MonsterFactory {
+                           ) {
 
   def this() {
     this(
