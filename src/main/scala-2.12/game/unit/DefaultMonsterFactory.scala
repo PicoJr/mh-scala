@@ -2,22 +2,24 @@ package game.unit
 
 import game.config.ConfigLoader
 import game.id.{DefaultIdSupplier, IdSupplier}
-import game.item.OpenEnum
-import game.item.element.{DefaultElementTypeEnum, ElementType, NORMAL}
-import game.item.status.{DefaultStatusTypeEnum, NEUTRAL, StatusType}
+import game.item.element._
+import game.item.status.{NEUTRAL, SLEEP, STUN, StatusType}
 import game.util.Procedural
 
 /**
   * Created by nol on 17/11/17.
   */
 class DefaultMonsterFactory(
-                             elementTypeEnum: OpenEnum[ElementType],
-                             statusTypeEnum: OpenEnum[StatusType],
+                             elementTypes: Seq[ElementType],
+                             statusTypes: Seq[StatusType],
                              idSupplier: IdSupplier
                            ) extends MonsterFactory {
 
   def this() {
-    this(new DefaultElementTypeEnum, new DefaultStatusTypeEnum, new DefaultIdSupplier)
+    this(
+      Seq(ELECTRIC, FIRE, NORMAL, WATER),
+      Seq(NEUTRAL, SLEEP, STUN),
+      new DefaultIdSupplier)
   }
 
   private final val config = ConfigLoader.loadGameConfig
@@ -25,9 +27,9 @@ class DefaultMonsterFactory(
 
   private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, monsterConfig.getMonsterStatsGrowth, config.getPercentageVariation)
 
-  private def getRandomElementType: ElementType = Procedural.pickRandomFromSeq(elementTypeEnum.getValues).getOrElse(NORMAL)
+  private def getRandomElementType: ElementType = Procedural.pickRandomFromSeq(elementTypes).getOrElse(NORMAL)
 
-  private def getRandomStatusType: StatusType = Procedural.pickRandomFromSeq(statusTypeEnum.getValues).getOrElse(NEUTRAL)
+  private def getRandomStatusType: StatusType = Procedural.pickRandomFromSeq(statusTypes).getOrElse(NEUTRAL)
 
   private def getRandomAttackStatusType(level: Int): StatusType = {
     if (level >= config.getLevelMin + 2) getRandomStatusType else NEUTRAL
