@@ -8,6 +8,12 @@ import game.quest.QuestResult
   */
 trait Description {
 
+  /** Returns description of craft recipes with item identified with itemId.
+    *
+    * @param gameState current
+    * @param itemId    ingredient of craft recipe
+    * @return description of craft recipes with item identified with itemId.
+    */
   def descriptionRecipesWith(gameState: GameState, itemId: Long): String
 
   def descriptionItem(gameState: GameState, itemId: Long): String

@@ -4,6 +4,7 @@ package game.item.status
   * Created by nol on 05/11/17.
   */
 trait StatusType {
+  /** user-friendly real-play description */
   val name: String
 }
 

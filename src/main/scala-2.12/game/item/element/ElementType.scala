@@ -4,6 +4,7 @@ package game.item.element
   * Created by nol on 05/11/17.
   */
 trait ElementType {
+  /** user-friendly real-play description */
   val name: String
 }
 

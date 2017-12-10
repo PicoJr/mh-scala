@@ -7,7 +7,8 @@ import game.item.craft.nature.{ARMOR, CHARM, NatureType, WEAPON}
 import game.item.element._
 import game.item.status.{NEUTRAL, SLEEP, STUN, StatusType}
 
-/**
+/** Default craft factory.
+  * FIXME: not very Open-Close friendly.
   * Created by nol on 20/11/17.
   */
 class DefaultCraftFactory(bonusTypes: Seq[BonusType],

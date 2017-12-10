@@ -4,7 +4,7 @@ import game.id.Identifiable
 import game.item.Item
 import game.unit.Monster
 
-/**
+/** Rewards hunter with loot when monster is slain
   * Created by nol on 22/11/17.
   */
 trait Quest extends Identifiable {
