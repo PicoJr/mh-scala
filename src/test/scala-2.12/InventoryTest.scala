@@ -24,7 +24,7 @@ class InventoryTest extends FlatSpec {
     val item = DefaultItem.createItem(DefaultItemType.createWeapon(config.getLevelMin, 42))
     assert(!inventory.isEquipped(item))
     inventory.addItems(item)
-    inventory.equipItem(item.getUniqueId)
+    inventory.tryEquipItem(item.getUniqueId, force = false)
     assert(inventory.isEquipped(item))
   }
 
@@ -32,7 +32,7 @@ class InventoryTest extends FlatSpec {
     val inventory = new DefaultInventory
     val weapon = new DefaultItem(DefaultItemType.createWeapon(config.getLevelMin, 42))
     inventory.addItems(weapon)
-    inventory.equipItem(weapon.getUniqueId)
+    inventory.tryEquipItem(weapon.getUniqueId, force = false)
     assert(inventory.getDamageProvided > 0)
   }
 
@@ -40,7 +40,7 @@ class InventoryTest extends FlatSpec {
     val inventory = new DefaultInventory
     val armor = new DefaultItem(DefaultItemType.createArmor(config.getLevelMin, 42, ArmorPart.HEAD))
     inventory.addItems(armor)
-    inventory.equipItem(armor.getUniqueId)
+    inventory.tryEquipItem(armor.getUniqueId, force = false)
     assert(inventory.getArmorProvided > 0)
   }
 
@@ -48,7 +48,7 @@ class InventoryTest extends FlatSpec {
     val inventory = new DefaultInventory
     val material = new DefaultItem(DefaultItemType.createMaterial("cannot be equipped", config.getLevelMin))
     inventory.addItems(material)
-    inventory.equipItem(material.getUniqueId)
+    inventory.tryEquipItem(material.getUniqueId, force = true)
     assert(!inventory.isEquipped(material))
   }
 

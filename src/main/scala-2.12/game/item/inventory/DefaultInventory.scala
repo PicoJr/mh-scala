@@ -1,5 +1,6 @@
 package game.item.inventory
 
+import game.item.ArmorPart.ArmorPart
 import game.item._
 
 /** Holds items
@@ -9,6 +10,20 @@ class DefaultInventory extends Inventory {
 
   private var items: Seq[Item] = Seq.empty
   private var equipped: Set[Item] = Set.empty
+
+  private def unEquipWeapon(): Unit = {
+    getWeaponEquipped match {
+      case Some(i) => unEquipItem(i.getUniqueId)
+      case None =>
+    }
+  }
+
+  private def unEquipArmorPart(armorPart: ArmorPart): Unit = {
+    getArmorEquipped(armorPart) match {
+      case Some(i) => unEquipItem(i.getUniqueId)
+      case None =>
+    }
+  }
 
   override def isEquipped(itemId: Long): Boolean = {
     equipped.exists(i => i.getUniqueId == itemId)
@@ -24,10 +39,21 @@ class DefaultInventory extends Inventory {
     this.items ++= items
   }
 
-  override def equipItem(itemId: Long): Unit = {
+  override def tryEquipItem(itemId: Long, force: Boolean): Boolean = {
     findItem(itemId) match {
-      case Some(i) => if (canBeEquipped(i)) equipItem(i)
-      case None =>
+      case Some(i) =>
+        if (!canBeEquipped(i) && force) {
+          i.getSlotTypeRequirement match {
+            case WEAPON_SLOT => unEquipWeapon()
+            case ARMOR_SLOT(part) => unEquipArmorPart(part)
+            case _ =>
+          }
+        }
+        if (canBeEquipped(i)) {
+          equipItem(i)
+          true
+        } else false
+      case None => false
     }
   }
 

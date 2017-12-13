@@ -40,8 +40,11 @@ class DefaultCommand(description: Description) extends Command {
   override def equipItem(gameState: GameState, itemId: Long): Unit = {
     val inventory = gameState.getHunter.getInventory
     gameState.findItem(itemId) match {
-      case Some(i) if inventory.canBeEquipped(i) => inventory.equipItem(i.getUniqueId)
-      case Some(_) => println(s"item with id $itemId cannot be equipped")
+      case Some(i) =>
+        val equipped = inventory.tryEquipItem(i.getUniqueId, force = true)
+        if (!equipped) {
+          println(s"item with id $itemId cannot be equipped")
+        }
       case None => println(s"item with id $itemId not found")
     }
   }

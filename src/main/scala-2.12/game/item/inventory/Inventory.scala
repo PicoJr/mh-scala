@@ -177,8 +177,10 @@ trait Inventory {
   /** Equip item with id itemId from inventory if any and possible
     *
     * @param itemId of item to equip
+    * @param force  item to be equipped (un-equip other items if necessary)
+    * @return item with id itemId equipped successfully
     */
-  def equipItem(itemId: Long): Unit
+  def tryEquipItem(itemId: Long, force: Boolean): Boolean
 
   /** Un-equip item with id itemId if any
     *
