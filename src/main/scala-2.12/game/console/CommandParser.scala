@@ -19,7 +19,7 @@ class CommandParser(command: Command) {
       |  mh item show <itemId>...
       |  mh quest (ls | start <questId>...)
       |  mh craft show <itemId>...
-      |  mh craft new <itemId1> <itemId2>
+      |  mh craft new <materialId> <itemId>...
       |  mh score
       |  mh quit
       |  mh (-h | --help)
@@ -66,7 +66,10 @@ class CommandParser(command: Command) {
           }
         }
         if (simpleOpts.asBoolean("new")) {
-          command.craftItem(gameState, simpleOpts.asLong("<itemId1>"), simpleOpts.asLong("<itemId2>"))
+          val materialId = simpleOpts.asLong("<materialId>")
+          for (itemId <- simpleOpts.asSeq("<itemId>")) {
+            command.craftItem(gameState, materialId, itemId.toString.toLong)
+          }
         }
       }
       else if (simpleOpts.asBoolean("quest")) {
