@@ -118,6 +118,7 @@ class DefaultDescription extends Description {
     desc.append(" level: ").append(quest.getLevel)
     desc.append("\n")
     desc.append(descriptionMonster(quest.getMonster))
+    desc.append("\n")
     desc.toString()
   }
 
