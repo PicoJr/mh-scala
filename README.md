@@ -15,11 +15,11 @@
 3. tackle design challenges (S.O.L.I.D)
 
 
-* __S__ingle Responsibility Principle
-* __O__pen-Closed Principle
-* __L__iskov Substitution Principle
-* __I__nterface Segregation Principle
-* __D__ependency-Inversion Principle
+* Single Responsibility Principle
+* Open-Closed Principle
+* Liskov Substitution Principle
+* Interface Segregation Principle
+* Dependency-Inversion Principle
 
 ### A Respectful Game
 
