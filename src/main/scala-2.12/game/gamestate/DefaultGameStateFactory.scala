@@ -3,7 +3,7 @@ package game.gamestate
 import game.config.{DefaultGameConfig, GameConfig}
 import game.id.DefaultIdSupplier
 import game.item.craft.{Crafts, DefaultCraftFactory}
-import game.item.{DefaultItem, ItemType}
+import game.item.{AbstractItemFactory, DefaultItemFactory, ItemType}
 import game.quest._
 import game.unit.{DefaultHunter, DefaultMonsterFactory, Hunter}
 import game.util.DefaultLoopingRandomPool
@@ -14,14 +14,16 @@ import game.util.DefaultLoopingRandomPool
 class DefaultGameStateFactory(crafts: Crafts,
                               hunter: Hunter,
                               questLogic: QuestLogic,
-                              gameConfig: GameConfig
+                              gameConfig: GameConfig,
+                              itemFactory: AbstractItemFactory
                              ) {
   def this() = {
     this(
       new DefaultCraftFactory().generateCraft,
       new DefaultHunter(),
       new DefaultQuestLogic(),
-      DefaultGameConfig.getGameConfig
+      DefaultGameConfig.getGameConfig,
+      DefaultItemFactory.getDefaultItemFactory
     )
   }
 
@@ -34,7 +36,7 @@ class DefaultGameStateFactory(crafts: Crafts,
   private def createDefaultHunter(crafts: Crafts): Hunter = {
     val hunter = new DefaultHunter()
     val itemTypesFirstLevel = crafts.getNonMaterials(gameConfig.getLevelMin).distinct
-    val items = itemTypesFirstLevel.map(i => DefaultItem.createItem(i))
+    val items = itemTypesFirstLevel.map(i => itemFactory.createItem(i))
     hunter.getInventory.addItems(items: _*)
     for (item <- items) {
       hunter.getInventory.tryEquipItem(item.getUniqueId, force = false)

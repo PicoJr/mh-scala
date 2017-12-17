@@ -1,19 +1,16 @@
 package game.item
 
-import game.id.DefaultIdSupplier
 import game.item.element.ElementType
 import game.item.status.StatusType
 
 /** A unique instance of an ItemType identified by an Id
   *
   */
-class DefaultItem(itemType: ItemType) extends Item {
-
-  private final val uniqueID = DefaultItem.itemIdSupplier.getNextUniqueId
+class DefaultItem(itemType: ItemType, itemId: Long) extends Item {
 
   override def getItemType: ItemType = itemType
 
-  override def getUniqueId: Long = uniqueID
+  override def getUniqueId: Long = itemId
 
   override def getLevel: Int = itemType.getLevel
 
@@ -32,18 +29,4 @@ class DefaultItem(itemType: ItemType) extends Item {
   override def getElementType: ElementType = itemType.getElementType
 
   override def getCharmSlotsProvided: Int = itemType.getCharmSlotsProvided
-}
-
-object DefaultItem {
-
-  private val itemIdSupplier = new DefaultIdSupplier
-
-  /** Create item from itemType
-    *
-    * @param itemType of item
-    * @return item from itemType
-    */
-  def createItem(itemType: ItemType): Item = {
-    new DefaultItem(itemType)
-  }
 }

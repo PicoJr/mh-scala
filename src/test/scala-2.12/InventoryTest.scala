@@ -8,6 +8,7 @@ import org.scalatest.FlatSpec
   */
 class InventoryTest extends FlatSpec {
   private val gameConfig = DefaultGameConfig.getGameConfig
+  private val itemFactory = DefaultItemFactory.getDefaultItemFactory
 
   "A new Inventory" must "be empty" in {
     assert(new DefaultInventory().getItems.isEmpty)
@@ -15,13 +16,13 @@ class InventoryTest extends FlatSpec {
 
   it should "have items when items are added" in {
     val inventory = new DefaultInventory
-    inventory.addItems(DefaultItem.createItem(new DefaultItemType("name", gameConfig.getLevelMin)))
+    inventory.addItems(itemFactory.createItem(new DefaultItemType("name", gameConfig.getLevelMin)))
     assert(inventory.getItems.nonEmpty)
   }
 
   "Equipped items" should "be detected as equipped" in {
     val inventory = new DefaultInventory
-    val item = DefaultItem.createItem(DefaultItemType.createWeapon(gameConfig.getLevelMin, 42))
+    val item = itemFactory.createItem(DefaultItemType.createWeapon(gameConfig.getLevelMin, 42))
     assert(!inventory.isEquipped(item))
     inventory.addItems(item)
     inventory.tryEquipItem(item.getUniqueId, force = false)
@@ -30,7 +31,7 @@ class InventoryTest extends FlatSpec {
 
   it should "provide damage when a weapon is equipped" in {
     val inventory = new DefaultInventory
-    val weapon = new DefaultItem(DefaultItemType.createWeapon(gameConfig.getLevelMin, 42))
+    val weapon = itemFactory.createItem(DefaultItemType.createWeapon(gameConfig.getLevelMin, 42))
     inventory.addItems(weapon)
     inventory.tryEquipItem(weapon.getUniqueId, force = false)
     assert(inventory.getDamageProvided > 0)
@@ -38,7 +39,7 @@ class InventoryTest extends FlatSpec {
 
   it should "provide armor when an armor is equipped" in {
     val inventory = new DefaultInventory
-    val armor = new DefaultItem(DefaultItemType.createArmor(gameConfig.getLevelMin, 42, ArmorPart.HEAD))
+    val armor = itemFactory.createItem(DefaultItemType.createArmor(gameConfig.getLevelMin, 42, ArmorPart.HEAD))
     inventory.addItems(armor)
     inventory.tryEquipItem(armor.getUniqueId, force = false)
     assert(inventory.getArmorProvided > 0)
@@ -46,7 +47,7 @@ class InventoryTest extends FlatSpec {
 
   it should "not equip item that cannot be equipped" in {
     val inventory = new DefaultInventory
-    val material = new DefaultItem(DefaultItemType.createMaterial("cannot be equipped", gameConfig.getLevelMin))
+    val material = itemFactory.createItem(DefaultItemType.createMaterial("cannot be equipped", gameConfig.getLevelMin))
     inventory.addItems(material)
     inventory.tryEquipItem(material.getUniqueId, force = true)
     assert(!inventory.isEquipped(material))

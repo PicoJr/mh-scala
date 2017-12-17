@@ -2,12 +2,16 @@ package game.console
 
 import game.description.Description
 import game.gamestate.GameState
-import game.item.DefaultItem
+import game.item.{AbstractItemFactory, DefaultItemFactory}
 
 /**
   * Created by nol on 12/11/17.
   */
-class DefaultCommand(description: Description) extends Command {
+class DefaultCommand(description: Description, itemFactory: AbstractItemFactory) extends Command {
+
+  def this(description: Description) {
+    this(description, DefaultItemFactory.getDefaultItemFactory)
+  }
 
   override def listQuests(gameState: GameState): Unit = {
     for (q <- gameState.getQuests) {
@@ -95,11 +99,11 @@ class DefaultCommand(description: Description) extends Command {
         val result_i2_i1 = gameState.getCrafts.getRecipes.get((i2.getItemType, i1.getItemType))
         (result_i1_i2, result_i2_i1) match {
           case (Some(result), _) =>
-            val itemResult = DefaultItem.createItem(result)
+            val itemResult = itemFactory.createItem(result)
             gameState.getHunter.getInventory.addItems(itemResult)
             println("obtained: " + description.descriptionItem(gameState, itemResult.getUniqueId))
           case (_, Some(result)) =>
-            val itemResult = DefaultItem.createItem(result)
+            val itemResult = itemFactory.createItem(result)
             gameState.getHunter.getInventory.addItems(itemResult)
             println("obtained: " + description.descriptionItem(gameState, itemResult.getUniqueId))
           case _ => println("no matching craft recipe found")

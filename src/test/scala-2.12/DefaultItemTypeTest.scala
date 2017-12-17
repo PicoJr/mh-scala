@@ -8,21 +8,22 @@ import org.scalatest.FlatSpec
 class DefaultItemTypeTest extends FlatSpec {
 
   private val gameConfig = DefaultGameConfig.getGameConfig
+  private val itemFactory = DefaultItemFactory.getDefaultItemFactory
 
   "An Item ID" should "remain the same" in {
-    val item = new DefaultItem(new DefaultItemType("1", gameConfig.getLevelMin))
+    val item = itemFactory.createItem(new DefaultItemType("1", gameConfig.getLevelMin))
     assert(item.getUniqueId == item.getUniqueId)
   }
 
   "An Item ID" should "be unique" in {
-    val item1 = new DefaultItem(new DefaultItemType("1", gameConfig.getLevelMin))
-    val item2 = new DefaultItem(new DefaultItemType("2", gameConfig.getLevelMin))
+    val item1 = itemFactory.createItem(new DefaultItemType("1", gameConfig.getLevelMin))
+    val item2 = itemFactory.createItem(new DefaultItemType("2", gameConfig.getLevelMin))
     assert(item1.getUniqueId != item2.getUniqueId)
   }
 
   "An item" should "be seen as an ItemType instance" in {
     val itemType = new DefaultItemType("1", gameConfig.getLevelMin)
-    assert(DefaultItem.createItem(itemType).isItemType(itemType))
+    assert(itemFactory.createItem(itemType).isItemType(itemType))
   }
 
   "A weapon" should "be a weapon" in {
