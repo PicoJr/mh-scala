@@ -9,7 +9,7 @@ import game.item.status.StatusType
   *
   * @param i wrapped
   */
-abstract class ItemTypeDecorator(i: ItemType) extends DefaultItemType(i.getName, i.getLevel) {
+abstract class ItemTypeDecorator(i: ItemType) extends DefaultItemType(i.getName, i.getLevel, i.getUniqueId) {
   val item: ItemType = i
 
   override def getDamage: Int = i.getDamage

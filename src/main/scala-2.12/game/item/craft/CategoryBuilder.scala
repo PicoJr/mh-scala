@@ -9,10 +9,10 @@ import game.util.Procedural
 /**
   * Created by nol on 29/11/17.
   */
-class CategoryBuilder(gameConfig: GameConfig) {
+class CategoryBuilder(gameConfig: GameConfig, itemTypeFactory: AbstractItemTypeFactory) {
 
   def this() {
-    this(DefaultGameConfig.getGameConfig)
+    this(DefaultGameConfig.getGameConfig, DefaultItemTypeFactory.getDefaultItemFactory)
   }
 
   private def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
@@ -61,11 +61,11 @@ class CategoryBuilder(gameConfig: GameConfig) {
     descriptionBuilder
   }
 
-  def createItemType(level: Int): DefaultItemType = {
+  def createItemType(level: Int): ItemType = {
     var itemType = getNature match {
-      case WEAPON => DefaultItemType.createWeapon(level, getRandomValue(level, gameConfig.getDamageBase))
-      case CHARM => DefaultItemType.createCharm(level, getRandomSlot)
-      case ARMOR(armorPart) => DefaultItemType.createArmor(level, getRandomValue(level, gameConfig.getArmorBase), armorPart)
+      case WEAPON => itemTypeFactory.createWeapon(level, getRandomValue(level, gameConfig.getDamageBase))
+      case CHARM => itemTypeFactory.createCharm(level, getRandomSlot)
+      case ARMOR(armorPart) => itemTypeFactory.createArmor(level, getRandomValue(level, gameConfig.getArmorBase), armorPart)
     }
     for (addOn <- getAddOns) {
       addOn match {

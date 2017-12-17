@@ -1,11 +1,16 @@
 package game.item.craft
 
-import game.item.{DefaultItemType, ItemType}
+import game.item.{AbstractItemTypeFactory, DefaultItemTypeFactory, ItemType}
 
 /**
   * Created by nol on 29/11/17.
   */
-class MaterialPool {
+class MaterialPool(itemTypeFactory: AbstractItemTypeFactory) {
+
+  def this() {
+    this(DefaultItemTypeFactory.getDefaultItemFactory)
+  }
+
   private var materials = Map.empty[(AddOn, Int), ItemType]
 
   def getMaterial(addOn: AddOn, level: Int): ItemType = {
@@ -26,7 +31,7 @@ class MaterialPool {
       case StatusAddOn(s) => descriptionBuilder.addAdjective(s.name)
       case BonusAddOn(b) => descriptionBuilder.addAdjective(b.name)
     }
-    DefaultItemType.createMaterial(descriptionBuilder.getDescription, level)
+    itemTypeFactory.createMaterial(descriptionBuilder.getDescription, level)
   }
 
 }
