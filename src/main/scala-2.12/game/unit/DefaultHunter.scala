@@ -1,6 +1,6 @@
 package game.unit
 
-import game.config.ConfigLoader
+import game.config.{DefaultGameConfig, GameConfig}
 import game.item.element.ElementType
 import game.item.inventory.{DefaultInventory, Inventory}
 import game.item.status.StatusType
@@ -8,19 +8,19 @@ import game.item.status.StatusType
 /**
   * Created by nol on 06/12/17.
   */
-case class DefaultHunter(name: String, inventory: Inventory) extends DefaultGameUnit(name) with Hunter {
+case class DefaultHunter(name: String, inventory: Inventory, gameConfig: GameConfig) extends DefaultGameUnit(name) with Hunter {
 
   def this(name: String) {
-    this(name, new DefaultInventory)
+    this(name, new DefaultInventory, DefaultGameConfig.getGameConfig)
   }
 
   def this() {
-    this(DefaultHunter.hunterConfig.getHunterName)
+    this(DefaultGameConfig.getGameConfig.getHunterName)
   }
 
   override def getInventory: Inventory = inventory
 
-  override def getLife: Int = DefaultHunter.hunterConfig.getHunterLifeMax
+  override def getLife: Int = gameConfig.getHunterLifeMax
 
   override def getArmor: Int = getInventory.getArmorProvided
 
@@ -33,8 +33,4 @@ case class DefaultHunter(name: String, inventory: Inventory) extends DefaultGame
   override def getAttackStatusType: StatusType = getInventory.getAttackStatusType
 
   override def getStatusResistances: Seq[StatusType] = getInventory.getArmorStatusTypes ++ getInventory.getCharmsStatusTypes
-}
-
-object DefaultHunter {
-  private final val hunterConfig = ConfigLoader.loadHunterConfig
 }

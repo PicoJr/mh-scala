@@ -21,7 +21,5 @@ trait EEResolver {
     * @param other       element type
     * @return Effectiveness.multiplier(effectiveness(element, other))
     */
-  def multiplier(elementType: ElementType, other: ElementType): Double = {
-    Effectiveness.multiplier(effectiveness(elementType, other))
-  }
+  def multiplier(elementType: ElementType, other: ElementType): Double
 }

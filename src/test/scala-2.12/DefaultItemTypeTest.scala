@@ -1,4 +1,4 @@
-import game.config.ConfigLoader
+import game.config.DefaultGameConfig
 import game.item._
 import org.scalatest.FlatSpec
 
@@ -7,41 +7,41 @@ import org.scalatest.FlatSpec
   */
 class DefaultItemTypeTest extends FlatSpec {
 
-  private val config = ConfigLoader.loadGameConfig
+  private val gameConfig = DefaultGameConfig.getGameConfig
 
   "An Item ID" should "remain the same" in {
-    val item = new DefaultItem(new DefaultItemType("1", config.getLevelMin))
+    val item = new DefaultItem(new DefaultItemType("1", gameConfig.getLevelMin))
     assert(item.getUniqueId == item.getUniqueId)
   }
 
   "An Item ID" should "be unique" in {
-    val item1 = new DefaultItem(new DefaultItemType("1", config.getLevelMin))
-    val item2 = new DefaultItem(new DefaultItemType("2", config.getLevelMin))
+    val item1 = new DefaultItem(new DefaultItemType("1", gameConfig.getLevelMin))
+    val item2 = new DefaultItem(new DefaultItemType("2", gameConfig.getLevelMin))
     assert(item1.getUniqueId != item2.getUniqueId)
   }
 
   "An item" should "be seen as an ItemType instance" in {
-    val itemType = new DefaultItemType("1", config.getLevelMin)
+    val itemType = new DefaultItemType("1", gameConfig.getLevelMin)
     assert(DefaultItem.createItem(itemType).isItemType(itemType))
   }
 
   "A weapon" should "be a weapon" in {
-    assert(DefaultItemType.createWeapon(42, config.getLevelMin).isWeapon)
+    assert(DefaultItemType.createWeapon(42, gameConfig.getLevelMin).isWeapon)
   }
 
   "An armor" should "be an armor" in {
-    val armor = DefaultItemType.createArmor(config.getLevelMin, 42, ArmorPart.HEAD)
+    val armor = DefaultItemType.createArmor(gameConfig.getLevelMin, 42, ArmorPart.HEAD)
     assert(armor.isArmor)
     assert(armor.isArmorPartRequired(ArmorPart.HEAD))
   }
 
   "An armor" should "provide armor" in {
-    val armor = DefaultItemType.createArmor(config.getLevelMin, 42, ArmorPart.HEAD)
+    val armor = DefaultItemType.createArmor(gameConfig.getLevelMin, 42, ArmorPart.HEAD)
     assert(armor.hasArmor)
   }
 
   "A weapon" should "provide damage" in {
-    val weapon = DefaultItemType.createWeapon(config.getLevelMin, 42)
+    val weapon = DefaultItemType.createWeapon(gameConfig.getLevelMin, 42)
     assert(weapon.hasDamage)
   }
 
@@ -51,12 +51,12 @@ class DefaultItemTypeTest extends FlatSpec {
   }
 
   "An armor" should "also be an equipment" in {
-    val armor = DefaultItemType.createArmor(config.getLevelMin, 42, ArmorPart.HEAD)
+    val armor = DefaultItemType.createArmor(gameConfig.getLevelMin, 42, ArmorPart.HEAD)
     assert(armor.isEquipment)
   }
 
   "A charm" should "be a charm" in {
-    assert(DefaultItemType.createCharm(config.getLevelMin, 42).isCharm)
+    assert(DefaultItemType.createCharm(gameConfig.getLevelMin, 42).isCharm)
   }
 
 }

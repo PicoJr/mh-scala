@@ -1,6 +1,6 @@
 package game.gamestate
 
-import game.config.ConfigLoader
+import game.config.{DefaultGameConfig, GameConfig}
 import game.id.DefaultIdSupplier
 import game.item.craft.{Crafts, DefaultCraftFactory}
 import game.item.{DefaultItem, ItemType}
@@ -13,13 +13,16 @@ import game.util.DefaultLoopingRandomPool
   */
 class DefaultGameStateFactory(crafts: Crafts,
                               hunter: Hunter,
-                              questLogic: QuestLogic
+                              questLogic: QuestLogic,
+                              gameConfig: GameConfig
                              ) {
   def this() = {
     this(
       new DefaultCraftFactory().generateCraft,
       new DefaultHunter(),
-      new DefaultQuestLogic())
+      new DefaultQuestLogic(),
+      DefaultGameConfig.getGameConfig
+    )
   }
 
   def createGameState: GameState = {
@@ -30,7 +33,7 @@ class DefaultGameStateFactory(crafts: Crafts,
 
   private def createDefaultHunter(crafts: Crafts): Hunter = {
     val hunter = new DefaultHunter()
-    val itemTypesFirstLevel = crafts.getNonMaterials(DefaultGameStateFactory.config.getLevelMin).distinct
+    val itemTypesFirstLevel = crafts.getNonMaterials(gameConfig.getLevelMin).distinct
     val items = itemTypesFirstLevel.map(i => DefaultItem.createItem(i))
     hunter.getInventory.addItems(items: _*)
     for (item <- items) {
@@ -40,16 +43,16 @@ class DefaultGameStateFactory(crafts: Crafts,
   }
 
   private def createQuests(crafts: Crafts): Seq[Quest] = {
-    val monsterNamePool = new DefaultLoopingRandomPool(DefaultGameStateFactory.nameConfig.getMonsters)
+    val monsterNamePool = new DefaultLoopingRandomPool(gameConfig.getMonsters)
     val idSupplier = new DefaultIdSupplier()
     val monsterFactory = new DefaultMonsterFactory()
     var quests = Seq.empty[Quest]
-    for (level <- DefaultGameStateFactory.config.getLevelMin until DefaultGameStateFactory.config.getLevelMax) {
+    for (level <- gameConfig.getLevelMin until gameConfig.getLevelMax) {
       val lootAtLevel = crafts.getMaterials(level).distinct
       val lootPool = new DefaultLoopingRandomPool[ItemType](lootAtLevel)
       // +1 => lootPerQuest * quests >= lootAtLevel
-      val lootPerQuest = math.max(1, (lootAtLevel.size / DefaultGameStateFactory.config.getQuestsPerLevel) + 1)
-      for (_ <- 0 until DefaultGameStateFactory.config.getQuestsPerLevel) {
+      val lootPerQuest = math.max(1, (lootAtLevel.size / gameConfig.getQuestsPerLevel) + 1)
+      for (_ <- 0 until gameConfig.getQuestsPerLevel) {
         var loot = Seq.empty[ItemType]
         for (_ <- 0 until lootPerQuest) {
           loot = loot :+ lootPool.next
@@ -61,10 +64,4 @@ class DefaultGameStateFactory(crafts: Crafts,
     quests
   }
 
-
-}
-
-private object DefaultGameStateFactory {
-  private val config = ConfigLoader.loadGameConfig
-  private val nameConfig = ConfigLoader.loadNameConfig
 }

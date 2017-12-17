@@ -1,6 +1,6 @@
 package game.item.craft
 
-import game.config.ConfigLoader
+import game.config.{DefaultGameConfig, GameConfig}
 import game.item._
 import game.item.craft.bonus.{BonusType, DAMAGE, PROTECTION}
 import game.item.craft.nature.{ARMOR, CHARM, NatureType, WEAPON}
@@ -14,7 +14,8 @@ import game.item.status.{NEUTRAL, SLEEP, STUN, StatusType}
 class DefaultCraftFactory(bonusTypes: Seq[BonusType],
                           elementTypes: Seq[ElementType],
                           natureTypes: Seq[NatureType],
-                          statusTypes: Seq[StatusType]
+                          statusTypes: Seq[StatusType],
+                          gameConfig: GameConfig
                          ) {
 
   def this() {
@@ -22,7 +23,8 @@ class DefaultCraftFactory(bonusTypes: Seq[BonusType],
       Seq(DAMAGE, PROTECTION),
       Seq(ELECTRIC, FIRE, NORMAL, WATER),
       Seq(WEAPON, ARMOR(ArmorPart.HEAD), ARMOR(ArmorPart.BODY), ARMOR(ArmorPart.ARMS), ARMOR(ArmorPart.LEGS), CHARM),
-      Seq(NEUTRAL, SLEEP, STUN)
+      Seq(NEUTRAL, SLEEP, STUN),
+      DefaultGameConfig.getGameConfig
     )
   }
 
@@ -39,19 +41,19 @@ class DefaultCraftFactory(bonusTypes: Seq[BonusType],
       craftItemType(CraftStep(result, resultCategory, craftStep.crafts, craftStep.materialPool))
     }
 
-    if (craftStep.itemTypeRoot.getLevel == DefaultCraftFactory.config.getLevelMin) {
+    if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin) {
       for (element <- elementTypes) {
         craftWithAddOn(craftStep, ElementAddOn(element))
       }
-    } else if (craftStep.itemTypeRoot.getLevel == DefaultCraftFactory.config.getLevelMin + 1) {
+    } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 1) {
       for (status <- statusTypes) {
         craftWithAddOn(craftStep, StatusAddOn(status))
       }
-    } else if (craftStep.itemTypeRoot.getLevel == DefaultCraftFactory.config.getLevelMin + 2) {
+    } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 2) {
       for (bonus <- bonusTypes) {
         craftWithAddOn(craftStep, BonusAddOn(bonus))
       }
-    } else if (craftStep.itemTypeRoot.getLevel == DefaultCraftFactory.config.getLevelMin + 3) {
+    } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 3) {
       for (bonus <- bonusTypes) {
         craftWithAddOn(craftStep, BonusAddOn(bonus))
       }
@@ -67,15 +69,11 @@ class DefaultCraftFactory(bonusTypes: Seq[BonusType],
         case CHARM => // a charm should not have charm add-ons...
         case _ => categoryRoot.withAddOn(CharmSlotAddOn)
       }
-      val itemTypeRoot = categoryRoot.createItemType(DefaultCraftFactory.config.getLevelMin)
+      val itemTypeRoot = categoryRoot.createItemType(gameConfig.getLevelMin)
       itemTypeRoot.setName(categoryRoot.createDescription.getDescription)
       craftItemType(CraftStep(itemTypeRoot, categoryRoot, crafts, materialPool))
     }
     crafts
   }
 
-}
-
-private object DefaultCraftFactory {
-  private val config = ConfigLoader.loadGameConfig
 }

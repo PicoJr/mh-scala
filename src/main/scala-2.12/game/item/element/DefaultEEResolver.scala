@@ -1,11 +1,17 @@
 package game.item.element
 
+import game.config.{DefaultGameConfig, GameConfig}
 import game.item.element.Effectiveness.Effectiveness
 
 /**
   * Created by nol on 22/11/17.
   */
-class DefaultEEResolver extends EEResolver {
+class DefaultEEResolver(gameConfig: GameConfig) extends EEResolver {
+
+  def this() {
+    this(DefaultGameConfig.getGameConfig)
+  }
+
   override def effectiveness(elementType: ElementType, other: ElementType): Effectiveness = (elementType, other) match {
     case (NORMAL, _) | (_, NORMAL) => Effectiveness.NORMAL
     case (FIRE, ELECTRIC) | (ELECTRIC, FIRE) => Effectiveness.NORMAL
@@ -16,4 +22,9 @@ class DefaultEEResolver extends EEResolver {
     case (ELECTRIC, WATER) => Effectiveness.EFFECTIVE
     case _ => Effectiveness.NORMAL
   }
+
+  override def multiplier(elementType: ElementType, other: ElementType): Double = {
+    Effectiveness.multiplier(effectiveness(elementType, other), gameConfig)
+  }
+
 }

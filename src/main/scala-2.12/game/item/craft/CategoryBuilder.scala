@@ -1,6 +1,6 @@
 package game.item.craft
 
-import game.config.ConfigLoader
+import game.config.{DefaultGameConfig, GameConfig}
 import game.item._
 import game.item.craft.bonus.{DAMAGE, PROTECTION}
 import game.item.craft.nature.{ARMOR, CHARM, NatureType, WEAPON}
@@ -9,12 +9,16 @@ import game.util.Procedural
 /**
   * Created by nol on 29/11/17.
   */
-class CategoryBuilder {
+class CategoryBuilder(gameConfig: GameConfig) {
+
+  def this() {
+    this(DefaultGameConfig.getGameConfig)
+  }
 
   private def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
 
   private def getRandomValue(level: Int, base: Int): Int = {
-    Procedural.getRandomValue(level, base, CategoryBuilder.hunterConfig.getHunterStatsGrowth, CategoryBuilder.config.getPercentageVariation)
+    Procedural.getRandomValue(level, base, gameConfig.getHunterStatsGrowth, gameConfig.getPercentageVariation)
   }
 
   private var natureType: NatureType = WEAPON
@@ -59,25 +63,19 @@ class CategoryBuilder {
 
   def createItemType(level: Int): DefaultItemType = {
     var itemType = getNature match {
-      case WEAPON => DefaultItemType.createWeapon(level, getRandomValue(level, CategoryBuilder.itemConfig.getDamageBase))
+      case WEAPON => DefaultItemType.createWeapon(level, getRandomValue(level, gameConfig.getDamageBase))
       case CHARM => DefaultItemType.createCharm(level, getRandomSlot)
-      case ARMOR(armorPart) => DefaultItemType.createArmor(level, getRandomValue(level, CategoryBuilder.itemConfig.getArmorBase), armorPart)
+      case ARMOR(armorPart) => DefaultItemType.createArmor(level, getRandomValue(level, gameConfig.getArmorBase), armorPart)
     }
     for (addOn <- getAddOns) {
       addOn match {
         case CharmSlotAddOn => itemType = CharmSlot(itemType, getRandomSlot)
         case ElementAddOn(e) => itemType = Element(itemType, e)
         case StatusAddOn(s) => itemType = Status(itemType, s)
-        case BonusAddOn(DAMAGE) => itemType = Damage(itemType, getRandomValue(level, CategoryBuilder.itemConfig.getDamageBonusBase))
-        case BonusAddOn(PROTECTION) => itemType = Protection(itemType, getRandomValue(level, CategoryBuilder.itemConfig.getArmorBonusBase))
+        case BonusAddOn(DAMAGE) => itemType = Damage(itemType, getRandomValue(level, gameConfig.getDamageBonusBase))
+        case BonusAddOn(PROTECTION) => itemType = Protection(itemType, getRandomValue(level, gameConfig.getArmorBonusBase))
       }
     }
     itemType
   }
-}
-
-object CategoryBuilder {
-  private final val config = ConfigLoader.loadGameConfig
-  private final val itemConfig = ConfigLoader.loadItemConfig
-  private final val hunterConfig = ConfigLoader.loadHunterConfig
 }
