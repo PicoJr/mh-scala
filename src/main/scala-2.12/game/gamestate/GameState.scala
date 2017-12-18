@@ -34,12 +34,6 @@ trait GameState {
     */
   def getQuestLogic: QuestLogic
 
-  /** Get player (hunter) score
-    *
-    * @return score
-    */
-  def getScore: Score
-
   /** Find quest with id questId
     *
     * @param questID to find
@@ -69,12 +63,6 @@ trait GameState {
   def findItem(itemId: Long): Option[Item] = {
     getHunter.getInventory.findItem(itemId)
   }
-
-  /** Set quest with id questId as completed
-    *
-    * @param questId of quest
-    */
-  def setCompleted(questId: Long): Unit
 
   /** Check quest with id questId is completed
     *

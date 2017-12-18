@@ -1,6 +1,7 @@
 package game.gamestate
 
 import game.config.{DefaultGameConfig, GameConfig}
+import game.gameEventsHandler.{DefaultGameEventsHandler, GameEventsHandler}
 import game.id.DefaultIdSupplier
 import game.item.craft.{Crafts, DefaultCraftFactory}
 import game.item.{AbstractItemFactory, DefaultItemFactory, ItemType}
@@ -15,7 +16,8 @@ class DefaultGameStateFactory(crafts: Crafts,
                               hunter: Hunter,
                               questLogic: QuestLogic,
                               gameConfig: GameConfig,
-                              itemFactory: AbstractItemFactory
+                              itemFactory: AbstractItemFactory,
+                              gameEventsHandler: GameEventsHandler
                              ) {
   def this() = {
     this(
@@ -23,14 +25,15 @@ class DefaultGameStateFactory(crafts: Crafts,
       new DefaultHunter(),
       new DefaultQuestLogic(),
       DefaultGameConfig.getGameConfig,
-      DefaultItemFactory.getDefaultItemFactory
+      DefaultItemFactory.getDefaultItemFactory,
+      DefaultGameEventsHandler.getGameEventsHandler
     )
   }
 
   def createGameState: GameState = {
     val hunter = createDefaultHunter(crafts)
     val quests = createQuests(crafts)
-    new DefaultGameState(hunter, quests, crafts, questLogic)
+    new DefaultGameState(hunter, quests, crafts, questLogic, gameEventsHandler)
   }
 
   private def createDefaultHunter(crafts: Crafts): Hunter = {

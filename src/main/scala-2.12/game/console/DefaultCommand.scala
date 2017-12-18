@@ -1,16 +1,17 @@
 package game.console
 
 import game.description.Description
+import game.gameEventsHandler.{DefaultGameEventsHandler, GameEventsHandler}
 import game.gamestate.GameState
 import game.item.{AbstractItemFactory, DefaultItemFactory}
 
 /**
   * Created by nol on 12/11/17.
   */
-class DefaultCommand(description: Description, itemFactory: AbstractItemFactory) extends Command {
+class DefaultCommand(description: Description, itemFactory: AbstractItemFactory, gameEventsHandler: GameEventsHandler) extends Command {
 
   def this(description: Description) {
-    this(description, DefaultItemFactory.getDefaultItemFactory)
+    this(description, DefaultItemFactory.getDefaultItemFactory, DefaultGameEventsHandler.getGameEventsHandler)
   }
 
   override def listQuests(gameState: GameState): Unit = {
@@ -73,15 +74,8 @@ class DefaultCommand(description: Description, itemFactory: AbstractItemFactory)
   override def startQuest(gameState: GameState, questId: Long): Unit = {
     gameState.findQuest(questId) match {
       case Some(quest) =>
-        val questResult = gameState.getQuestLogic.processQuestResult(gameState, quest)
-        println(description.descriptionQuestResult(gameState, questResult))
-        gameState.getScore.incrQuestAttempts()
-        if (questResult.isSuccessful) {
-          gameState.setCompleted(quest.getUniqueId)
-          gameState.getScore.incrQuestSuccesses()
-        } else {
-          gameState.getScore.incrQuestFailures()
-        }
+        gameState.getQuestLogic.processQuest(gameState, quest)
+        println(description.descriptionQuestResult(gameState))
       case None => println(s"quest with id $questId not found")
     }
   }

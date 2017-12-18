@@ -1,7 +1,6 @@
 package game.description
 
 import game.gamestate.GameState
-import game.quest.QuestResult
 
 /** Provides descriptions of game instances to the player.
   * Created by nol on 23/11/17.
@@ -26,7 +25,7 @@ trait Description {
 
   def descriptionQuest(gameState: GameState, questId: Long): String
 
-  def descriptionQuestResult(gameState: GameState, questResult: QuestResult): String
+  def descriptionQuestResult(gameState: GameState): String
 
   def descriptionScore(gameState: GameState): String
 }

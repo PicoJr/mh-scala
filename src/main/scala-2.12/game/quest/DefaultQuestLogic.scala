@@ -1,17 +1,18 @@
 package game.quest
 
 import game.config.{DefaultGameConfig, GameConfig}
+import game.gameEventsHandler.{DefaultGameEventsHandler, GameEventsHandler}
 import game.gamestate.GameState
 import game.item.element.{DefaultEEResolver, EEResolver}
-import game.unit.{GameUnit, Hunter}
+import game.unit.GameUnit
 
 /**
   * Created by nol on 22/11/17.
   */
-class DefaultQuestLogic(eEResolver: EEResolver, gameConfig: GameConfig) extends QuestLogic {
+class DefaultQuestLogic(eEResolver: EEResolver, gameConfig: GameConfig, gameEventsHandler: GameEventsHandler) extends QuestLogic {
 
   def this() = {
-    this(new DefaultEEResolver(), DefaultGameConfig.getGameConfig)
+    this(new DefaultEEResolver(), DefaultGameConfig.getGameConfig, DefaultGameEventsHandler.getGameEventsHandler)
   }
 
   private def computeDamageDealt(attacker: GameUnit, defender: GameUnit): Double = {
@@ -19,27 +20,25 @@ class DefaultQuestLogic(eEResolver: EEResolver, gameConfig: GameConfig) extends 
     math.max(gameConfig.getDamageMin, attacker.getDamage * multiplier - defender.getArmor)
   }
 
-  private def computeQuestResult(hunter: Hunter, quest: Quest): QuestResult = {
-    val questResultDefault = new QuestResultDefault
-    val damageDealtByHunter = computeDamageDealt(hunter, quest.getMonster)
-    val damageDealtByMonster = computeDamageDealt(quest.getMonster, hunter)
-    val durationMaxHunter = hunter.getLife / damageDealtByMonster
+  override def processQuest(gameState: GameState, quest: Quest): Unit = {
+    val damageDealtByHunter = computeDamageDealt(gameState.getHunter, quest.getMonster)
+    val damageDealtByMonster = computeDamageDealt(quest.getMonster, gameState.getHunter)
+    val durationMaxHunter = gameState.getHunter.getLife / damageDealtByMonster
     val durationMaxMonster = quest.getMonster.getLife / damageDealtByHunter
     val timeElapsed = math.min(gameConfig.getQuestDurationMax, math.min(durationMaxHunter, durationMaxMonster))
-    questResultDefault.withTimeElapsed(timeElapsed)
-    questResultDefault.withDamageDealtByHunter(damageDealtByHunter * timeElapsed)
-    questResultDefault.withDamageDealtByMonster(damageDealtByMonster * timeElapsed)
     val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxHunter < gameConfig.getQuestDurationMax
-    questResultDefault.withHunterDefeated(hunterDefeated)
     val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxMonster < gameConfig.getQuestDurationMax
-    questResultDefault.withMonsterSlain(monsterSlain)
-    questResultDefault
-  }
-
-  override def processQuestResult(gameState: GameState, quest: Quest): QuestResult = {
-    val questResult = computeQuestResult(gameState.getHunter, quest)
-    if (questResult.isSuccessful) gameState.getHunter.getInventory.addItems(quest.createLoot: _*)
-    questResult
+    gameEventsHandler.questStarted(quest.getUniqueId)
+    gameEventsHandler.questFinished(timeElapsed)
+    gameEventsHandler.hunterDealtDamage(damageDealtByHunter * timeElapsed)
+    gameEventsHandler.monsterDealtDamage(damageDealtByMonster * timeElapsed)
+    gameEventsHandler.hunterDefeated(hunterDefeated)
+    gameEventsHandler.monsterSlain(monsterSlain)
+    if (hunterDefeated || !monsterSlain) gameEventsHandler.questFailed(quest.getUniqueId)
+    if (!hunterDefeated && monsterSlain) {
+      gameEventsHandler.questSucceeded(quest.getUniqueId)
+      gameState.getHunter.getInventory.addItems(quest.createLoot: _*)
+    }
   }
 
 }

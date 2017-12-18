@@ -7,11 +7,10 @@ import game.gamestate.GameState
   */
 trait QuestLogic {
 
-  /** Returns quest result of hunter (from gameState) attempt at quest.
+  /** Process quest result of hunter (from gameState) attempt at quest.
     *
     * @param gameState containing the given quest
     * @param quest     whose result is processed
-    * @return
     */
-  def processQuestResult(gameState: GameState, quest: Quest): QuestResult
+  def processQuest(gameState: GameState, quest: Quest): Unit
 }
