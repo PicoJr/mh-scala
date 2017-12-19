@@ -40,7 +40,9 @@ class QuestEventsHandler(
       val timeElapsed = math.min(gameConfig.getQuestDurationMax, math.min(durationMaxHunter, durationMaxMonster))
       val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxHunter < gameConfig.getQuestDurationMax
       val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxMonster < gameConfig.getQuestDurationMax
-      if (hunterDefeated || !monsterSlain) QuestEvents.questFailed(quest.getUniqueId)
+      if (hunterDefeated || !monsterSlain) {
+        QuestEvents.questFailed(quest.getUniqueId)
+      }
       if (!hunterDefeated && monsterSlain) {
         QuestEvents.questSucceeded(quest.getUniqueId)
         gameState.getHunter.getInventory.addItems(quest.createLoot: _*)

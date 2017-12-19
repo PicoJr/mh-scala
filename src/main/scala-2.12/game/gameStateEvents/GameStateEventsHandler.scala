@@ -45,7 +45,7 @@ class GameStateEventsHandler(
   }
 
   GameStateEvents.questSucceeded += {
-    (questId: Long) => if (!gameState.isCompletedQuest(questId)) GameStateEvents.questCompleted(questId)
+    (questId: Id) => if (!gameState.isCompletedQuest(questId)) GameStateEvents.questCompleted(questId)
   }
 
   GameStateEvents.equipItem += {
