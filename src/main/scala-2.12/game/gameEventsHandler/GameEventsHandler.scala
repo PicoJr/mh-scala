@@ -1,5 +1,6 @@
 package game.gameEventsHandler
 
+import game.item.Item
 import rescala._
 
 /**
@@ -7,23 +8,31 @@ import rescala._
   */
 trait GameEventsHandler {
 
+  type Id = Long
+
   val hunterDefeated: rescala.Evt[Boolean] = Evt[Boolean]()
 
   val monsterSlain: rescala.Evt[Boolean] = Evt[Boolean]()
 
-  val questStarted: rescala.Evt[Long] = Evt[Long]() // value: questId
+  val questStarted: rescala.Evt[Id] = Evt[Id]() // value: questId
 
-  val questFailed: rescala.Evt[Long] = Evt[Long]() // values: questId
+  val questFailed: rescala.Evt[Id] = Evt[Id]() // values: questId
 
-  val questSucceeded: rescala.Evt[Long] = Evt[Long]() // values: quest
+  val questSucceeded: rescala.Evt[Id] = Evt[Id]() // values: quest
 
-  val questCompleted: rescala.Evt[Long] = Evt[Long]() // values: quest
+  val questCompleted: rescala.Evt[Id] = Evt[Id]() // values: quest
 
   val questFinished: rescala.Evt[Double] = Evt[Double]() // values: time elapsed
 
   val hunterDealtDamage: rescala.Evt[Double] = Evt[Double]() // values: damage
 
   val monsterDealtDamage: rescala.Evt[Double] = Evt[Double]() // values: damage
+
+  val itemIdNotFound: rescala.Evt[Id] = Evt[Id]()
+
+  val craftNotFound: rescala.Evt[(Id, Id)] = Evt[(Id, Id)]
+
+  val itemCrafted: rescala.Evt[Item] = Evt[Item]()
 
   val questSuccesses: Signal[Int] = questSucceeded.count
 

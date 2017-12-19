@@ -4,9 +4,12 @@ package game.id
   * Created by nol on 14/11/17.
   */
 trait Identifiable {
+
+  type UniqueId = Long
+
   /** Get unique id
     *
     * @return unique id
     */
-  def getUniqueId: Long
+  def getUniqueId: UniqueId
 }
