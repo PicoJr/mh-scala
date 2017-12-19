@@ -3,9 +3,9 @@ package dot
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
-import game.description.DefaultDescription
 import game.item.craft.{Crafts, DefaultCraftFactory}
 import game.item.{ArmorPart, ItemType}
+import game.ui.DefaultDescription
 
 import scalax.collection.Graph
 import scalax.collection.edge.LDiEdge
@@ -16,7 +16,7 @@ import scalax.collection.io.dot._
   * Created by nol on 19/11/17.
   */
 object DotGeneration extends App {
-  val defaultDescription = new DefaultDescription()
+  val defaultDescription = DefaultDescription
   val crafts = new DefaultCraftFactory().generateCraft
   val weapons = generateGraphFor((i1, i2, _) => i1.isWeapon || i2.isWeapon, crafts)
   val armorsHead = generateGraphFor((i1, i2, _) => i1.isArmorPartRequired(ArmorPart.HEAD) || i2.isArmorPartRequired(ArmorPart.HEAD), crafts)

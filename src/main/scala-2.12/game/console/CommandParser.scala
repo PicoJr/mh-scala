@@ -1,5 +1,6 @@
 package game.console
 
+import game.commandEvents.CommandEvents
 import org.docopt.{Docopt, DocoptExitException}
 
 import scala.collection.JavaConverters
@@ -7,7 +8,7 @@ import scala.collection.JavaConverters
 /**
   * Created by nol on 18/11/17.
   */
-class CommandParser(command: Command) {
+object CommandParser {
 
   private final val doc: String =
     """ Monster Hunter
@@ -19,7 +20,7 @@ class CommandParser(command: Command) {
       |  mh quest (ls | start <questId>...)
       |  mh craft show <itemId>...
       |  mh craft new <materialId> <itemId>...
-      |  mh score
+      |  mh stat
       |  mh quit
       |  mh (-h | --help)
       |  mh --version
@@ -37,52 +38,52 @@ class CommandParser(command: Command) {
       }
       else if (simpleOpts.asBoolean("hunter")) {
         if (simpleOpts.asBoolean("show")) {
-          command.showHunter()
+          CommandEvents.showHunter(Unit)
         }
       }
       else if (simpleOpts.asBoolean("item")) {
         if (simpleOpts.asBoolean("show")) {
-          command.showItem(simpleOpts.asLong("<itemId>"))
+          CommandEvents.showItem(simpleOpts.asLong("<itemId>"))
         }
         if (simpleOpts.asBoolean("equip")) {
           for (itemId <- simpleOpts.asSeq("<itemId>")) {
-            command.equipItem(itemId.toString.toLong)
+            CommandEvents.equipItem(itemId.toString.toLong)
           }
         }
         if (simpleOpts.asBoolean("unequip")) {
           for (itemId <- simpleOpts.asSeq("<itemId>")) {
-            command.unEquipItem(itemId.toString.toLong)
+            CommandEvents.unEquipItem(itemId.toString.toLong)
           }
         }
         if (simpleOpts.asBoolean("ls")) {
-          command.listInventory()
+          CommandEvents.listInventory(Unit)
         }
       }
       else if (simpleOpts.asBoolean("craft")) {
         if (simpleOpts.asBoolean("show")) {
           for (itemId <- simpleOpts.asSeq("<itemId>")) {
-            command.showCraft(itemId.toString.toLong)
+            CommandEvents.showCraft(itemId.toString.toLong)
           }
         }
         if (simpleOpts.asBoolean("new")) {
           val materialId = simpleOpts.asLong("<materialId>")
           for (itemId <- simpleOpts.asSeq("<itemId>")) {
-            command.craftItem(materialId, itemId.toString.toLong)
+            CommandEvents.craftItem(materialId, itemId.toString.toLong)
           }
         }
       }
       else if (simpleOpts.asBoolean("quest")) {
         if (simpleOpts.asBoolean("start")) {
           for (questId <- simpleOpts.asSeq("<questId>")) {
-            command.startQuest(questId.toString.toLong)
+            CommandEvents.startQuest(questId.toString.toLong)
           }
         }
         if (simpleOpts.asBoolean("ls")) {
-          command.listQuests()
+          CommandEvents.listQuests(Unit)
         }
       }
-      else if (simpleOpts.asBoolean("score")) {
-        command.showScore()
+      else if (simpleOpts.asBoolean("stat")) {
+        CommandEvents.showStat(Unit)
       }
     } catch {
       case _: DocoptExitException =>

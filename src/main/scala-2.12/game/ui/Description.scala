@@ -1,4 +1,4 @@
-package game.description
+package game.ui
 
 import game.gamestate.GameState
 
@@ -25,7 +25,5 @@ trait Description {
 
   def descriptionQuest(gameState: GameState, questId: Long): String
 
-  def descriptionQuestResult(gameState: GameState): String
-
-  def descriptionScore(gameState: GameState): String
+  def descriptionStatistics(gameState: GameState): String
 }

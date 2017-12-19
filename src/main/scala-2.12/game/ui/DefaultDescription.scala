@@ -1,6 +1,6 @@
-package game.description
+package game.ui
 
-import game.gameEventsHandler.{DefaultGameEventsHandler, GameEventsHandler}
+import game.gameStatistics.DefaultGameStatistics
 import game.gamestate.GameState
 import game.item.element._
 import game.item.inventory.Inventory
@@ -12,11 +12,7 @@ import game.unit.{GameUnit, Hunter, Monster}
 /**
   * Created by nol on 11/11/17.
   */
-class DefaultDescription(gameEventsHandler: GameEventsHandler) extends Description {
-
-  def this() {
-    this(DefaultGameEventsHandler.getGameEventsHandler)
-  }
+object DefaultDescription extends Description {
 
   def descriptionElementType(elementType: ElementType): String = elementType match {
     case ELECTRIC => "E"
@@ -168,24 +164,14 @@ class DefaultDescription(gameEventsHandler: GameEventsHandler) extends Descripti
     }
   }
 
-  override def descriptionQuestResult(gameState: GameState): String = {
-    val desc = new StringBuilder()
-    if (gameEventsHandler.monsterWasSlain.now) desc.append("monster slain\n")
-    if (gameEventsHandler.hunterWasDefeated.now) desc.append("hunter defeated\n")
-    desc.append("time elapsed: ").append(gameEventsHandler.timeElapsed.now.toInt).append("\n")
-    desc.append("hunter dmg dealt ").append(gameEventsHandler.damageDealtByHunter.now.toInt).append("\n")
-    desc.append("hunter dmg received ").append(gameEventsHandler.damageDealtByMonster.now.toInt).append("\n")
-    desc.toString()
-  }
-
-  override def descriptionScore(gameState: GameState): String = {
+  override def descriptionStatistics(gameState: GameState): String = {
     val desc = new StringBuilder()
     if (gameState.allQuestsCompleted) desc.append("All Quests Completed!\n")
     desc.append("quests completed:").append(gameState.getCompletedQuests.size)
     desc.append("/").append(gameState.getQuests.size).append("\n")
-    desc.append("quests failures: ").append(gameEventsHandler.questFailures.now).append("\n")
-    desc.append("quests successes: ").append(gameEventsHandler.questSuccesses.now).append("\n")
-    desc.append("quests attempts: ").append(gameEventsHandler.questAttempts.now).append("\n")
+    desc.append("quests failures: ").append(DefaultGameStatistics.questFailedCount.now).append("\n")
+    desc.append("quests successes: ").append(DefaultGameStatistics.questSucceededCount.now).append("\n")
+    desc.append("quests attempts: ").append(DefaultGameStatistics.questStartedCount.now).append("\n")
     desc.toString()
   }
 }

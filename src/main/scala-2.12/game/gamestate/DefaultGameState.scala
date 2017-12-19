@@ -1,6 +1,5 @@
 package game.gamestate
 
-import game.gameEventsHandler.GameEventsHandler
 import game.item.craft.Crafts
 import game.quest._
 import game.unit.Hunter
@@ -8,12 +7,9 @@ import game.unit.Hunter
 /** Holds all game entities and states.
   * Created by nol on 11/11/17.
   */
-class DefaultGameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts, questLogic: QuestLogic, gameEventsHandler: GameEventsHandler) extends GameState {
+class DefaultGameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts) extends GameState {
 
   private var questsCompletedIds: Set[Long] = Set.empty
-
-  gameEventsHandler.questSucceeded += { (questId: Long) => if (!isCompletedQuest(questId)) gameEventsHandler.questCompleted(questId) }
-  gameEventsHandler.questCompleted += { (questId: Long) => questsCompletedIds += questId }
 
   override def getHunter: Hunter = hunter
 
@@ -23,5 +19,5 @@ class DefaultGameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts, quest
 
   override def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
 
-  override def getQuestLogic: QuestLogic = questLogic
+  override def addCompletedQuest(questId: Long): Unit = questsCompletedIds += questId
 }

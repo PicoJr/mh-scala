@@ -2,7 +2,7 @@ package game.gamestate
 
 import game.item.Item
 import game.item.craft.Crafts
-import game.quest.{Quest, QuestLogic}
+import game.quest.Quest
 import game.unit.{Hunter, Monster}
 
 /** Holds all game instances and states.
@@ -28,11 +28,7 @@ trait GameState {
     */
   def getCrafts: Crafts
 
-  /** Get quest logic
-    *
-    * @return quest logic
-    */
-  def getQuestLogic: QuestLogic
+  def addCompletedQuest(questId: Long): Unit
 
   /** Find quest with id questId
     *
