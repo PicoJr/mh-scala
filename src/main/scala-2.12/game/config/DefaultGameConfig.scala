@@ -9,10 +9,6 @@ import scala.collection.JavaConverters
   */
 private class DefaultGameConfig(conf: Config) extends GameConfig {
 
-  private def this() {
-    this(ConfigFactory.load())
-  }
-
   override def getLevelMin: Int = conf.getInt("game.level.min")
 
   override def getLevelMax: Int = conf.getInt("game.level.max")
@@ -60,7 +56,7 @@ private class DefaultGameConfig(conf: Config) extends GameConfig {
 }
 
 object DefaultGameConfig {
-  private final val gameConfig: GameConfig = new DefaultGameConfig()
+  private final val gameConfig: GameConfig = new DefaultGameConfig(ConfigFactory.load())
 
   def getGameConfig: GameConfig = gameConfig
 }

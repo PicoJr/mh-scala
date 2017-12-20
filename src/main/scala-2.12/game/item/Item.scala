@@ -16,7 +16,7 @@ trait Item extends ItemType with Identifiable {
   /** Same as getItemType.getUniqueId == itemType.getUniqueId
     *
     * @param itemType checked
-    * @return getItemType == itemType
+    * @return getItemType.getUniqueId == itemType.getUniqueId
     */
   def isItemType(itemType: ItemType): Boolean = {
     getItemType.getUniqueId == itemType.getUniqueId
