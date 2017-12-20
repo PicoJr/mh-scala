@@ -7,15 +7,3 @@ trait StatusType {
   /** user-friendly real-play description */
   val name: String
 }
-
-case object NEUTRAL extends StatusType {
-  override val name: String = "noble"
-}
-
-case object SLEEP extends StatusType {
-  override val name: String = "tranquilizing"
-}
-
-case object STUN extends StatusType {
-  override val name = "stunning"
-}
