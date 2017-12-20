@@ -4,7 +4,7 @@ import game.gameStatistics.DefaultGameStatistics
 import game.gamestate.GameState
 import game.item.element._
 import game.item.inventory.Inventory
-import game.item.status.{NEUTRAL, SLEEP, STUN, StatusType}
+import game.item.status.StatusType
 import game.item.{ArmorPart, _}
 import game.quest.Quest
 import game.unit.{GameUnit, Hunter, Monster}
@@ -14,23 +14,18 @@ import game.unit.{GameUnit, Hunter, Monster}
   */
 object DefaultDescription extends Description {
 
-  def descriptionElementType(elementType: ElementType): String = elementType match {
-    case ELECTRIC => "E"
-    case FIRE => "F"
-    case NORMAL => "N"
-    case WATER => "W"
+  def descriptionElementType(elementType: ElementType): String = {
+    elementType.name.substring(0, 4)
   }
 
-  def descriptionStatusType(statusType: StatusType): String = statusType match {
-    case NEUTRAL => "N"
-    case SLEEP => "Sl"
-    case STUN => "St"
+  def descriptionStatusType(statusType: StatusType): String = {
+    statusType.name.substring(0, 4)
   }
 
   def descriptionItemType(i: ItemType): String = {
     val desc = new StringBuilder()
     desc.append(i.getName)
-    desc.append("[" + i.getLevel + "]")
+    desc.append("[lvl " + i.getLevel + "]")
     if (i.hasDamage) desc.append(" dmg:").append(i.getDamage)
     if (i.hasArmor) desc.append(" armor:").append(i.getArmor)
     if (i.requiresSlot) desc.append("-:").append(i.getCharmSlotsRequired)
