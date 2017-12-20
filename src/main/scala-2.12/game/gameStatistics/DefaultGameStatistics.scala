@@ -1,7 +1,5 @@
 package game.gameStatistics
 
-import game.gameStateEvents.GameStateEvents
-import game.questEvents.QuestEvents
 import rescala._
 
 /**
@@ -9,12 +7,11 @@ import rescala._
   */
 object DefaultGameStatistics {
 
-  val questSucceededCount: Signal[Int] = QuestEvents.questSucceeded.count
+  val questSucceededCount: Var[Int] = Var(0)
 
-  val questFailedCount: Signal[Int] = QuestEvents.questFailed.count
+  val questFailedCount: Var[Int] = Var(0)
 
-  val questStartedCount: Signal[Int] = QuestEvents.questStarted.count
+  val questStartedCount: Var[Int] = Var(0)
 
-  val itemCraftedCount: Signal[Int] = GameStateEvents.itemCrafted.count
-
+  val itemCraftedCount: Var[Int] = Var(0)
 }

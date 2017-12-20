@@ -2,6 +2,7 @@ package game.questEvents
 
 import game.config.{DefaultGameConfig, GameConfig}
 import game.gameStateEvents.GameStateEvents
+import game.gameStatistics.DefaultGameStatistics
 import game.gamestate.GameState
 import game.item.element.{DefaultEEResolver, EEResolver}
 import game.quest.Quest
@@ -29,6 +30,7 @@ class QuestEventsHandler(gameState: GameState, eEResolver: EEResolver, gameConfi
 
   QuestEvents.questStarted += {
     (quest: Quest) =>
+      DefaultGameStatistics.questStartedCount() = DefaultGameStatistics.questStartedCount.now + 1
       val damageDealtByHunter = computeDamageDealt(gameState.getHunter, quest.getMonster)
       val damageDealtByMonster = computeDamageDealt(quest.getMonster, gameState.getHunter)
       val durationMaxHunter = gameState.getHunter.getLife / damageDealtByMonster
@@ -46,8 +48,14 @@ class QuestEventsHandler(gameState: GameState, eEResolver: EEResolver, gameConfi
   }
 
   QuestEvents.questSucceeded += {
-    (questId: Id) => GameStateEvents.questSucceeded(questId)
+    (questId: Id) =>
+      DefaultGameStatistics.questSucceededCount() = DefaultGameStatistics.questSucceededCount.now + 1
+      GameStateEvents.questSucceeded(questId)
   }
 
+  QuestEvents.questFailed += {
+    (_: Id) =>
+      DefaultGameStatistics.questFailedCount() = DefaultGameStatistics.questFailedCount.now + 1
+  }
 
 }
