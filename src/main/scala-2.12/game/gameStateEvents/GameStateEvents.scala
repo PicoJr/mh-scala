@@ -17,6 +17,8 @@ object GameStateEvents {
 
   val hunterRenamed: rescala.Evt[String] = Evt[String]()
 
+  val questStarted: rescala.Evt[Id] = Evt[Id]()
+
   val questSucceeded: rescala.Evt[Id] = Evt[Id]()
 
   val questCompleted: rescala.Evt[Id] = Evt[Id]()

@@ -10,11 +10,7 @@ import game.unit.GameUnit
 /**
   * Created by nol on 19/12/17.
   */
-class QuestEventsHandler(
-                          gameState: GameState,
-                          eEResolver: EEResolver,
-                          gameConfig: GameConfig
-                        ) {
+class QuestEventsHandler(gameState: GameState, eEResolver: EEResolver, gameConfig: GameConfig) {
 
   type Id = Long
 

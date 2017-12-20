@@ -12,7 +12,7 @@ import game.uiEvents.UIEventsHandler
   */
 object Game extends App {
   val gameState = new DefaultGameStateFactory().createGameState
-  new CommandEventsHandler(gameState)
+  new CommandEventsHandler()
   new QuestEventsHandler(gameState)
   new GameStateEventsHandler(gameState)
   new UIEventsHandler(gameState)

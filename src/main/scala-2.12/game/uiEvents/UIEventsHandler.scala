@@ -47,7 +47,12 @@ class UIEventsHandler(gameState: GameState, description: Description) {
   }
 
   UIEvents.showQuest += {
-    (questId: Id) => println(description.descriptionQuest(gameState, questId))
+    (questId: Id) =>
+      gameState.findQuest(questId) match {
+        case Some(_) => println(description.descriptionQuest(gameState, questId))
+        case None => UIEvents.questIdNotFound(questId)
+      }
+
   }
 
   UIEvents.questIdNotFound += {

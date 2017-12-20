@@ -2,15 +2,13 @@ package game.gameStateEvents
 
 import game.gamestate.GameState
 import game.item.{AbstractItemFactory, DefaultItemFactory, Item}
+import game.questEvents.QuestEvents
 import game.uiEvents.UIEvents
 
 /**
   * Created by nol on 19/12/17.
   */
-class GameStateEventsHandler(
-                              gameState: GameState,
-                              abstractItemFactory: AbstractItemFactory
-                            ) {
+class GameStateEventsHandler(gameState: GameState, abstractItemFactory: AbstractItemFactory) {
 
   def this(gameState: GameState) {
     this(gameState, DefaultItemFactory.getDefaultItemFactory)
@@ -36,6 +34,14 @@ class GameStateEventsHandler(
 
   GameStateEvents.itemNotEquipped += {
     (item: Item) => UIEvents.itemNotEquipped(item)
+  }
+
+  GameStateEvents.questStarted += {
+    (questId: Id) =>
+      gameState.findQuest(questId) match {
+        case Some(quest) => QuestEvents.questStarted(quest)
+        case None => UIEvents.questIdNotFound(questId)
+      }
   }
 
   GameStateEvents.questCompleted += {
@@ -74,7 +80,13 @@ class GameStateEventsHandler(
     (itemIds: (Id, Id)) =>
       (gameState.findItem(itemIds._1), gameState.findItem(itemIds._2)) match {
         case (Some(i1), Some(i2)) =>
-          gameState.getCrafts.findCraftResult(i1.getItemType, i2.getItemType) match {
+          val craftResult =
+            if (i2.isMaterial) {
+              gameState.getCrafts.findCraftResult(i1.getItemType, i2.getItemType)
+            } else {
+              gameState.getCrafts.findCraftResult(i2.getItemType, i1.getItemType)
+            }
+          craftResult match {
             case Some(result) =>
               GameStateEvents.itemCrafted(abstractItemFactory.createItem(result))
             case None => UIEvents.craftNotFound(itemIds._1, itemIds._2)

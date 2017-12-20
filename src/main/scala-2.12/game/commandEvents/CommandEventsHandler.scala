@@ -1,31 +1,14 @@
 package game.commandEvents
 
 import game.gameStateEvents.GameStateEvents
-import game.gamestate.GameState
-import game.item.{AbstractItemFactory, DefaultItemFactory}
-import game.questEvents.QuestEvents
-import game.ui.{DefaultDescription, Description}
 import game.uiEvents.UIEvents
 
 /**
   * Created by nol on 12/11/17.
   */
-class CommandEventsHandler(
-                            gameState: GameState,
-                            description: Description,
-                            itemFactory: AbstractItemFactory
-                          ) {
+class CommandEventsHandler() {
 
   type Id = Long
-
-  def this(gameState: GameState) {
-    this(
-      gameState,
-      DefaultDescription,
-      DefaultItemFactory.getDefaultItemFactory
-    )
-  }
-
 
   CommandEvents.listQuests += {
     (_: Unit) => UIEvents.listQuests(Unit)
@@ -36,11 +19,7 @@ class CommandEventsHandler(
   }
 
   CommandEvents.showQuest += {
-    (questId: Id) =>
-      gameState.findQuest(questId) match {
-        case Some(_) => UIEvents.showQuest(questId)
-        case None => UIEvents.questIdNotFound(questId)
-      }
+    (questId: Id) => UIEvents.showQuest(questId)
   }
 
   CommandEvents.showHunter += {
@@ -64,11 +43,7 @@ class CommandEventsHandler(
   }
 
   CommandEvents.startQuest += {
-    (questId: Id) =>
-      gameState.findQuest(questId) match {
-        case Some(quest) => QuestEvents.questStarted(quest)
-        case None => UIEvents.questIdNotFound(questId)
-      }
+    (questId: Id) => GameStateEvents.questStarted(questId)
   }
 
   CommandEvents.showCraft += {
