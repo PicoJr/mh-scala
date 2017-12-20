@@ -12,7 +12,65 @@ import game.unit.{GameUnit, Hunter, Monster}
 /** Default Description.
   * Created by nol on 11/11/17.
   */
-object DefaultDescription extends Description {
+class DefaultDescription(gameState: GameState) extends Description {
+
+  override def descriptionRecipesWith(itemId: Long): String = {
+    val desc = new StringBuilder()
+    gameState.findItem(itemId) match {
+      case Some(i) =>
+        val recipes = gameState.getCrafts.getRecipesWith(i)
+        for (m <- recipes) {
+          m match {
+            case ((i1, i2), result) =>
+              desc.append(DefaultDescription.descriptionItemType(i1))
+              desc.append(" + ").append(DefaultDescription.descriptionItemType(i2))
+              desc.append(" -> ").append(DefaultDescription.descriptionItemType(result)).append("\n")
+          }
+        }
+        desc.toString()
+      case None => s"item with id $itemId not found"
+    }
+  }
+
+  override def descriptionItem(item: Item): String = {
+    DefaultDescription.descriptionItem(item)
+  }
+
+  override def descriptionInventory(inventory: Inventory): String = {
+    DefaultDescription.descriptionInventory(inventory)
+  }
+
+  override def descriptionHunter(hunter: Hunter): String = {
+    DefaultDescription.descriptionHunter(hunter)
+  }
+
+  override def descriptionMonster(monster: Monster): String = {
+    DefaultDescription.descriptionMonster(monster)
+  }
+
+  override def descriptionQuest(quest: Quest): String = {
+    val desc = new StringBuilder()
+    if (gameState.isCompletedQuest(quest.getUniqueId)) {
+      desc.append("<completed>\n")
+    }
+    desc.append(DefaultDescription.descriptionQuest(quest))
+    desc.toString()
+  }
+
+  override def descriptionStatistics(): String = {
+    val desc = new StringBuilder()
+    if (gameState.allQuestsCompleted) desc.append("All Quests Completed!\n")
+    desc.append("quests completed:").append(gameState.getCompletedQuests.size)
+    desc.append("/").append(gameState.getQuests.size).append("\n")
+    desc.append("quests failures: ").append(DefaultGameStatistics.questFailedCount.now).append("\n")
+    desc.append("quests successes: ").append(DefaultGameStatistics.questSucceededCount.now).append("\n")
+    desc.append("quests attempts: ").append(DefaultGameStatistics.questStartedCount.now).append("\n")
+    desc.append("items crafted: ").append(DefaultGameStatistics.itemCraftedCount.now).append("\n")
+    desc.toString()
+  }
+}
+
+object DefaultDescription {
 
   def descriptionElementType(elementType: ElementType): String = {
     elementType.name.substring(0, 4)
@@ -35,14 +93,14 @@ object DefaultDescription extends Description {
     desc.toString()
   }
 
-  private def descriptionItem(i: Item): String = {
+  def descriptionItem(i: Item): String = {
     val desc = new StringBuilder()
     desc.append("[").append(i.getUniqueId).append("]")
     desc.append(descriptionItemType(i))
     desc.toString()
   }
 
-  private def descriptionInventory(inventory: Inventory): String = {
+  def descriptionInventory(inventory: Inventory): String = {
     val desc = new StringBuilder()
     desc.append("slots: ").append(inventory.getCharmSlotsUsed)
     desc.append("/").append(inventory.getCharmSlotsProvided).append("\n")
@@ -66,7 +124,7 @@ object DefaultDescription extends Description {
     desc.toString()
   }
 
-  private def descriptionGameUnit(gameUnit: GameUnit): String = {
+  def descriptionGameUnit(gameUnit: GameUnit): String = {
     val desc = new StringBuilder()
     desc.append(gameUnit.getName)
     desc.append("\n")
@@ -86,18 +144,18 @@ object DefaultDescription extends Description {
     desc.toString()
   }
 
-  private def descriptionHunter(hunter: Hunter): String = {
+  def descriptionHunter(hunter: Hunter): String = {
     descriptionGameUnit(hunter)
   }
 
-  private def descriptionMonster(monster: Monster): String = {
+  def descriptionMonster(monster: Monster): String = {
     val desc = new StringBuilder()
     desc.append("[").append(monster.getUniqueId).append("]")
     desc.append(descriptionGameUnit(monster))
     desc.toString()
   }
 
-  private def descriptionQuest(quest: Quest): String = {
+  def descriptionQuest(quest: Quest): String = {
     val desc = new StringBuilder()
     desc.append("quest[").append(quest.getUniqueId).append("]")
     desc.append(" level: ").append(quest.getLevel)
@@ -107,67 +165,4 @@ object DefaultDescription extends Description {
     desc.toString()
   }
 
-  override def descriptionRecipesWith(gameState: GameState, itemId: Long): String = {
-    val desc = new StringBuilder()
-    gameState.findItem(itemId) match {
-      case Some(i) =>
-        val recipes = gameState.getCrafts.getRecipesWith(i)
-        for (m <- recipes) {
-          m match {
-            case ((i1, i2), result) =>
-              desc.append(descriptionItemType(i1)).append(" + ").append(descriptionItemType(i2))
-              desc.append(" -> ").append(descriptionItemType(result)).append("\n")
-          }
-        }
-        desc.toString()
-      case None => s"item with id $itemId not found"
-    }
-  }
-
-  override def descriptionItem(gameState: GameState, itemId: Long): String = {
-    gameState.findItem(itemId) match {
-      case Some(i) => descriptionItem(i)
-      case None => s"item with id $itemId not found"
-    }
-  }
-
-  override def descriptionInventory(gameState: GameState): String = {
-    descriptionInventory(gameState.getHunter.getInventory)
-  }
-
-  override def descriptionHunter(gameState: GameState): String = {
-    descriptionHunter(gameState.getHunter)
-  }
-
-  override def descriptionMonster(gameState: GameState, monsterId: Long): String = {
-    gameState.findMonster(monsterId) match {
-      case Some(m) => descriptionMonster(m)
-      case None => s"monster with id $monsterId not found"
-    }
-  }
-
-  override def descriptionQuest(gameState: GameState, questId: Long): String = {
-    gameState.findQuest(questId) match {
-      case Some(q) =>
-        val desc = new StringBuilder()
-        if (gameState.isCompletedQuest(questId)) {
-          desc.append("<completed>\n")
-        }
-        desc.append(descriptionQuest(q))
-        desc.toString()
-      case None => s"quest with id $questId not found"
-    }
-  }
-
-  override def descriptionStatistics(gameState: GameState): String = {
-    val desc = new StringBuilder()
-    if (gameState.allQuestsCompleted) desc.append("All Quests Completed!\n")
-    desc.append("quests completed:").append(gameState.getCompletedQuests.size)
-    desc.append("/").append(gameState.getQuests.size).append("\n")
-    desc.append("quests failures: ").append(DefaultGameStatistics.questFailedCount.now).append("\n")
-    desc.append("quests successes: ").append(DefaultGameStatistics.questSucceededCount.now).append("\n")
-    desc.append("quests attempts: ").append(DefaultGameStatistics.questStartedCount.now).append("\n")
-    desc.append("items crafted: ").append(DefaultGameStatistics.itemCraftedCount.now).append("\n")
-    desc.toString()
-  }
 }

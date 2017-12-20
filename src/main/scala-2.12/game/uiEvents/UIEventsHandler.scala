@@ -10,13 +10,17 @@ import game.ui.{DefaultDescription, Description}
 class UIEventsHandler(gameState: GameState, description: Description) {
 
   def this(gameState: GameState) {
-    this(gameState, DefaultDescription)
+    this(gameState, new DefaultDescription(gameState))
   }
 
   type Id = Long
 
   UIEvents.itemObtained += {
-    (itemId: Long) => println("obtained: " + description.descriptionItem(gameState, itemId))
+    (itemId: Long) =>
+      gameState.findItem(itemId) match {
+        case Some(item) => println("obtained: " + description.descriptionItem(item))
+        case None => UIEvents.itemIdNotFound(itemId)
+      }
   }
 
   UIEvents.craftNotFound += {
@@ -38,18 +42,18 @@ class UIEventsHandler(gameState: GameState, description: Description) {
   UIEvents.listQuests += {
     (_: Unit) =>
       for (q <- gameState.getQuests) {
-        println(description.descriptionQuest(gameState, q.getUniqueId))
+        println(description.descriptionQuest(q))
       }
   }
 
   UIEvents.listInventory += {
-    (_: Unit) => println(description.descriptionInventory(gameState))
+    (_: Unit) => println(description.descriptionInventory(gameState.getHunter.getInventory))
   }
 
   UIEvents.showQuest += {
     (questId: Id) =>
       gameState.findQuest(questId) match {
-        case Some(_) => println(description.descriptionQuest(gameState, questId))
+        case Some(quest) => println(description.descriptionQuest(quest))
         case None => UIEvents.questIdNotFound(questId)
       }
 
@@ -60,19 +64,23 @@ class UIEventsHandler(gameState: GameState, description: Description) {
   }
 
   UIEvents.showHunter += {
-    (_: Unit) => println(description.descriptionHunter(gameState))
+    (_: Unit) => println(description.descriptionHunter(gameState.getHunter))
   }
 
   UIEvents.showStat += {
-    (_: Unit) => println(description.descriptionStatistics(gameState))
+    (_: Unit) => println(description.descriptionStatistics())
   }
 
   UIEvents.showCraft += {
-    (itemId: Id) => println(description.descriptionRecipesWith(gameState, itemId))
+    (itemId: Id) => println(description.descriptionRecipesWith(itemId))
   }
 
   UIEvents.showItem += {
-    (itemId: Id) => println(description.descriptionItem(gameState, itemId))
+    (itemId: Id) =>
+      gameState.findItem(itemId) match {
+        case Some(item) => println(description.descriptionItem(item))
+        case None => UIEvents.itemIdNotFound(itemId)
+      }
   }
 
 }
