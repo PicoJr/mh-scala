@@ -172,6 +172,7 @@ object DefaultDescription extends Description {
     desc.append("quests failures: ").append(DefaultGameStatistics.questFailedCount.now).append("\n")
     desc.append("quests successes: ").append(DefaultGameStatistics.questSucceededCount.now).append("\n")
     desc.append("quests attempts: ").append(DefaultGameStatistics.questStartedCount.now).append("\n")
+    desc.append("items crafted: ").append(DefaultGameStatistics.itemCraftedCount.now).append("\n")
     desc.toString()
   }
 }

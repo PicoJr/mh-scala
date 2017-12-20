@@ -1,5 +1,6 @@
 package game.gameStateEvents
 
+import game.gameStatistics.DefaultGameStatistics
 import game.gamestate.GameState
 import game.item.{AbstractItemFactory, DefaultItemFactory, Item}
 import game.questEvents.QuestEvents
@@ -19,6 +20,7 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
   GameStateEvents.itemCrafted += {
     (result: Item) =>
       gameState.getHunter.getInventory.addItems(result)
+      DefaultGameStatistics.itemCraftedCount() = DefaultGameStatistics.itemCraftedCount.now + 1
       UIEvents.itemObtained(result.getUniqueId)
   }
 
