@@ -9,7 +9,7 @@ import game.item.{ArmorPart, _}
 import game.quest.Quest
 import game.unit.{GameUnit, Hunter, Monster}
 
-/**
+/** Default Description.
   * Created by nol on 11/11/17.
   */
 object DefaultDescription extends Description {
