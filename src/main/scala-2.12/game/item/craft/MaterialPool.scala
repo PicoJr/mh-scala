@@ -1,5 +1,6 @@
 package game.item.craft
 
+import game.item.craft.addOn.AddOn
 import game.item.{AbstractItemTypeFactory, DefaultItemTypeFactory, ItemType}
 
 /**
@@ -25,12 +26,7 @@ class MaterialPool(itemTypeFactory: AbstractItemTypeFactory) {
 
   private def createMaterialFromAddOn(addOn: AddOn, level: Int): ItemType = {
     val descriptionBuilder = new DescriptionBuilder().addNature("material")
-    addOn match {
-      case CharmSlotAddOn => descriptionBuilder.addAdjective("charmed")
-      case ElementAddOn(e) => descriptionBuilder.addElement(e.name)
-      case StatusAddOn(s) => descriptionBuilder.addAdjective(s.name)
-      case BonusAddOn(b) => descriptionBuilder.addAdjective(b.name)
-    }
+    descriptionBuilder.addAdjective(addOn.name)
     itemTypeFactory.createMaterial(descriptionBuilder.getDescription, level)
   }
 
