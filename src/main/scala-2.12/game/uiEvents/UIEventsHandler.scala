@@ -72,7 +72,11 @@ class UIEventsHandler(gameState: GameState, description: Description) {
   }
 
   UIEvents.showCraft += {
-    (itemId: Id) => println(description.descriptionRecipesWith(itemId))
+    (itemId: Id) =>
+      gameState.findItem(itemId) match {
+        case Some(item) => println(description.descriptionRecipesWith(item))
+        case None => UIEvents.itemIdNotFound(itemId)
+      }
   }
 
   UIEvents.showItem += {

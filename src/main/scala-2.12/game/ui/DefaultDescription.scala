@@ -14,22 +14,18 @@ import game.unit.{GameUnit, Hunter, Monster}
   */
 class DefaultDescription(gameState: GameState) extends Description {
 
-  override def descriptionRecipesWith(itemId: Long): String = {
+  override def descriptionRecipesWith(item: Item): String = {
     val desc = new StringBuilder()
-    gameState.findItem(itemId) match {
-      case Some(i) =>
-        val recipes = gameState.getCrafts.getRecipesWith(i)
-        for (m <- recipes) {
-          m match {
-            case ((i1, i2), result) =>
-              desc.append(DefaultDescription.descriptionItemType(i1))
-              desc.append(" + ").append(DefaultDescription.descriptionItemType(i2))
-              desc.append(" -> ").append(DefaultDescription.descriptionItemType(result)).append("\n")
-          }
-        }
-        desc.toString()
-      case None => s"item with id $itemId not found"
+    val recipes = gameState.getCrafts.getRecipesWith(item)
+    for (m <- recipes) {
+      m match {
+        case ((i1, i2), result) =>
+          desc.append(DefaultDescription.descriptionItemType(i1))
+          desc.append(" + ").append(DefaultDescription.descriptionItemType(i2))
+          desc.append(" -> ").append(DefaultDescription.descriptionItemType(result)).append("\n")
+      }
     }
+    desc.toString()
   }
 
   override def descriptionItem(item: Item): String = {
