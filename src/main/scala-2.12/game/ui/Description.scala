@@ -12,10 +12,10 @@ trait Description {
 
   /** Returns description of craft recipes with item identified with itemId.
     *
-    * @param itemId    ingredient of craft recipe
+    * @param item ingredient of craft recipe
     * @return description of craft recipes with item identified with itemId.
     */
-  def descriptionRecipesWith(itemId: Long): String
+  def descriptionRecipesWith(item: Item): String
 
   def descriptionItem(item: Item): String
 

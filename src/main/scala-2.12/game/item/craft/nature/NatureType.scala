@@ -1,30 +1,13 @@
 package game.item.craft.nature
 
-import game.item.ArmorPart
-import game.item.ArmorPart.ArmorPart
+import game.item.ItemType
 
 /** ItemType Nature.
   * Created by nol on 25/11/17.
   */
-sealed trait NatureType {
+trait NatureType {
   /** user-friendly real-play description */
   val name: String
-}
 
-case object WEAPON extends NatureType {
-  override val name = "sword"
+  def createItemType(level: Int): ItemType
 }
-
-case class ARMOR(armorPart: ArmorPart) extends NatureType {
-  override val name: String = armorPart match {
-    case ArmorPart.HEAD => "helmet"
-    case ArmorPart.BODY => "plastron"
-    case ArmorPart.ARMS => "arms"
-    case ArmorPart.LEGS => "legs"
-  }
-}
-
-case object CHARM extends NatureType {
-  override val name = "charm"
-}
-

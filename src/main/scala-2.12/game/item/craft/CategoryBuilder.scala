@@ -1,25 +1,13 @@
 package game.item.craft
 
-import game.config.{DefaultGameConfig, GameConfig}
 import game.item._
-import game.item.craft.bonus.{DAMAGE, PROTECTION}
-import game.item.craft.nature.{ARMOR, CHARM, NatureType, WEAPON}
-import game.util.Procedural
+import game.item.craft.addOn.{AddOn, CharmSlotAddOn}
+import game.item.craft.nature.{NatureType, WEAPON}
 
 /**
   * Created by nol on 29/11/17.
   */
-class CategoryBuilder(gameConfig: GameConfig, itemTypeFactory: AbstractItemTypeFactory) {
-
-  def this() {
-    this(DefaultGameConfig.getGameConfig, DefaultItemTypeFactory.getDefaultItemFactory)
-  }
-
-  private def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
-
-  private def getRandomValue(level: Int, base: Int): Int = {
-    Procedural.getRandomValue(level, base, gameConfig.getHunterStatsGrowth, gameConfig.getPercentageVariation)
-  }
+class CategoryBuilder() {
 
   private var natureType: NatureType = WEAPON
   private var addOns: Seq[AddOn] = Seq.empty
@@ -52,29 +40,17 @@ class CategoryBuilder(gameConfig: GameConfig, itemTypeFactory: AbstractItemTypeF
     descriptionBuilder.addNature(getNature.name)
     for (addOn <- getAddOns) {
       addOn match {
-        case CharmSlotAddOn => // descriptionBuilder.addAdjective("charmed") // removed for brevity
-        case ElementAddOn(e) => descriptionBuilder.addAdjective(e.name)
-        case StatusAddOn(s) => descriptionBuilder.addAdjective(s.name)
-        case BonusAddOn(b) => descriptionBuilder.addAdjective(b.name)
+        case CharmSlotAddOn =>
+        case _ => descriptionBuilder.addAdjective(addOn.name)
       }
     }
     descriptionBuilder
   }
 
   def createItemType(level: Int): ItemType = {
-    var itemType = getNature match {
-      case WEAPON => itemTypeFactory.createWeapon(level, getRandomValue(level, gameConfig.getDamageBase))
-      case CHARM => itemTypeFactory.createCharm(level, getRandomSlot)
-      case ARMOR(armorPart) => itemTypeFactory.createArmor(level, getRandomValue(level, gameConfig.getArmorBase), armorPart)
-    }
+    var itemType = getNature.createItemType(level)
     for (addOn <- getAddOns) {
-      addOn match {
-        case CharmSlotAddOn => itemType = CharmSlot(itemType, getRandomSlot)
-        case ElementAddOn(e) => itemType = Element(itemType, e)
-        case StatusAddOn(s) => itemType = Status(itemType, s)
-        case BonusAddOn(DAMAGE) => itemType = Damage(itemType, getRandomValue(level, gameConfig.getDamageBonusBase))
-        case BonusAddOn(PROTECTION) => itemType = Protection(itemType, getRandomValue(level, gameConfig.getArmorBonusBase))
-      }
+      itemType = addOn.createItemType(level, itemType)
     }
     itemType
   }

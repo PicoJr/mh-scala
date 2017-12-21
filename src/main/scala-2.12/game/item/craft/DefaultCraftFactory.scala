@@ -2,6 +2,7 @@ package game.item.craft
 
 import game.config.{DefaultGameConfig, GameConfig}
 import game.item._
+import game.item.craft.addOn._
 import game.item.craft.bonus.{BonusType, DAMAGE, PROTECTION}
 import game.item.craft.nature.{ARMOR, CHARM, NatureType, WEAPON}
 import game.item.element._
@@ -22,7 +23,7 @@ class DefaultCraftFactory(bonusTypes: Seq[BonusType],
     this(
       Seq(DAMAGE, PROTECTION),
       Seq(ELECTRIC, FIRE, NORMAL, WATER),
-      Seq(WEAPON, ARMOR(ArmorPart.HEAD), ARMOR(ArmorPart.BODY), ARMOR(ArmorPart.ARMS), ARMOR(ArmorPart.LEGS), CHARM),
+      Seq(WEAPON, new ARMOR(ArmorPart.HEAD), new ARMOR(ArmorPart.BODY), new ARMOR(ArmorPart.ARMS), new ARMOR(ArmorPart.LEGS), CHARM),
       Seq(NEUTRAL, SLEEP, STUN),
       DefaultGameConfig.getGameConfig
     )
@@ -43,19 +44,19 @@ class DefaultCraftFactory(bonusTypes: Seq[BonusType],
 
     if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin) {
       for (element <- elementTypes) {
-        craftWithAddOn(craftStep, ElementAddOn(element))
+        craftWithAddOn(craftStep, new ElementAddOn(element))
       }
     } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 1) {
       for (status <- statusTypes) {
-        craftWithAddOn(craftStep, StatusAddOn(status))
+        craftWithAddOn(craftStep, new StatusAddOn(status))
       }
     } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 2) {
       for (bonus <- bonusTypes) {
-        craftWithAddOn(craftStep, BonusAddOn(bonus))
+        craftWithAddOn(craftStep, new BonusAddOn(bonus))
       }
     } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 3) {
       for (bonus <- bonusTypes) {
-        craftWithAddOn(craftStep, BonusAddOn(bonus))
+        craftWithAddOn(craftStep, new BonusAddOn(bonus))
       }
     }
   }

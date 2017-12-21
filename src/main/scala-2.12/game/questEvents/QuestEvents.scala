@@ -10,10 +10,10 @@ object QuestEvents {
 
   type Id = Long
 
-  val questStarted: rescala.Evt[Quest] = Evt[Quest]() // value: questId
+  val questStarted: rescala.Evt[Quest] = Evt[Quest]()
 
-  val questFailed: rescala.Evt[Id] = Evt[Id]() // values: questId
+  val questFailed: rescala.Evt[Id] = Evt[Id]()
 
-  val questSucceeded: rescala.Evt[Id] = Evt[Id]() // values: quest
+  val questSucceeded: rescala.Evt[Id] = Evt[Id]()
 
 }
