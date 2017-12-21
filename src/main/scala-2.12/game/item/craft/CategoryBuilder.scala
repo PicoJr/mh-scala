@@ -3,7 +3,7 @@ package game.item.craft
 import game.config.{DefaultGameConfig, GameConfig}
 import game.item._
 import game.item.craft.bonus.{DAMAGE, PROTECTION}
-import game.item.craft.nature.{ARMOR, CHARM, NatureType, WEAPON}
+import game.item.craft.nature.{NatureType, WEAPON}
 import game.util.Procedural
 
 /**
@@ -62,11 +62,7 @@ class CategoryBuilder(gameConfig: GameConfig, itemTypeFactory: AbstractItemTypeF
   }
 
   def createItemType(level: Int): ItemType = {
-    var itemType = getNature match {
-      case WEAPON => itemTypeFactory.createWeapon(level, getRandomValue(level, gameConfig.getDamageBase))
-      case CHARM => itemTypeFactory.createCharm(level, getRandomSlot)
-      case ARMOR(armorPart) => itemTypeFactory.createArmor(level, getRandomValue(level, gameConfig.getArmorBase), armorPart)
-    }
+    var itemType = getNature.createItemType(level)
     for (addOn <- getAddOns) {
       addOn match {
         case CharmSlotAddOn => itemType = CharmSlot(itemType, getRandomSlot)

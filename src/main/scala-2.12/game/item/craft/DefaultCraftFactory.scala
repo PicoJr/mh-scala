@@ -22,7 +22,7 @@ class DefaultCraftFactory(bonusTypes: Seq[BonusType],
     this(
       Seq(DAMAGE, PROTECTION),
       Seq(ELECTRIC, FIRE, NORMAL, WATER),
-      Seq(WEAPON, ARMOR(ArmorPart.HEAD), ARMOR(ArmorPart.BODY), ARMOR(ArmorPart.ARMS), ARMOR(ArmorPart.LEGS), CHARM),
+      Seq(WEAPON, new ARMOR(ArmorPart.HEAD), new ARMOR(ArmorPart.BODY), new ARMOR(ArmorPart.ARMS), new ARMOR(ArmorPart.LEGS), CHARM),
       Seq(NEUTRAL, SLEEP, STUN),
       DefaultGameConfig.getGameConfig
     )
