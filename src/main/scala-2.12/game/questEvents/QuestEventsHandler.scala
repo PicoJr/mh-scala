@@ -28,34 +28,43 @@ class QuestEventsHandler(gameState: GameState, eEResolver: EEResolver, gameConfi
     math.max(gameConfig.getDamageMin, attacker.getDamage * multiplier - defender.getArmor)
   }
 
+  def onQuestStarted(quest: Quest): Unit = {
+    DefaultGameStatistics.questStartedCount() = DefaultGameStatistics.questStartedCount.now + 1
+    val damageDealtByHunter = computeDamageDealt(gameState.getHunter, quest.getMonster)
+    val damageDealtByMonster = computeDamageDealt(quest.getMonster, gameState.getHunter)
+    val durationMaxHunter = gameState.getHunter.getLife / damageDealtByMonster
+    val durationMaxMonster = quest.getMonster.getLife / damageDealtByHunter
+    val timeElapsed = math.min(gameConfig.getQuestDurationMax, math.min(durationMaxHunter, durationMaxMonster))
+    val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxHunter < gameConfig.getQuestDurationMax
+    val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxMonster < gameConfig.getQuestDurationMax
+    if (hunterDefeated || !monsterSlain) {
+      QuestEvents.questFailed(quest.getUniqueId)
+    }
+    if (!hunterDefeated && monsterSlain) {
+      QuestEvents.questSucceeded(quest.getUniqueId)
+      gameState.getHunter.getInventory.addItems(quest.createLoot: _*)
+    }
+  }
+
+  def onQuestSucceeded(questId: Id): Unit = {
+    DefaultGameStatistics.questSucceededCount() = DefaultGameStatistics.questSucceededCount.now + 1
+    GameStateEvents.questSucceeded(questId)
+  }
+
+  def onQuestFailed(questId: Id): Unit = {
+    DefaultGameStatistics.questFailedCount() = DefaultGameStatistics.questFailedCount.now + 1
+  }
+
   QuestEvents.questStarted += {
-    (quest: Quest) =>
-      DefaultGameStatistics.questStartedCount() = DefaultGameStatistics.questStartedCount.now + 1
-      val damageDealtByHunter = computeDamageDealt(gameState.getHunter, quest.getMonster)
-      val damageDealtByMonster = computeDamageDealt(quest.getMonster, gameState.getHunter)
-      val durationMaxHunter = gameState.getHunter.getLife / damageDealtByMonster
-      val durationMaxMonster = quest.getMonster.getLife / damageDealtByHunter
-      val timeElapsed = math.min(gameConfig.getQuestDurationMax, math.min(durationMaxHunter, durationMaxMonster))
-      val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxHunter < gameConfig.getQuestDurationMax
-      val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxMonster < gameConfig.getQuestDurationMax
-      if (hunterDefeated || !monsterSlain) {
-        QuestEvents.questFailed(quest.getUniqueId)
-      }
-      if (!hunterDefeated && monsterSlain) {
-        QuestEvents.questSucceeded(quest.getUniqueId)
-        gameState.getHunter.getInventory.addItems(quest.createLoot: _*)
-      }
+    (quest: Quest) => onQuestStarted(quest)
   }
 
   QuestEvents.questSucceeded += {
-    (questId: Id) =>
-      DefaultGameStatistics.questSucceededCount() = DefaultGameStatistics.questSucceededCount.now + 1
-      GameStateEvents.questSucceeded(questId)
+    (questId: Id) => onQuestSucceeded(questId)
   }
 
   QuestEvents.questFailed += {
-    (_: Id) =>
-      DefaultGameStatistics.questFailedCount() = DefaultGameStatistics.questFailedCount.now + 1
+    (questId: Id) => onQuestFailed(questId)
   }
 
 }

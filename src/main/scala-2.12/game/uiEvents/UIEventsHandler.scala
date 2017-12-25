@@ -15,66 +15,66 @@ class UIEventsHandler(gameState: GameState, description: Description) {
 
   type Id = Long
 
-  def actionItemObtained(itemId: Id): Unit = {
+  def onItemObtained(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
       case Some(item) => println("obtained: " + description.descriptionItem(item))
       case None => UIEvents.itemIdNotFound(itemId)
     }
   }
 
-  def actionCraftNotFound(ids: (Id, Id)): Unit = {
+  def onCraftNotFound(ids: (Id, Id)): Unit = {
     println("no matching craft recipe found")
   }
 
-  def actionHunterRenamed(newName: String): Unit = {
+  def onHunterRenamed(newName: String): Unit = {
     println(s"new name: $newName")
   }
 
-  def actionItemEquipped(item: Item): Unit = {
+  def onItemEquipped(item: Item): Unit = {
     println(s"item with id ${item.getUniqueId} equipped")
   }
 
-  def actionItemNotEquipped(item: Item): Unit = {
+  def onItemNotEquipped(item: Item): Unit = {
     println(s"item with id ${item.getUniqueId} could not be equipped")
   }
 
-  def actionListQuests(): Unit = {
+  def onListQuests(): Unit = {
     for (q <- gameState.getQuests) {
       println(description.descriptionQuest(q))
     }
   }
 
-  def actionListInventory(): Unit = {
+  def onListInventory(): Unit = {
     println(description.descriptionInventory(gameState.getHunter.getInventory))
   }
 
-  def actionShowQuest(questId: Id): Unit = {
+  def onShowQuest(questId: Id): Unit = {
     gameState.findQuest(questId) match {
       case Some(quest) => println(description.descriptionQuest(quest))
       case None => UIEvents.questIdNotFound(questId)
     }
   }
 
-  def actionQuestIdNotFound(questId: Id): Unit = {
+  def onQuestIdNotFound(questId: Id): Unit = {
     println(s"quest with id $questId not found")
   }
 
-  def actionShowHunter(): Unit = {
+  def onShowHunter(): Unit = {
     println(description.descriptionHunter(gameState.getHunter))
   }
 
-  def actionShowStat(): Unit = {
+  def onShowStat(): Unit = {
     println(description.descriptionStatistics())
   }
 
-  def actionShowCraft(itemId: Id): Unit = {
+  def onShowCraft(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
       case Some(item) => println(description.descriptionRecipesWith(item))
       case None => UIEvents.itemIdNotFound(itemId)
     }
   }
 
-  def actionShowItem(itemId: Id): Unit = {
+  def onShowItem(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
       case Some(item) => println(description.descriptionItem(item))
       case None => UIEvents.itemIdNotFound(itemId)
@@ -82,55 +82,55 @@ class UIEventsHandler(gameState: GameState, description: Description) {
   }
 
   UIEvents.itemObtained += {
-    (itemId: Id) => actionItemObtained(itemId)
+    (itemId: Id) => onItemObtained(itemId)
   }
 
   UIEvents.craftNotFound += {
-    (ids: (Id, Id)) => actionCraftNotFound(ids)
+    (ids: (Id, Id)) => onCraftNotFound(ids)
   }
 
   UIEvents.hunterRenamed += {
-    (newName: String) => actionHunterRenamed(newName)
+    (newName: String) => onHunterRenamed(newName)
   }
 
   UIEvents.itemEquipped += {
-    (item: Item) => actionItemEquipped(item)
+    (item: Item) => onItemEquipped(item)
   }
 
   UIEvents.itemNotEquipped += {
-    (item: Item) => actionItemNotEquipped(item)
+    (item: Item) => onItemNotEquipped(item)
   }
 
   UIEvents.listQuests += {
-    (_: Unit) => actionListQuests()
+    (_: Unit) => onListQuests()
   }
 
   UIEvents.listInventory += {
-    (_: Unit) => actionListInventory()
+    (_: Unit) => onListInventory()
   }
 
   UIEvents.showQuest += {
-    (questId: Id) => actionShowQuest(questId)
+    (questId: Id) => onShowQuest(questId)
   }
 
   UIEvents.questIdNotFound += {
-    (questId: Id) => actionQuestIdNotFound(questId)
+    (questId: Id) => onQuestIdNotFound(questId)
   }
 
   UIEvents.showHunter += {
-    (_: Unit) => actionShowHunter()
+    (_: Unit) => onShowHunter()
   }
 
   UIEvents.showStat += {
-    (_: Unit) => actionShowStat()
+    (_: Unit) => onShowStat()
   }
 
   UIEvents.showCraft += {
-    (itemId: Id) => actionShowCraft(itemId)
+    (itemId: Id) => onShowCraft(itemId)
   }
 
   UIEvents.showItem += {
-    (itemId: Id) => actionShowItem(itemId)
+    (itemId: Id) => onShowItem(itemId)
   }
 
 }
