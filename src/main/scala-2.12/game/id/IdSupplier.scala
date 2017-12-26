@@ -9,6 +9,12 @@ trait IdSupplier {
     *
     * @return new unique id (increasing)
     */
-  def getNextUniqueId: Long
+  def getNextUniqueId: IdSupplier.Id
+
+}
+
+object IdSupplier {
+
+  type Id = Long
 
 }
