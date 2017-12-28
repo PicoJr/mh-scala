@@ -13,15 +13,13 @@ import game.util.DefaultLoopingRandomPool
   */
 class DefaultGameStateFactory(crafts: Crafts,
                               hunter: Hunter,
-                              gameConfig: GameConfig,
-                              itemFactory: AbstractItemFactory
+                              gameConfig: GameConfig = DefaultGameConfig.getGameConfig,
+                              itemFactory: AbstractItemFactory = DefaultItemFactory.getDefaultItemFactory
                              ) {
   def this() = {
     this(
       new DefaultCraftFactory().generateCraft,
-      new DefaultHunter(),
-      DefaultGameConfig.getGameConfig,
-      DefaultItemFactory.getDefaultItemFactory
+      new DefaultHunter()
     )
   }
 
