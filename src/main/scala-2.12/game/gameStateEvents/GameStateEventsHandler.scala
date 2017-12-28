@@ -2,7 +2,7 @@ package game.gameStateEvents
 
 import game.gameStatistics.DefaultGameStatistics
 import game.gamestate.GameState
-import game.id.IdSupplier
+import game.id.Identifiable
 import game.item.{AbstractItemFactory, DefaultItemFactory, Item}
 import game.questEvents.QuestEvents
 import game.uiEvents.UIEvents
@@ -12,7 +12,7 @@ import game.uiEvents.UIEvents
   */
 class GameStateEventsHandler(gameState: GameState, abstractItemFactory: AbstractItemFactory = DefaultItemFactory.getDefaultItemFactory) {
 
-  type Id = IdSupplier.Id
+  type Id = Identifiable.Id
 
   def onItemCrafted(result: Item): Unit = {
     gameState.getHunter.inventory.addItems(result)
