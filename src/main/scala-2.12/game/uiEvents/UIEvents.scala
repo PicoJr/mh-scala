@@ -1,5 +1,6 @@
 package game.uiEvents
 
+import game.id.Identifiable
 import game.item.Item
 import rescala._
 
@@ -8,7 +9,7 @@ import rescala._
   */
 object UIEvents {
 
-  type Id = Long
+  type Id = Identifiable.Id
 
   val itemObtained: rescala.Evt[Id] = Evt[Id]()
 

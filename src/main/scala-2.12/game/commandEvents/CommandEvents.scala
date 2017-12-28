@@ -1,5 +1,6 @@
 package game.commandEvents
 
+import game.id.Identifiable
 import rescala._
 
 /**
@@ -7,7 +8,7 @@ import rescala._
   */
 object CommandEvents {
 
-  type Id = Long
+  type Id = Identifiable.Id
 
   val listQuests: rescala.Evt[Unit] = Evt[Unit]()
 

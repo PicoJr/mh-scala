@@ -1,7 +1,7 @@
 package game.commandEvents
 
 import game.gameStateEvents.GameStateEvents
-import game.id.IdSupplier
+import game.id.Identifiable
 import game.uiEvents.UIEvents
 
 /**
@@ -9,7 +9,7 @@ import game.uiEvents.UIEvents
   */
 class CommandEventsHandler() {
 
-  type Id = IdSupplier.Id
+  type Id = Identifiable.Id
 
   def onListQuests(): Unit = {
     UIEvents.listQuests(Unit)

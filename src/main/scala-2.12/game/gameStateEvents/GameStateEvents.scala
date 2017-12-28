@@ -1,5 +1,6 @@
 package game.gameStateEvents
 
+import game.id.Identifiable
 import game.item.Item
 import rescala._
 
@@ -7,7 +8,7 @@ import rescala._
   * Created by nol on 18/12/17.
   */
 object GameStateEvents {
-  type Id = Long
+  type Id = Identifiable.Id
 
   val itemCrafted: rescala.Evt[Item] = Evt[Item]()
 

@@ -1,5 +1,6 @@
 package game.questEvents
 
+import game.id.Identifiable
 import game.quest.Quest
 import rescala._
 
@@ -8,7 +9,7 @@ import rescala._
   */
 object QuestEvents {
 
-  type Id = Long
+  type Id = Identifiable.Id
 
   val questStarted: rescala.Evt[Quest] = Evt[Quest]()
 
