@@ -6,11 +6,7 @@ import game.item.element.Effectiveness.Effectiveness
 /**
   * Created by nol on 22/11/17.
   */
-class DefaultEEResolver(gameConfig: GameConfig) extends EEResolver {
-
-  def this() {
-    this(DefaultGameConfig.getGameConfig)
-  }
+class DefaultEEResolver(gameConfig: GameConfig = DefaultGameConfig.getGameConfig) extends EEResolver {
 
   override def effectiveness(elementType: ElementType, other: ElementType): Effectiveness = (elementType, other) match {
     case (NORMAL, _) | (_, NORMAL) => Effectiveness.NORMAL
