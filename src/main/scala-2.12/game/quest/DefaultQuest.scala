@@ -6,17 +6,13 @@ import game.unit.Monster
 /** Default quest.
   * Created by nol on 05/11/17.
   */
-class DefaultQuest(monster: Monster, loot: Seq[ItemType], level: Int, questUniqueId: Long, itemFactory: AbstractItemFactory) extends Quest {
+class DefaultQuest(questMonster: Monster, loot: Seq[ItemType], questLevel: Int, questUniqueId: Long, itemFactory: AbstractItemFactory = DefaultItemFactory.getDefaultItemFactory) extends Quest {
 
-  def this(monster: Monster, loot: Seq[ItemType], level: Int, questUniqueId: Long) {
-    this(monster, loot, level, questUniqueId, DefaultItemFactory.getDefaultItemFactory)
-  }
 
   override def getUniqueId: Long = questUniqueId
 
-  override def getMonster: Monster = monster
-
   override def createLoot: Seq[Item] = loot.map(i => itemFactory.createItem(i))
 
-  override def getLevel: Int = level
+  override val monster: Monster = questMonster
+  override val level: Int = questLevel
 }

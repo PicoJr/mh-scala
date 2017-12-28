@@ -154,9 +154,9 @@ object DefaultDescription {
   def descriptionQuest(quest: Quest): String = {
     val desc = new StringBuilder()
     desc.append("quest[").append(quest.getUniqueId).append("]")
-    desc.append(" level: ").append(quest.getLevel)
+    desc.append(" level: ").append(quest.level)
     desc.append("\n")
-    desc.append(descriptionMonster(quest.getMonster))
+    desc.append(descriptionMonster(quest.monster))
     desc.append("\n")
     desc.toString()
   }

@@ -45,8 +45,8 @@ trait GameState {
     * @return monster with id monsterId if any else None
     */
   def findMonster(monsterId: Long): Option[Monster] = {
-    getQuests.find(q => q.getMonster.getUniqueId == monsterId) match {
-      case Some(q) => Some(q.getMonster)
+    getQuests.find(q => q.monster.getUniqueId == monsterId) match {
+      case Some(q) => Some(q.monster)
       case None => None
     }
   }

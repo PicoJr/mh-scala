@@ -9,11 +9,11 @@ import game.unit.Monster
   */
 trait Quest extends Identifiable {
 
-  /** Return monster to hunt during quest
-    *
-    * @return monster to hunt during quest
-    */
-  def getMonster: Monster
+  /** monster to hunt during quest */
+  val monster: Monster
+
+  /** quest level (how tough the quest is to complete) */
+  val level: Int
 
   /** Returns items obtained from quest if success
     * Calling this method several times
@@ -23,9 +23,4 @@ trait Quest extends Identifiable {
     */
   def createLoot: Seq[Item]
 
-  /** Returns quest level (how tough the quest is to complete)
-    *
-    * @return quest level
-    */
-  def getLevel: Int
 }
