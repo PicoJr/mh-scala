@@ -10,11 +10,7 @@ import game.uiEvents.UIEvents
 /**
   * Created by nol on 19/12/17.
   */
-class GameStateEventsHandler(gameState: GameState, abstractItemFactory: AbstractItemFactory) {
-
-  def this(gameState: GameState) {
-    this(gameState, DefaultItemFactory.getDefaultItemFactory)
-  }
+class GameStateEventsHandler(gameState: GameState, abstractItemFactory: AbstractItemFactory = DefaultItemFactory.getDefaultItemFactory) {
 
   type Id = IdSupplier.Id
 
