@@ -9,21 +9,7 @@ import game.util.Procedural
 /**
   * Created by nol on 17/11/17.
   */
-class DefaultMonsterFactory(
-                             elementTypes: Seq[ElementType],
-                             statusTypes: Seq[StatusType],
-                             idSupplier: IdSupplier,
-                             gameConfig: GameConfig
-                           ) {
-
-  def this() {
-    this(
-      Seq(ELECTRIC, FIRE, NORMAL, WATER),
-      Seq(NEUTRAL, SLEEP, STUN),
-      new DefaultIdSupplier,
-      DefaultGameConfig.getGameConfig
-    )
-  }
+class DefaultMonsterFactory(elementTypes: Seq[ElementType] = Seq(ELECTRIC, FIRE, NORMAL, WATER), statusTypes: Seq[StatusType] = Seq(NEUTRAL, SLEEP, STUN), idSupplier: IdSupplier = new DefaultIdSupplier, gameConfig: GameConfig = DefaultGameConfig.getGameConfig) {
 
   private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, gameConfig.getMonsterStatsGrowth, gameConfig.getPercentageVariation)
 
