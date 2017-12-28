@@ -1,6 +1,6 @@
 package game.unit
 
-import game.config.{DefaultGameConfig, GameConfig}
+import game.config.DefaultGameConfig
 import game.item.element.ElementType
 import game.item.inventory.{DefaultInventory, Inventory}
 import game.item.status.StatusType
@@ -8,25 +8,27 @@ import game.item.status.StatusType
 /**
   * Created by nol on 06/12/17.
   */
-case class DefaultHunter(name: String, hunterInventory: Inventory = new DefaultInventory, gameConfig: GameConfig = DefaultGameConfig.getGameConfig) extends DefaultGameUnit(name) with Hunter {
+case class DefaultHunter(hunterName: String, hunterInventory: Inventory = new DefaultInventory, hunterLife: Int = DefaultGameConfig.getGameConfig.getHunterLifeMax) extends Hunter {
 
   def this() {
     this(DefaultGameConfig.getGameConfig.getHunterName)
   }
 
-  val inventory: Inventory = hunterInventory
+  override val inventory: Inventory = hunterInventory
 
-  override def getLife: Int = gameConfig.getHunterLifeMax
+  override var name: String = hunterName
 
-  override def getArmor: Int = inventory.getArmorProvided
+  override val life: Int = hunterLife
 
-  override def getDamage: Int = inventory.getDamageProvided
+  override val armor: Int = inventory.getArmorProvided
 
-  override def getAttackElementType: ElementType = inventory.getAttackElementType
+  override val damage: Int = inventory.getDamageProvided
 
-  override def getElementalResistances: Seq[ElementType] = inventory.getArmorElementTypes ++ inventory.getCharmsElementTypes
+  override val attackElementType: ElementType = inventory.getAttackElementType
 
-  override def getAttackStatusType: StatusType = inventory.getAttackStatusType
+  override val elementalResistances: Seq[ElementType] = inventory.getArmorElementTypes ++ inventory.getCharmsElementTypes
 
-  override def getStatusResistances: Seq[StatusType] = inventory.getArmorStatusTypes ++ inventory.getCharmsStatusTypes
+  override val attackStatusType: StatusType = inventory.getAttackStatusType
+
+  override val statusResistances: Seq[StatusType] = inventory.getArmorStatusTypes ++ inventory.getCharmsStatusTypes
 }

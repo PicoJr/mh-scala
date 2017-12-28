@@ -21,7 +21,7 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
   }
 
   def onHunterRenamed(newName: String): Unit = {
-    gameState.hunter.setName(newName)
+    gameState.hunter.name = newName
     UIEvents.hunterRenamed(newName)
   }
 

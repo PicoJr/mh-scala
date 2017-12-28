@@ -8,55 +8,28 @@ import game.item.status.StatusType
   */
 trait GameUnit {
 
-  /** Get game unit name
-    *
-    * @return game unit name
-    */
-  def getName: String
+  /** game unit name, not necessarily unique */
+  var name: String
 
+  /** unit life (>=0) */
+  val life: Int
 
-  def setName(newName: String): Unit
+  /** unit armor (>= 0) */
+  val armor: Int
 
-  /**
-    *
-    * @return unit life (>=0)
-    */
-  def getLife: Int
+  /** unit damage (>=0) */
+  val damage: Int
 
-  /**
-    *
-    * @return unit armor (>= 0)
-    */
-  def getArmor: Int
+  /** unit elemental resistances (may be empty) */
+  val elementalResistances: Seq[ElementType]
 
-  /**
-    *
-    * @return unit damage (>=0)
-    */
-  def getDamage: Int
+  /** Get unit status resistances (may be empty) */
+  val statusResistances: Seq[StatusType]
 
-  /** Get unit elemental resistances
-    *
-    * @return unit elemental resistances (may be empty)
-    */
-  def getElementalResistances: Seq[ElementType]
+  /** Get attack element type */
+  val attackElementType: ElementType
 
-  /** Get unit status resistances
-    *
-    * @return unit status resistances (may be empty)
-    */
-  def getStatusResistances: Seq[StatusType]
-
-  /** Get attack element type
-    *
-    * @return attack element type
-    */
-  def getAttackElementType: ElementType
-
-  /** Get attack status type
-    *
-    * @return attack status type
-    */
-  def getAttackStatusType: StatusType
+  /** Get attack status type */
+  val attackStatusType: StatusType
 
 }

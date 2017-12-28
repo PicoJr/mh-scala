@@ -122,19 +122,19 @@ object DefaultDescription {
 
   def descriptionGameUnit(gameUnit: GameUnit): String = {
     val desc = new StringBuilder()
-    desc.append(gameUnit.getName)
+    desc.append(gameUnit.name)
     desc.append("\n")
-    desc.append("life:  ").append(gameUnit.getLife)
+    desc.append("life:  ").append(gameUnit.life)
     desc.append("\n")
-    desc.append("dmg:   ").append(gameUnit.getDamage).append(" ")
-    desc.append("{").append(descriptionElementType(gameUnit.getAttackElementType)).append("}")
-    desc.append("<").append(descriptionStatusType(gameUnit.getAttackStatusType)).append(">")
+    desc.append("dmg:   ").append(gameUnit.damage).append(" ")
+    desc.append("{").append(descriptionElementType(gameUnit.attackElementType)).append("}")
+    desc.append("<").append(descriptionStatusType(gameUnit.attackStatusType)).append(">")
     desc.append("\n")
-    desc.append("armor: ").append(gameUnit.getArmor).append(" ")
-    for (element <- gameUnit.getElementalResistances) {
+    desc.append("armor: ").append(gameUnit.armor).append(" ")
+    for (element <- gameUnit.elementalResistances) {
       desc.append("{").append(descriptionElementType(element)).append("}")
     }
-    for (status <- gameUnit.getStatusResistances) {
+    for (status <- gameUnit.statusResistances) {
       desc.append("<").append(descriptionStatusType(status)).append(">")
     }
     desc.toString()

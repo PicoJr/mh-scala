@@ -24,16 +24,16 @@ class QuestEventsHandler(gameState: GameState, eEResolver: EEResolver, gameConfi
   }
 
   private def computeDamageDealt(attacker: GameUnit, defender: GameUnit): Double = {
-    val multiplier = defender.getElementalResistances.foldLeft(1.0)((m, e) => m * eEResolver.multiplier(attacker.getAttackElementType, e))
-    math.max(gameConfig.getDamageMin, attacker.getDamage * multiplier - defender.getArmor)
+    val multiplier = defender.elementalResistances.foldLeft(1.0)((m, e) => m * eEResolver.multiplier(attacker.attackElementType, e))
+    math.max(gameConfig.getDamageMin, attacker.damage * multiplier - defender.armor)
   }
 
   def onQuestStarted(quest: Quest): Unit = {
     DefaultGameStatistics.questStartedCount() = DefaultGameStatistics.questStartedCount.now + 1
     val damageDealtByHunter = computeDamageDealt(gameState.hunter, quest.monster)
     val damageDealtByMonster = computeDamageDealt(quest.monster, gameState.hunter)
-    val durationMaxHunter = gameState.hunter.getLife / damageDealtByMonster
-    val durationMaxMonster = quest.monster.getLife / damageDealtByHunter
+    val durationMaxHunter = gameState.hunter.life / damageDealtByMonster
+    val durationMaxMonster = quest.monster.life / damageDealtByHunter
     val timeElapsed = math.min(gameConfig.getQuestDurationMax, math.min(durationMaxHunter, durationMaxMonster))
     val hunterDefeated = durationMaxHunter < durationMaxMonster && durationMaxHunter < gameConfig.getQuestDurationMax
     val monsterSlain = durationMaxMonster < durationMaxHunter && durationMaxMonster < gameConfig.getQuestDurationMax
