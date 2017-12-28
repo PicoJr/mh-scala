@@ -35,9 +35,9 @@ class DefaultGameStateFactory(crafts: Crafts,
     val hunter = new DefaultHunter()
     val itemTypesFirstLevel = crafts.getNonMaterials(gameConfig.getLevelMin).distinct
     val items = itemTypesFirstLevel.map(i => itemFactory.createItem(i))
-    hunter.getInventory.addItems(items: _*)
+    hunter.inventory.addItems(items: _*)
     for (item <- items) {
-      hunter.getInventory.tryEquipItem(item.getUniqueId, force = false)
+      hunter.inventory.tryEquipItem(item.getUniqueId, force = false)
     }
     hunter
   }

@@ -42,7 +42,7 @@ class QuestEventsHandler(gameState: GameState, eEResolver: EEResolver, gameConfi
     }
     if (!hunterDefeated && monsterSlain) {
       QuestEvents.questSucceeded(quest.getUniqueId)
-      gameState.getHunter.getInventory.addItems(quest.createLoot: _*)
+      gameState.getHunter.inventory.addItems(quest.createLoot: _*)
     }
   }
 

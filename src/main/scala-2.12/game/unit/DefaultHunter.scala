@@ -8,29 +8,25 @@ import game.item.status.StatusType
 /**
   * Created by nol on 06/12/17.
   */
-case class DefaultHunter(name: String, inventory: Inventory, gameConfig: GameConfig) extends DefaultGameUnit(name) with Hunter {
-
-  def this(name: String) {
-    this(name, new DefaultInventory, DefaultGameConfig.getGameConfig)
-  }
+case class DefaultHunter(name: String, hunterInventory: Inventory = new DefaultInventory, gameConfig: GameConfig = DefaultGameConfig.getGameConfig) extends DefaultGameUnit(name) with Hunter {
 
   def this() {
     this(DefaultGameConfig.getGameConfig.getHunterName)
   }
 
-  override def getInventory: Inventory = inventory
+  val inventory: Inventory = hunterInventory
 
   override def getLife: Int = gameConfig.getHunterLifeMax
 
-  override def getArmor: Int = getInventory.getArmorProvided
+  override def getArmor: Int = inventory.getArmorProvided
 
-  override def getDamage: Int = getInventory.getDamageProvided
+  override def getDamage: Int = inventory.getDamageProvided
 
-  override def getAttackElementType: ElementType = getInventory.getAttackElementType
+  override def getAttackElementType: ElementType = inventory.getAttackElementType
 
-  override def getElementalResistances: Seq[ElementType] = getInventory.getArmorElementTypes ++ getInventory.getCharmsElementTypes
+  override def getElementalResistances: Seq[ElementType] = inventory.getArmorElementTypes ++ inventory.getCharmsElementTypes
 
-  override def getAttackStatusType: StatusType = getInventory.getAttackStatusType
+  override def getAttackStatusType: StatusType = inventory.getAttackStatusType
 
-  override def getStatusResistances: Seq[StatusType] = getInventory.getArmorStatusTypes ++ getInventory.getCharmsStatusTypes
+  override def getStatusResistances: Seq[StatusType] = inventory.getArmorStatusTypes ++ inventory.getCharmsStatusTypes
 }

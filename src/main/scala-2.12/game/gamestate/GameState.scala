@@ -57,7 +57,7 @@ trait GameState {
     * @return item with id itemId if any else None
     */
   def findItem(itemId: Long): Option[Item] = {
-    getHunter.getInventory.findItem(itemId)
+    getHunter.inventory.findItem(itemId)
   }
 
   /** Check quest with id questId is completed

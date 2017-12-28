@@ -7,11 +7,7 @@ import game.item.inventory.Inventory
   */
 trait Hunter extends GameUnit {
 
-
-  /** Get hunter inventory
-    *
-    * @return hunter inventory
-    */
-  def getInventory: Inventory
+  /** hunter inventory */
+  val inventory: Inventory
 
 }

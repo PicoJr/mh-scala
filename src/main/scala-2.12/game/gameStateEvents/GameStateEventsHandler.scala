@@ -15,7 +15,7 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
   type Id = IdSupplier.Id
 
   def onItemCrafted(result: Item): Unit = {
-    gameState.getHunter.getInventory.addItems(result)
+    gameState.getHunter.inventory.addItems(result)
     DefaultGameStatistics.itemCraftedCount() = DefaultGameStatistics.itemCraftedCount.now + 1
     UIEvents.itemObtained(result.getUniqueId)
   }
@@ -52,7 +52,7 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
   def onEquipItem(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
       case Some(i) =>
-        val equipped = gameState.getHunter.getInventory.tryEquipItem(i.getUniqueId, force = true)
+        val equipped = gameState.getHunter.inventory.tryEquipItem(i.getUniqueId, force = true)
         if (equipped) {
           GameStateEvents.itemEquipped(i)
         } else {
@@ -64,7 +64,7 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
 
   def onUnEquipItem(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
-      case Some(i) => gameState.getHunter.getInventory.unEquipItem(i.getUniqueId)
+      case Some(i) => gameState.getHunter.inventory.unEquipItem(i.getUniqueId)
       case None => UIEvents.itemIdNotFound(itemId)
     }
   }

@@ -45,7 +45,7 @@ class UIEventsHandler(gameState: GameState, description: Description) {
   }
 
   def onListInventory(): Unit = {
-    println(description.descriptionInventory(gameState.getHunter.getInventory))
+    println(description.descriptionInventory(gameState.getHunter.inventory))
   }
 
   def onShowQuest(questId: Id): Unit = {
