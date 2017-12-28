@@ -31,16 +31,7 @@ class DefaultMonsterFactory(elementTypes: Seq[ElementType] = Seq(ELECTRIC, FIRE,
 
   private def getRandomArmorElementTypes(level: Int): Seq[ElementType] = {
     var armorElementTypes = Seq.empty[ElementType]
-    if (level >= gameConfig.getLevelMin) {
-      armorElementTypes = armorElementTypes :+ getRandomElementType
-    }
-    if (level >= gameConfig.getLevelMin + 1) {
-      armorElementTypes = armorElementTypes :+ getRandomElementType
-    }
-    if (level >= gameConfig.getLevelMin + 2) {
-      armorElementTypes = armorElementTypes :+ getRandomElementType
-    }
-    if (level >= gameConfig.getLevelMin + 3) {
+    for (_ <- gameConfig.getLevelMin to math.min(level, 3)) {
       armorElementTypes = armorElementTypes :+ getRandomElementType
     }
     armorElementTypes
