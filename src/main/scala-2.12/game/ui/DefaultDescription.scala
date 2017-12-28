@@ -16,7 +16,7 @@ class DefaultDescription(gameState: GameState) extends Description {
 
   override def descriptionRecipesWith(item: Item): String = {
     val desc = new StringBuilder()
-    val recipes = gameState.getCrafts.getRecipesWith(item)
+    val recipes = gameState.crafts.getRecipesWith(item)
     for (m <- recipes) {
       m match {
         case ((i1, i2), result) =>
@@ -57,7 +57,7 @@ class DefaultDescription(gameState: GameState) extends Description {
     val desc = new StringBuilder()
     if (gameState.allQuestsCompleted) desc.append("All Quests Completed!\n")
     desc.append("quests completed:").append(gameState.getCompletedQuests.size)
-    desc.append("/").append(gameState.getQuests.size).append("\n")
+    desc.append("/").append(gameState.quests.size).append("\n")
     desc.append("quests failures: ").append(DefaultGameStatistics.questFailedCount.now).append("\n")
     desc.append("quests successes: ").append(DefaultGameStatistics.questSucceededCount.now).append("\n")
     desc.append("quests attempts: ").append(DefaultGameStatistics.questStartedCount.now).append("\n")

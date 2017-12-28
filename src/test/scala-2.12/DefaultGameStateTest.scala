@@ -9,11 +9,11 @@ class DefaultGameStateTest extends FlatSpec {
   private val gameState: GameState = new DefaultGameStateFactory().createGameState
 
   "GameState" should "have quests" in {
-    assert(gameState.getQuests.nonEmpty)
+    assert(gameState.quests.nonEmpty)
   }
 
   "All quests" should "provide loot" in {
-    assert(gameState.getQuests.forall(q => q.createLoot.nonEmpty))
+    assert(gameState.quests.forall(q => q.createLoot.nonEmpty))
   }
 
 }

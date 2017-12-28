@@ -39,13 +39,13 @@ class UIEventsHandler(gameState: GameState, description: Description) {
   }
 
   def onListQuests(): Unit = {
-    for (q <- gameState.getQuests) {
+    for (q <- gameState.quests) {
       println(description.descriptionQuest(q))
     }
   }
 
   def onListInventory(): Unit = {
-    println(description.descriptionInventory(gameState.getHunter.inventory))
+    println(description.descriptionInventory(gameState.hunter.inventory))
   }
 
   def onShowQuest(questId: Id): Unit = {
@@ -60,7 +60,7 @@ class UIEventsHandler(gameState: GameState, description: Description) {
   }
 
   def onShowHunter(): Unit = {
-    println(description.descriptionHunter(gameState.getHunter))
+    println(description.descriptionHunter(gameState.hunter))
   }
 
   def onShowStat(): Unit = {

@@ -10,23 +10,13 @@ import game.unit.{Hunter, Monster}
   */
 trait GameState {
 
-  /** Get hunter
-    *
-    * @return hunter
-    */
-  def getHunter: Hunter
+  val hunter: Hunter
 
-  /** Get quests
-    *
-    * @return quests regardless of completion
-    */
-  def getQuests: Seq[Quest]
+  /** quests regardless of completion */
+  val quests: Seq[Quest]
 
-  /** Get craft recipes
-    *
-    * @return craft recipes
-    */
-  def getCrafts: Crafts
+  /** Get craft recipes */
+  val crafts: Crafts
 
   def addCompletedQuest(questId: Long): Unit
 
@@ -36,7 +26,7 @@ trait GameState {
     * @return quest with id questId if any else None
     */
   def findQuest(questID: Long): Option[Quest] = {
-    getQuests.find(q => q.getUniqueId == questID)
+    quests.find(q => q.getUniqueId == questID)
   }
 
   /** Find monster with id monsterId
@@ -45,7 +35,7 @@ trait GameState {
     * @return monster with id monsterId if any else None
     */
   def findMonster(monsterId: Long): Option[Monster] = {
-    getQuests.find(q => q.monster.getUniqueId == monsterId) match {
+    quests.find(q => q.monster.getUniqueId == monsterId) match {
       case Some(q) => Some(q.monster)
       case None => None
     }
@@ -57,7 +47,7 @@ trait GameState {
     * @return item with id itemId if any else None
     */
   def findItem(itemId: Long): Option[Item] = {
-    getHunter.inventory.findItem(itemId)
+    hunter.inventory.findItem(itemId)
   }
 
   /** Check quest with id questId is completed
@@ -72,7 +62,7 @@ trait GameState {
     * @return quest completed
     */
   def getCompletedQuests: Seq[Quest] = {
-    getQuests.filter(q => isCompletedQuest(q.getUniqueId))
+    quests.filter(q => isCompletedQuest(q.getUniqueId))
   }
 
   /** Same as getCompletedQuests.size == getQuests.size
@@ -80,7 +70,7 @@ trait GameState {
     * @return all quests are completed
     */
   def allQuestsCompleted: Boolean = {
-    getCompletedQuests.size == getQuests.size
+    getCompletedQuests.size == quests.size
   }
 
 }

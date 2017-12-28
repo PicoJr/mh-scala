@@ -15,13 +15,13 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
   type Id = Identifiable.Id
 
   def onItemCrafted(result: Item): Unit = {
-    gameState.getHunter.inventory.addItems(result)
+    gameState.hunter.inventory.addItems(result)
     DefaultGameStatistics.itemCraftedCount() = DefaultGameStatistics.itemCraftedCount.now + 1
     UIEvents.itemObtained(result.getUniqueId)
   }
 
   def onHunterRenamed(newName: String): Unit = {
-    gameState.getHunter.setName(newName)
+    gameState.hunter.setName(newName)
     UIEvents.hunterRenamed(newName)
   }
 
@@ -52,7 +52,7 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
   def onEquipItem(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
       case Some(i) =>
-        val equipped = gameState.getHunter.inventory.tryEquipItem(i.getUniqueId, force = true)
+        val equipped = gameState.hunter.inventory.tryEquipItem(i.getUniqueId, force = true)
         if (equipped) {
           GameStateEvents.itemEquipped(i)
         } else {
@@ -64,7 +64,7 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
 
   def onUnEquipItem(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
-      case Some(i) => gameState.getHunter.inventory.unEquipItem(i.getUniqueId)
+      case Some(i) => gameState.hunter.inventory.unEquipItem(i.getUniqueId)
       case None => UIEvents.itemIdNotFound(itemId)
     }
   }
@@ -74,9 +74,9 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
       case (Some(i1), Some(i2)) =>
         val craftResult =
           if (i2.isMaterial) {
-            gameState.getCrafts.findCraftResult(i1.getItemType, i2.getItemType)
+            gameState.crafts.findCraftResult(i1.getItemType, i2.getItemType)
           } else {
-            gameState.getCrafts.findCraftResult(i2.getItemType, i1.getItemType)
+            gameState.crafts.findCraftResult(i2.getItemType, i1.getItemType)
           }
         craftResult match {
           case Some(result) =>
