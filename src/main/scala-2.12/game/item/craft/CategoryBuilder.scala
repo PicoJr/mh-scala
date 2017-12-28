@@ -1,7 +1,7 @@
 package game.item.craft
 
 import game.item._
-import game.item.craft.addOn.{AddOn, CharmSlotAddOn}
+import game.item.craft.addOn.AddOn
 import game.item.craft.nature.{NatureType, WEAPON}
 
 /**
@@ -50,7 +50,7 @@ class CategoryBuilder() {
   def createItemType(level: Int): ItemType = {
     var itemType = getNature.createItemType(level)
     for (addOn <- getAddOns) {
-      itemType = addOn.createItemType(level, itemType)
+      itemType = addOn.create(level, itemType)
     }
     itemType
   }

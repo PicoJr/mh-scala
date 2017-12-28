@@ -1,20 +1,17 @@
 package game.item.craft.addOn
 
 import game.item.craft.bonus.{BonusType, DAMAGE}
-import game.item.{Damage, ItemType, Protection}
+import game.item.{AbstractDecorator, ItemType}
 
 /** Provides additional bonus.
   * Created by nol on 21/12/17.
   */
 
-class BonusAddOn(bonusType: BonusType) extends DefaultAddOn {
-  override val name: String = bonusType.name
+class BonusAddOn[TItemType <: ItemType](bonusType: BonusType, decorator: AbstractDecorator[TItemType]) extends DefaultAddOn[TItemType](bonusType.name, decorator) {
 
-  override def createItemType(level: Int, itemType: ItemType): ItemType = {
-    bonusType match {
-      case DAMAGE => Damage(itemType, getRandomValue(level, gameConfig.getDamageBonusBase))
-      case _ => Protection(itemType, getRandomValue(level, gameConfig.getArmorBonusBase))
-    }
+  override def create(level: Int, itemType: TItemType): TItemType = bonusType match {
+    case DAMAGE => decorator.decorateWithDamage(itemType, getRandomValue(level, gameConfig.getDamageBonusBase))
+    case _ => decorator.decorateWithProtection(itemType, getRandomValue(level, gameConfig.getArmorBonusBase))
   }
 }
 

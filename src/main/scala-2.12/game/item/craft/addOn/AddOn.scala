@@ -2,12 +2,12 @@ package game.item.craft.addOn
 
 import game.item.ItemType
 
-/** ItemType AddOn.
-  * Stacked up to make increasingly complex itemTypes.
+/** Generic AddOn for ItemTypes.
+  * Stacked up to make increasingly complex item types.
   * Created by nol on 29/11/17.
   */
-trait AddOn {
+trait AddOn[TItemType <: ItemType] {
   val name: String
 
-  def createItemType(level: Int, itemType: ItemType): ItemType
+  def create(level: Int, itemType: TItemType): TItemType
 }

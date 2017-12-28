@@ -1,17 +1,16 @@
 package game.item.craft.addOn
 
 import game.item.element.ElementType
-import game.item.{Element, ItemType}
+import game.item.{AbstractDecorator, ItemType}
 
 /** Provides elemental protection/damage.
   *
   * @param elementType added
   */
-class ElementAddOn(elementType: ElementType) extends DefaultAddOn {
-  override val name: String = elementType.name
+class ElementAddOn[TItemType <: ItemType](elementType: ElementType, decorator: AbstractDecorator[TItemType]) extends DefaultAddOn[TItemType](elementType.name, decorator) {
 
-  override def createItemType(level: Int, itemType: ItemType): ItemType = {
-    Element(itemType, elementType)
+  override def create(level: Int, itemType: TItemType): TItemType = {
+    decorator.decorateWithElement(itemType, elementType)
   }
 }
 
