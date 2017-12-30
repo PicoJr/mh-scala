@@ -6,7 +6,7 @@ import rescala._
 /**
   * Created by nol on 19/12/17.
   */
-object CommandEvents {
+class CommandEvents {
 
   type Id = Identifiable.Id
 

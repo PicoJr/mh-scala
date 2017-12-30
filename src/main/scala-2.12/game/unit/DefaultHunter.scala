@@ -1,34 +1,31 @@
 package game.unit
 
 import game.config.DefaultGameConfig
+import game.item.Item
 import game.item.element.ElementType
-import game.item.inventory.{DefaultInventory, Inventory}
+import game.item.inventory.Inventory
 import game.item.status.StatusType
 
 /**
   * Created by nol on 06/12/17.
   */
-case class DefaultHunter(hunterName: String, hunterInventory: Inventory = new DefaultInventory, hunterLife: Int = DefaultGameConfig.getGameConfig.getHunterLifeMax) extends Hunter {
+case class DefaultHunter[TItem <: Item](hunterName: String, hunterInventory: Inventory[TItem], hunterLife: Int = DefaultGameConfig.getGameConfig.getHunterLifeMax) extends Hunter[TItem] {
 
-  def this() {
-    this(DefaultGameConfig.getGameConfig.getHunterName)
-  }
-
-  override val inventory: Inventory = hunterInventory
+  override val inventory: Inventory[TItem] = hunterInventory
 
   override var name: String = hunterName
 
-  override val life: Int = hunterLife
+  override def getLife: Int = hunterLife
 
-  override val armor: Int = inventory.getArmorProvided
+  override def getArmor: Int = inventory.getArmorProvided
 
-  override val damage: Int = inventory.getDamageProvided
+  override def getDamage: Int = inventory.getDamageProvided
 
-  override val attackElementType: ElementType = inventory.getAttackElementType
+  override def getAttackElementType: ElementType = inventory.getAttackElementType
 
-  override val elementalResistances: Seq[ElementType] = inventory.getArmorElementTypes ++ inventory.getCharmsElementTypes
+  override def getElementalResistances: Seq[ElementType] = inventory.getArmorElementTypes ++ inventory.getCharmsElementTypes
 
-  override val attackStatusType: StatusType = inventory.getAttackStatusType
+  override def getAttackStatusType: StatusType = inventory.getAttackStatusType
 
-  override val statusResistances: Seq[StatusType] = inventory.getArmorStatusTypes ++ inventory.getCharmsStatusTypes
+  override def getStatusResistances: Seq[StatusType] = inventory.getArmorStatusTypes ++ inventory.getCharmsStatusTypes
 }

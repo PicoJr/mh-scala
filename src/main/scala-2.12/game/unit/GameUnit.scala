@@ -12,24 +12,24 @@ trait GameUnit {
   var name: String
 
   /** unit life (>=0) */
-  val life: Int
+  def getLife: Int
 
   /** unit armor (>= 0) */
-  val armor: Int
+  def getArmor: Int
 
   /** unit damage (>=0) */
-  val damage: Int
+  def getDamage: Int
 
   /** unit elemental resistances (may be empty) */
-  val elementalResistances: Seq[ElementType]
+  def getElementalResistances: Seq[ElementType]
 
   /** Get unit status resistances (may be empty) */
-  val statusResistances: Seq[StatusType]
+  def getStatusResistances: Seq[StatusType]
 
   /** Get attack element type */
-  val attackElementType: ElementType
+  def getAttackElementType: ElementType
 
   /** Get attack status type */
-  val attackStatusType: StatusType
+  def getAttackStatusType: StatusType
 
 }

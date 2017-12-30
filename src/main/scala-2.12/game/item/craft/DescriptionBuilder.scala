@@ -3,8 +3,7 @@ package game.item.craft
 /**
   * Created by nol on 20/11/17.
   */
-class DescriptionBuilder {
-  private var nature: String = "undefined"
+class DescriptionBuilder(nature: String) {
   private var adjectives: Seq[String] = Seq.empty
 
   def getDescription: String = {
@@ -19,11 +18,6 @@ class DescriptionBuilder {
   def getNature: String = nature
 
   def getAdjectives: Seq[String] = adjectives
-
-  def addNature(nature: String): DescriptionBuilder = {
-    this.nature = nature
-    this
-  }
 
   def addAdjective(adjective: String): DescriptionBuilder = {
     this.adjectives = adjectives :+ adjective

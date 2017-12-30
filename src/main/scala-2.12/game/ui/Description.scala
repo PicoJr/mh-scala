@@ -1,31 +1,26 @@
 package game.ui
 
-import game.item.Item
 import game.item.inventory.Inventory
+import game.item.{Item, ItemType}
 import game.quest.Quest
 import game.unit.{Hunter, Monster}
 
 /** Provides descriptions of game instances to the player.
   * Created by nol on 23/11/17.
   */
-trait Description {
+trait Description[TItem <: Item, TItemType <: ItemType] {
 
-  /** Returns description of craft recipes with item identified with itemId.
-    *
-    * @param item ingredient of craft recipe
-    * @return description of craft recipes with item identified with itemId.
-    */
-  def descriptionRecipesWith(item: Item): String
+  def descriptionRecipesWith(item: TItem): String
 
-  def descriptionItem(item: Item): String
+  def descriptionItem(item: TItem): String
 
-  def descriptionInventory(inventory: Inventory): String
+  def descriptionInventory(inventory: Inventory[TItem]): String
 
-  def descriptionHunter(hunter: Hunter): String
+  def descriptionHunter(hunter: Hunter[TItem]): String
 
   def descriptionMonster(monster: Monster): String
 
-  def descriptionQuest(quest: Quest): String
+  def descriptionQuest(quest: Quest[TItemType]): String
 
   def descriptionStatistics(): String
 }

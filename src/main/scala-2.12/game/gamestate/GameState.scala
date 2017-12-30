@@ -1,22 +1,22 @@
 package game.gamestate
 
-import game.item.Item
 import game.item.craft.Crafts
+import game.item.{Item, ItemType}
 import game.quest.Quest
 import game.unit.{Hunter, Monster}
 
 /** Holds all game instances and states.
   * Created by nol on 22/11/17.
   */
-trait GameState {
+trait GameState[TItem <: Item, TItemType <: ItemType] {
 
-  val hunter: Hunter
+  val hunter: Hunter[TItem]
 
   /** quests regardless of completion */
-  val quests: Seq[Quest]
+  val quests: Seq[Quest[TItemType]]
 
   /** Get craft recipes */
-  val crafts: Crafts
+  val crafts: Crafts[TItemType]
 
   def addCompletedQuest(questId: Long): Unit
 
@@ -25,7 +25,7 @@ trait GameState {
     * @param questID to find
     * @return quest with id questId if any else None
     */
-  def findQuest(questID: Long): Option[Quest] = {
+  def findQuest(questID: Long): Option[Quest[TItemType]] = {
     quests.find(q => q.getUniqueId == questID)
   }
 
@@ -46,7 +46,7 @@ trait GameState {
     * @param itemId to find
     * @return item with id itemId if any else None
     */
-  def findItem(itemId: Long): Option[Item] = {
+  def findItem(itemId: Long): Option[TItem] = {
     hunter.inventory.findItem(itemId)
   }
 
@@ -61,7 +61,7 @@ trait GameState {
     *
     * @return quest completed
     */
-  def getCompletedQuests: Seq[Quest] = {
+  def getCompletedQuests: Seq[Quest[TItemType]] = {
     quests.filter(q => isCompletedQuest(q.getUniqueId))
   }
 

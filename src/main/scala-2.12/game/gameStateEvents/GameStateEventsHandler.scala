@@ -3,50 +3,50 @@ package game.gameStateEvents
 import game.gameStatistics.DefaultGameStatistics
 import game.gamestate.GameState
 import game.id.Identifiable
-import game.item.{AbstractItemFactory, DefaultItemFactory, Item}
+import game.item.{AbstractItemFactory, Item, ItemType}
 import game.questEvents.QuestEvents
 import game.uiEvents.UIEvents
 
 /**
   * Created by nol on 19/12/17.
   */
-class GameStateEventsHandler(gameState: GameState, abstractItemFactory: AbstractItemFactory = DefaultItemFactory.getDefaultItemFactory) {
+class GameStateEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameState[TItem, TItemType], gameStateEvents: GameStateEvents, questEvents: QuestEvents, uIEvents: UIEvents, abstractItemFactory: AbstractItemFactory[TItem, TItemType]) {
 
   type Id = Identifiable.Id
 
-  def onItemCrafted(result: Item): Unit = {
-    gameState.hunter.inventory.addItems(result)
-    DefaultGameStatistics.itemCraftedCount() = DefaultGameStatistics.itemCraftedCount.now + 1
-    UIEvents.itemObtained(result.getUniqueId)
+  def onItemCrafted(itemId: Id): Unit = {
+    gameState.findItem(itemId) match {
+      case Some(result) =>
+        DefaultGameStatistics.itemCraftedCount() = DefaultGameStatistics.itemCraftedCount.now + 1
+        uIEvents.itemObtained(result.getUniqueId)
+      case None => uIEvents.itemIdNotFound(itemId)
+    }
   }
 
   def onHunterRenamed(newName: String): Unit = {
     gameState.hunter.name = newName
-    UIEvents.hunterRenamed(newName)
+    uIEvents.hunterRenamed(newName)
   }
 
-  def onItemEquipped(item: Item): Unit = {
-    UIEvents.itemEquipped(item)
+  def onItemEquipped(itemId: Id): Unit = {
+    uIEvents.itemEquipped(itemId)
   }
 
-  def onItemNotEquipped(item: Item): Unit = {
-    UIEvents.itemNotEquipped(item)
+  def onItemNotEquipped(itemId: Id): Unit = {
+    uIEvents.itemNotEquipped(itemId)
   }
 
   def onQuestStarted(questId: Id): Unit = {
-    gameState.findQuest(questId) match {
-      case Some(quest) => QuestEvents.questStarted(quest)
-      case None => UIEvents.questIdNotFound(questId)
-    }
+    questEvents.questStarted(questId)
   }
 
   def onQuestCompleted(questId: Id): Unit = {
     gameState.addCompletedQuest(questId)
-    UIEvents.questCompleted(questId)
+    uIEvents.questCompleted(questId)
   }
 
   def onQuestSucceeded(questId: Id): Unit = {
-    if (!gameState.isCompletedQuest(questId)) GameStateEvents.questCompleted(questId)
+    if (!gameState.isCompletedQuest(questId)) gameStateEvents.questCompleted(questId)
   }
 
   def onEquipItem(itemId: Id): Unit = {
@@ -54,18 +54,18 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
       case Some(i) =>
         val equipped = gameState.hunter.inventory.tryEquipItem(i.getUniqueId, force = true)
         if (equipped) {
-          GameStateEvents.itemEquipped(i)
+          gameStateEvents.itemEquipped(i.getUniqueId)
         } else {
-          GameStateEvents.itemNotEquipped(i)
+          gameStateEvents.itemNotEquipped(i.getUniqueId)
         }
-      case None => UIEvents.itemIdNotFound(itemId)
+      case None => uIEvents.itemIdNotFound(itemId)
     }
   }
 
   def onUnEquipItem(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
       case Some(i) => gameState.hunter.inventory.unEquipItem(i.getUniqueId)
-      case None => UIEvents.itemIdNotFound(itemId)
+      case None => uIEvents.itemIdNotFound(itemId)
     }
   }
 
@@ -74,57 +74,59 @@ class GameStateEventsHandler(gameState: GameState, abstractItemFactory: Abstract
       case (Some(i1), Some(i2)) =>
         val craftResult =
           if (i2.isMaterial) {
-            gameState.crafts.findCraftResult(i1.getItemType, i2.getItemType)
+            gameState.crafts.findCraftResult(i1.getItemTypeId, i2.getItemTypeId)
           } else {
-            gameState.crafts.findCraftResult(i2.getItemType, i1.getItemType)
+            gameState.crafts.findCraftResult(i2.getItemTypeId, i1.getItemTypeId)
           }
         craftResult match {
           case Some(result) =>
-            GameStateEvents.itemCrafted(abstractItemFactory.createItem(result))
-          case None => UIEvents.craftNotFound(itemIds._1, itemIds._2)
+            val resultItem = abstractItemFactory.createItem(result)
+            gameState.hunter.inventory.addItems(resultItem)
+            gameStateEvents.itemCrafted(resultItem.getUniqueId)
+          case None => uIEvents.craftNotFound(itemIds._1, itemIds._2)
         }
-      case (None, _) => UIEvents.itemIdNotFound(itemIds._1)
-      case (_, None) => UIEvents.itemIdNotFound(itemIds._2)
+      case (None, _) => uIEvents.itemIdNotFound(itemIds._1)
+      case (_, None) => uIEvents.itemIdNotFound(itemIds._2)
     }
   }
 
-  GameStateEvents.itemCrafted += {
-    (result: Item) => onItemCrafted(result)
+  gameStateEvents.itemCrafted += {
+    (itemId: Id) => onItemCrafted(itemId)
   }
 
-  GameStateEvents.hunterRenamed += {
+  gameStateEvents.hunterRenamed += {
     (newName: String) => onHunterRenamed(newName)
   }
 
-  GameStateEvents.itemEquipped += {
-    (item: Item) => onItemEquipped(item)
+  gameStateEvents.itemEquipped += {
+    (itemId: Id) => onItemEquipped(itemId)
   }
 
-  GameStateEvents.itemNotEquipped += {
-    (item: Item) => onItemNotEquipped(item)
+  gameStateEvents.itemNotEquipped += {
+    (itemId: Id) => onItemNotEquipped(itemId)
   }
 
-  GameStateEvents.questStarted += {
+  gameStateEvents.questStarted += {
     (questId: Id) => onQuestStarted(questId)
   }
 
-  GameStateEvents.questCompleted += {
+  gameStateEvents.questCompleted += {
     (questId: Id) => onQuestCompleted(questId)
   }
 
-  GameStateEvents.questSucceeded += {
+  gameStateEvents.questSucceeded += {
     (questId: Id) => onQuestSucceeded(questId)
   }
 
-  GameStateEvents.equipItem += {
+  gameStateEvents.equipItem += {
     (itemId: Id) => onEquipItem(itemId)
   }
 
-  GameStateEvents.unEquipItem += {
+  gameStateEvents.unEquipItem += {
     (itemId: Id) => onUnEquipItem(itemId)
   }
 
-  GameStateEvents.craftItem += {
+  gameStateEvents.craftItem += {
     (itemIds: (Id, Id)) => onCraftItem(itemIds)
   }
 }

@@ -7,103 +7,103 @@ import game.uiEvents.UIEvents
 /**
   * Created by nol on 12/11/17.
   */
-class CommandEventsHandler() {
+class CommandEventsHandler(commandEvents: CommandEvents, uIEvents: UIEvents, gameStateEvents: GameStateEvents) {
 
   type Id = Identifiable.Id
 
   def onListQuests(): Unit = {
-    UIEvents.listQuests(Unit)
+    uIEvents.listQuests(Unit)
   }
 
   def onListInventory(): Unit = {
-    UIEvents.listInventory(Unit)
+    uIEvents.listInventory(Unit)
   }
 
   def onShowQuest(questId: Id): Unit = {
-    UIEvents.showQuest(questId)
+    uIEvents.showQuest(questId)
   }
 
   def onShowHunter(): Unit = {
-    UIEvents.showHunter(Unit)
+    uIEvents.showHunter(Unit)
   }
 
   def onEquipItem(itemId: Id): Unit = {
-    GameStateEvents.equipItem(itemId)
+    gameStateEvents.equipItem(itemId)
   }
 
   def onUnEquipItem(itemId: Id): Unit = {
-    GameStateEvents.unEquipItem(itemId)
+    gameStateEvents.unEquipItem(itemId)
   }
 
   def onShowItem(itemId: Id): Unit = {
-    UIEvents.showItem(itemId)
+    uIEvents.showItem(itemId)
   }
 
   def onRenameHunter(newName: String): Unit = {
-    GameStateEvents.hunterRenamed(newName)
+    gameStateEvents.hunterRenamed(newName)
   }
 
   def onStartQuest(questId: Id): Unit = {
-    GameStateEvents.questStarted(questId)
+    gameStateEvents.questStarted(questId)
   }
 
   def onShowStat(): Unit = {
-    UIEvents.showStat(Unit)
+    uIEvents.showStat(Unit)
   }
 
   def onShowCraft(itemId: Id): Unit = {
-    UIEvents.showCraft(itemId)
+    uIEvents.showCraft(itemId)
   }
 
   def onCraftItem(itemIds: (Id, Id)): Unit = {
-    GameStateEvents.craftItem(itemIds)
+    gameStateEvents.craftItem(itemIds)
   }
 
-  CommandEvents.listQuests += {
+  commandEvents.listQuests += {
     (_: Unit) => onListQuests()
   }
 
-  CommandEvents.listInventory += {
+  commandEvents.listInventory += {
     (_: Unit) => onListInventory()
   }
 
-  CommandEvents.showQuest += {
+  commandEvents.showQuest += {
     (questId: Id) => onShowQuest(questId)
   }
 
-  CommandEvents.showHunter += {
+  commandEvents.showHunter += {
     (_: Unit) => onShowHunter()
   }
 
-  CommandEvents.equipItem += {
+  commandEvents.equipItem += {
     (itemId: Id) => onEquipItem(itemId)
   }
 
-  CommandEvents.unEquipItem += {
+  commandEvents.unEquipItem += {
     (itemId: Id) => onUnEquipItem(itemId)
   }
 
-  CommandEvents.showItem += {
+  commandEvents.showItem += {
     (itemId: Id) => onShowItem(itemId)
   }
 
-  CommandEvents.renameHunter += {
+  commandEvents.renameHunter += {
     (newName: String) => onRenameHunter(newName)
   }
 
-  CommandEvents.startQuest += {
+  commandEvents.startQuest += {
     (questId: Id) => onStartQuest(questId)
   }
 
-  CommandEvents.showCraft += {
+  commandEvents.showCraft += {
     (itemId: Id) => onShowCraft(itemId)
   }
 
-  CommandEvents.craftItem += {
+  commandEvents.craftItem += {
     (itemIds: (Id, Id)) => onCraftItem(itemIds)
   }
 
-  CommandEvents.showStat += {
+  commandEvents.showStat += {
     (_: Unit) => onShowStat()
   }
 }

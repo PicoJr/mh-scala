@@ -7,19 +7,8 @@ import game.id.Identifiable
   */
 trait Item extends ItemType with Identifiable {
 
-  /** Get item type
-    *
-    * @return item type
-    */
-  def getItemType: ItemType
+  type Id = Identifiable.Id
 
-  /** Same as getItemType.getUniqueId == itemType.getUniqueId
-    *
-    * @param itemType checked
-    * @return getItemType.getUniqueId == itemType.getUniqueId
-    */
-  def isItemType(itemType: ItemType): Boolean = {
-    getItemType.getUniqueId == itemType.getUniqueId
-  }
+  def getItemTypeId: Id
 
 }

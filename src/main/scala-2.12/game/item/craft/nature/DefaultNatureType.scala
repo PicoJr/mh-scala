@@ -1,17 +1,13 @@
 package game.item.craft.nature
 
 import game.config.{DefaultGameConfig, GameConfig}
-import game.item.{AbstractItemTypeFactory, DefaultItemTypeFactory}
+import game.item.ItemType
 import game.util.Procedural
 
 /**
   * Created by nol on 21/12/17.
   */
-abstract class DefaultNatureType extends NatureType {
-
-  protected val gameConfig: GameConfig = DefaultGameConfig.getGameConfig
-
-  protected val itemTypeFactory: AbstractItemTypeFactory = DefaultItemTypeFactory.getDefaultItemFactory
+abstract class DefaultNatureType[TItemType <: ItemType](val gameConfig: GameConfig = DefaultGameConfig.getGameConfig) extends NatureType[TItemType] {
 
   protected def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
 

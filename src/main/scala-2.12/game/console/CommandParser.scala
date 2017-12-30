@@ -8,7 +8,7 @@ import scala.collection.JavaConverters
 /**
   * Created by nol on 18/11/17.
   */
-object CommandParser {
+class CommandParser(commandEvents: CommandEvents) {
 
   private final val doc: String =
     """ Monster Hunter
@@ -38,52 +38,52 @@ object CommandParser {
       }
       else if (simpleOpts.asBoolean("hunter")) {
         if (simpleOpts.asBoolean("show")) {
-          CommandEvents.showHunter(Unit)
+          commandEvents.showHunter(Unit)
         }
       }
       else if (simpleOpts.asBoolean("item")) {
         if (simpleOpts.asBoolean("show")) {
-          CommandEvents.showItem(simpleOpts.asLong("<itemId>"))
+          commandEvents.showItem(simpleOpts.asLong("<itemId>"))
         }
         if (simpleOpts.asBoolean("equip")) {
           for (itemId <- simpleOpts.asSeq("<itemId>")) {
-            CommandEvents.equipItem(itemId.toString.toLong)
+            commandEvents.equipItem(itemId.toString.toLong)
           }
         }
         if (simpleOpts.asBoolean("unequip")) {
           for (itemId <- simpleOpts.asSeq("<itemId>")) {
-            CommandEvents.unEquipItem(itemId.toString.toLong)
+            commandEvents.unEquipItem(itemId.toString.toLong)
           }
         }
         if (simpleOpts.asBoolean("ls")) {
-          CommandEvents.listInventory(Unit)
+          commandEvents.listInventory(Unit)
         }
       }
       else if (simpleOpts.asBoolean("craft")) {
         if (simpleOpts.asBoolean("show")) {
           for (itemId <- simpleOpts.asSeq("<itemId>")) {
-            CommandEvents.showCraft(itemId.toString.toLong)
+            commandEvents.showCraft(itemId.toString.toLong)
           }
         }
         if (simpleOpts.asBoolean("new")) {
           val materialId = simpleOpts.asLong("<materialId>")
           for (itemId <- simpleOpts.asSeq("<itemId>")) {
-            CommandEvents.craftItem(materialId, itemId.toString.toLong)
+            commandEvents.craftItem(materialId, itemId.toString.toLong)
           }
         }
       }
       else if (simpleOpts.asBoolean("quest")) {
         if (simpleOpts.asBoolean("start")) {
           for (questId <- simpleOpts.asSeq("<questId>")) {
-            CommandEvents.startQuest(questId.toString.toLong)
+            commandEvents.startQuest(questId.toString.toLong)
           }
         }
         if (simpleOpts.asBoolean("ls")) {
-          CommandEvents.listQuests(Unit)
+          commandEvents.listQuests(Unit)
         }
       }
       else if (simpleOpts.asBoolean("stat")) {
-        CommandEvents.showStat(Unit)
+        commandEvents.showStat(Unit)
       }
     } catch {
       case _: DocoptExitException =>

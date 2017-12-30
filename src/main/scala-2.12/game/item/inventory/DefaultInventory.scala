@@ -6,10 +6,10 @@ import game.item._
 /** Holds items
   * Created by nol on 06/11/17.
   */
-class DefaultInventory extends Inventory {
+class DefaultInventory[TItem <: Item] extends Inventory[TItem] {
 
-  private var items: Seq[Item] = Seq.empty
-  private var equipped: Set[Item] = Set.empty
+  private var items = Seq.empty[TItem]
+  private var equipped = Set.empty[TItem]
 
   private def unEquipWeapon(): Unit = {
     getWeaponEquipped match {
@@ -29,13 +29,13 @@ class DefaultInventory extends Inventory {
     equipped.exists(i => i.getUniqueId == itemId)
   }
 
-  override def getItems: Seq[Item] = items
+  override def getItems: Seq[TItem] = items
 
-  override def findItem(itemId: Long): Option[Item] = {
+  override def findItem(itemId: Long): Option[TItem] = {
     items.find(i => i.getUniqueId == itemId)
   }
 
-  override def addItems(items: Item*): Unit = {
+  override def addItems(items: TItem*): Unit = {
     this.items ++= items
   }
 
@@ -73,11 +73,11 @@ class DefaultInventory extends Inventory {
     }
   }
 
-  private def equipItem(item: Item): Unit = {
+  private def equipItem(item: TItem): Unit = {
     equipped += item
   }
 
-  override def canBeEquipped(item: Item): Boolean = {
+  override def canBeEquipped(item: TItem): Boolean = {
     if (item.isEquipment) {
       item.getSlotTypeRequirement match {
         case CHARM_SLOT(slot) => (getCharmSlotsUsed + slot) <= getCharmSlotsProvided

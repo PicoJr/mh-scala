@@ -1,24 +1,21 @@
 package game.uiEvents
 
 import game.gamestate.GameState
-import game.item.Item
-import game.ui.{DefaultDescription, Description}
+import game.id.Identifiable
+import game.item.{Item, ItemType}
+import game.ui.Description
 
 /**
   * Created by nol on 19/12/17.
   */
-class UIEventsHandler(gameState: GameState, description: Description) {
+class UIEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameState[TItem, TItemType], uIEvents: UIEvents, description: Description[TItem, TItemType]) {
 
-  def this(gameState: GameState) {
-    this(gameState, new DefaultDescription(gameState))
-  }
-
-  type Id = Long
+  type Id = Identifiable.Id
 
   def onItemObtained(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
       case Some(item) => println("obtained: " + description.descriptionItem(item))
-      case None => UIEvents.itemIdNotFound(itemId)
+      case None => uIEvents.itemIdNotFound(itemId)
     }
   }
 
@@ -30,12 +27,12 @@ class UIEventsHandler(gameState: GameState, description: Description) {
     println(s"new name: $newName")
   }
 
-  def onItemEquipped(item: Item): Unit = {
-    println(s"item with id ${item.getUniqueId} equipped")
+  def onItemEquipped(itemId: Id): Unit = {
+    println(s"item with id $itemId equipped")
   }
 
-  def onItemNotEquipped(item: Item): Unit = {
-    println(s"item with id ${item.getUniqueId} could not be equipped")
+  def onItemNotEquipped(itemId: Id): Unit = {
+    println(s"item with id $itemId could not be equipped")
   }
 
   def onListQuests(): Unit = {
@@ -51,7 +48,7 @@ class UIEventsHandler(gameState: GameState, description: Description) {
   def onShowQuest(questId: Id): Unit = {
     gameState.findQuest(questId) match {
       case Some(quest) => println(description.descriptionQuest(quest))
-      case None => UIEvents.questIdNotFound(questId)
+      case None => uIEvents.questIdNotFound(questId)
     }
   }
 
@@ -70,66 +67,66 @@ class UIEventsHandler(gameState: GameState, description: Description) {
   def onShowCraft(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
       case Some(item) => println(description.descriptionRecipesWith(item))
-      case None => UIEvents.itemIdNotFound(itemId)
+      case None => uIEvents.itemIdNotFound(itemId)
     }
   }
 
   def onShowItem(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
       case Some(item) => println(description.descriptionItem(item))
-      case None => UIEvents.itemIdNotFound(itemId)
+      case None => uIEvents.itemIdNotFound(itemId)
     }
   }
 
-  UIEvents.itemObtained += {
+  uIEvents.itemObtained += {
     (itemId: Id) => onItemObtained(itemId)
   }
 
-  UIEvents.craftNotFound += {
+  uIEvents.craftNotFound += {
     (ids: (Id, Id)) => onCraftNotFound(ids)
   }
 
-  UIEvents.hunterRenamed += {
+  uIEvents.hunterRenamed += {
     (newName: String) => onHunterRenamed(newName)
   }
 
-  UIEvents.itemEquipped += {
-    (item: Item) => onItemEquipped(item)
+  uIEvents.itemEquipped += {
+    (itemId: Id) => onItemEquipped(itemId)
   }
 
-  UIEvents.itemNotEquipped += {
-    (item: Item) => onItemNotEquipped(item)
+  uIEvents.itemNotEquipped += {
+    (itemId: Id) => onItemNotEquipped(itemId)
   }
 
-  UIEvents.listQuests += {
+  uIEvents.listQuests += {
     (_: Unit) => onListQuests()
   }
 
-  UIEvents.listInventory += {
+  uIEvents.listInventory += {
     (_: Unit) => onListInventory()
   }
 
-  UIEvents.showQuest += {
+  uIEvents.showQuest += {
     (questId: Id) => onShowQuest(questId)
   }
 
-  UIEvents.questIdNotFound += {
+  uIEvents.questIdNotFound += {
     (questId: Id) => onQuestIdNotFound(questId)
   }
 
-  UIEvents.showHunter += {
+  uIEvents.showHunter += {
     (_: Unit) => onShowHunter()
   }
 
-  UIEvents.showStat += {
+  uIEvents.showStat += {
     (_: Unit) => onShowStat()
   }
 
-  UIEvents.showCraft += {
+  uIEvents.showCraft += {
     (itemId: Id) => onShowCraft(itemId)
   }
 
-  UIEvents.showItem += {
+  uIEvents.showItem += {
     (itemId: Id) => onShowItem(itemId)
   }
 

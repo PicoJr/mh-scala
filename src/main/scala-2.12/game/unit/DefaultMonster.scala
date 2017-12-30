@@ -12,17 +12,17 @@ case class DefaultMonster(monsterName: String, uniqueId: Long, monsterLife: Int,
 
   override var name: String = monsterName
 
-  override val life: Int = monsterLife
+  override def getLife: Int = monsterLife
 
-  override val armor: Int = monsterArmor
+  override def getArmor: Int = monsterArmor
 
-  override val damage: Int = monsterDamage
+  override def getDamage: Int = monsterDamage
 
-  override val elementalResistances: Seq[ElementType] = monsterArmorElementTypes
+  override def getElementalResistances: Seq[ElementType] = monsterArmorElementTypes
 
-  override val attackStatusType: StatusType = monsterAttackStatusType
+  override def getAttackStatusType: StatusType = monsterAttackStatusType
 
-  override val statusResistances: Seq[StatusType] = monsterArmorStatusTypes
+  override def getStatusResistances: Seq[StatusType] = monsterArmorStatusTypes
 
-  override val attackElementType: ElementType = monsterAttackElementType
+  override def getAttackElementType: ElementType = monsterAttackElementType
 }

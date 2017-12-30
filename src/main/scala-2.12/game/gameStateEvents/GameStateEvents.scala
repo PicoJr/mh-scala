@@ -1,20 +1,19 @@
 package game.gameStateEvents
 
 import game.id.Identifiable
-import game.item.Item
 import rescala._
 
 /**
   * Created by nol on 18/12/17.
   */
-object GameStateEvents {
+class GameStateEvents {
   type Id = Identifiable.Id
 
-  val itemCrafted: rescala.Evt[Item] = Evt[Item]()
+  val itemCrafted: rescala.Evt[Id] = Evt[Id]()
 
-  val itemEquipped: rescala.Evt[Item] = Evt[Item]()
+  val itemEquipped: rescala.Evt[Id] = Evt[Id]()
 
-  val itemNotEquipped: rescala.Evt[Item] = Evt[Item]()
+  val itemNotEquipped: rescala.Evt[Id] = Evt[Id]()
 
   val hunterRenamed: rescala.Evt[String] = Evt[String]()
 

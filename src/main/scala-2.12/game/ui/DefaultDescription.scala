@@ -12,7 +12,7 @@ import game.unit.{GameUnit, Hunter, Monster}
 /** Default Description.
   * Created by nol on 11/11/17.
   */
-class DefaultDescription(gameState: GameState) extends Description {
+class DefaultDescription(gameState: GameState[Item, ItemType]) extends Description[Item, ItemType] {
 
   override def descriptionRecipesWith(item: Item): String = {
     val desc = new StringBuilder()
@@ -32,11 +32,11 @@ class DefaultDescription(gameState: GameState) extends Description {
     DefaultDescription.descriptionItem(item)
   }
 
-  override def descriptionInventory(inventory: Inventory): String = {
+  override def descriptionInventory(inventory: Inventory[Item]): String = {
     DefaultDescription.descriptionInventory(inventory)
   }
 
-  override def descriptionHunter(hunter: Hunter): String = {
+  override def descriptionHunter(hunter: Hunter[Item]): String = {
     DefaultDescription.descriptionHunter(hunter)
   }
 
@@ -44,7 +44,7 @@ class DefaultDescription(gameState: GameState) extends Description {
     DefaultDescription.descriptionMonster(monster)
   }
 
-  override def descriptionQuest(quest: Quest): String = {
+  override def descriptionQuest(quest: Quest[ItemType]): String = {
     val desc = new StringBuilder()
     if (gameState.isCompletedQuest(quest.getUniqueId)) {
       desc.append("<completed>\n")
@@ -96,7 +96,7 @@ object DefaultDescription {
     desc.toString()
   }
 
-  def descriptionInventory(inventory: Inventory): String = {
+  def descriptionInventory(inventory: Inventory[Item]): String = {
     val desc = new StringBuilder()
     desc.append("slots: ").append(inventory.getCharmSlotsUsed)
     desc.append("/").append(inventory.getCharmSlotsProvided).append("\n")
@@ -124,23 +124,23 @@ object DefaultDescription {
     val desc = new StringBuilder()
     desc.append(gameUnit.name)
     desc.append("\n")
-    desc.append("life:  ").append(gameUnit.life)
+    desc.append("life:  ").append(gameUnit.getLife)
     desc.append("\n")
-    desc.append("dmg:   ").append(gameUnit.damage).append(" ")
-    desc.append("{").append(descriptionElementType(gameUnit.attackElementType)).append("}")
-    desc.append("<").append(descriptionStatusType(gameUnit.attackStatusType)).append(">")
+    desc.append("dmg:   ").append(gameUnit.getDamage).append(" ")
+    desc.append("{").append(descriptionElementType(gameUnit.getAttackElementType)).append("}")
+    desc.append("<").append(descriptionStatusType(gameUnit.getAttackStatusType)).append(">")
     desc.append("\n")
-    desc.append("armor: ").append(gameUnit.armor).append(" ")
-    for (element <- gameUnit.elementalResistances) {
+    desc.append("armor: ").append(gameUnit.getArmor).append(" ")
+    for (element <- gameUnit.getElementalResistances) {
       desc.append("{").append(descriptionElementType(element)).append("}")
     }
-    for (status <- gameUnit.statusResistances) {
+    for (status <- gameUnit.getStatusResistances) {
       desc.append("<").append(descriptionStatusType(status)).append(">")
     }
     desc.toString()
   }
 
-  def descriptionHunter(hunter: Hunter): String = {
+  def descriptionHunter(hunter: Hunter[Item]): String = {
     descriptionGameUnit(hunter)
   }
 
@@ -151,7 +151,7 @@ object DefaultDescription {
     desc.toString()
   }
 
-  def descriptionQuest(quest: Quest): String = {
+  def descriptionQuest(quest: Quest[ItemType]): String = {
     val desc = new StringBuilder()
     desc.append("quest[").append(quest.getUniqueId).append("]")
     desc.append(" level: ").append(quest.level)

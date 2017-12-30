@@ -9,5 +9,5 @@ import game.item.ItemType
 trait AddOn[TItemType <: ItemType] {
   val name: String
 
-  def create(level: Int, itemType: TItemType): TItemType
+  def decorate(level: Int, itemType: TItemType): TItemType
 }
