@@ -78,6 +78,13 @@ class UIEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameState
     }
   }
 
+  def onQuestCompleted(questId: Id): Unit = {
+    gameState.findQuest(questId) match {
+      case Some(quest) => println(s"${quest.monster.name} was defeated! ($questId completed)")
+      case None => uIEvents.questIdNotFound(questId)
+    }
+  }
+
   uIEvents.itemObtained += {
     (itemId: Id) => onItemObtained(itemId)
   }
@@ -128,6 +135,10 @@ class UIEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameState
 
   uIEvents.showItem += {
     (itemId: Id) => onShowItem(itemId)
+  }
+
+  uIEvents.questCompleted += {
+    (questId: Id) => onQuestCompleted(questId)
   }
 
 }
