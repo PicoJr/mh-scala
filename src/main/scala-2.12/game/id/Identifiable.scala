@@ -5,11 +5,13 @@ package game.id
   */
 trait Identifiable {
 
-  type UniqueId = Long
-
   /** Get unique id
     *
     * @return unique id
     */
-  def getUniqueId: UniqueId
+  def getUniqueId: Identifiable.Id
+}
+
+object Identifiable {
+  type Id = Long
 }

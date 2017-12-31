@@ -2,55 +2,48 @@ package game.item.craft
 
 import game.item._
 import game.item.craft.addOn.{AddOn, CharmSlotAddOn}
-import game.item.craft.nature.{NatureType, WEAPON}
+import game.item.craft.nature.NatureType
 
 /**
   * Created by nol on 29/11/17.
   */
-class CategoryBuilder() {
+class CategoryBuilder[TItemType <: ItemType](natureType: NatureType[TItemType]) {
 
-  private var natureType: NatureType = WEAPON
-  private var addOns: Seq[AddOn] = Seq.empty
+  private var addOns: Seq[AddOn[TItemType]] = Seq.empty
 
-  def getNature: NatureType = natureType
+  def getNature: NatureType[TItemType] = natureType
 
-  def getAddOns: Seq[AddOn] = addOns
+  def getAddOns: Seq[AddOn[TItemType]] = addOns
 
-  def withNature(natureType: NatureType): CategoryBuilder = {
-    this.natureType = natureType
-    this
-  }
-
-  def withAddOn(addOn: AddOn): CategoryBuilder = {
+  def withAddOn(addOn: AddOn[TItemType]): CategoryBuilder[TItemType] = {
     addOns = addOns :+ addOn
     this
   }
 
-  def withAddOns(addOns: AddOn*): CategoryBuilder = {
+  def withAddOns(addOns: AddOn[TItemType]*): CategoryBuilder[TItemType] = {
     this.addOns = this.addOns ++ Seq(addOns: _*)
     this
   }
 
-  def copy: CategoryBuilder = {
-    (new CategoryBuilder).withNature(natureType).withAddOns(addOns: _*)
+  def copy: CategoryBuilder[TItemType] = {
+    new CategoryBuilder(natureType).withAddOns(addOns: _*)
   }
 
   def createDescription: DescriptionBuilder = {
-    val descriptionBuilder = new DescriptionBuilder()
-    descriptionBuilder.addNature(getNature.name)
+    val descriptionBuilder = new DescriptionBuilder(getNature.name)
     for (addOn <- getAddOns) {
       addOn match {
-        case CharmSlotAddOn =>
+        case CharmSlotAddOn(_) =>
         case _ => descriptionBuilder.addAdjective(addOn.name)
       }
     }
     descriptionBuilder
   }
 
-  def createItemType(level: Int): ItemType = {
-    var itemType = getNature.createItemType(level)
+  def create(level: Int): TItemType = {
+    var itemType = getNature.create(level)
     for (addOn <- getAddOns) {
-      itemType = addOn.createItemType(level, itemType)
+      itemType = addOn.decorate(level, itemType)
     }
     itemType
   }

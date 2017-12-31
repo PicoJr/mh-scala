@@ -1,14 +1,14 @@
 package game.uiEvents
 
-import game.item.Item
+import game.id.Identifiable
 import rescala._
 
 /**
   * Created by nol on 19/12/17.
   */
-object UIEvents {
+class UIEvents {
 
-  type Id = Long
+  type Id = Identifiable.Id
 
   val itemObtained: rescala.Evt[Id] = Evt[Id]()
 
@@ -20,9 +20,9 @@ object UIEvents {
 
   val hunterRenamed: rescala.Evt[String] = Evt[String]()
 
-  val itemEquipped: rescala.Evt[Item] = Evt[Item]()
+  val itemEquipped: rescala.Evt[Id] = Evt[Id]()
 
-  val itemNotEquipped: rescala.Evt[Item] = Evt[Item]()
+  val itemNotEquipped: rescala.Evt[Id] = Evt[Id]()
 
   val listQuests: rescala.Evt[Unit] = Evt[Unit]()
 

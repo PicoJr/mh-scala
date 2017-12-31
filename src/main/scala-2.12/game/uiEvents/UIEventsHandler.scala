@@ -1,90 +1,144 @@
 package game.uiEvents
 
 import game.gamestate.GameState
-import game.item.Item
-import game.ui.{DefaultDescription, Description}
+import game.id.Identifiable
+import game.item.{Item, ItemType}
+import game.ui.Description
 
 /**
   * Created by nol on 19/12/17.
   */
-class UIEventsHandler(gameState: GameState, description: Description) {
+class UIEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameState[TItem, TItemType], uIEvents: UIEvents, description: Description[TItem, TItemType]) {
 
-  def this(gameState: GameState) {
-    this(gameState, new DefaultDescription(gameState))
+  type Id = Identifiable.Id
+
+  def onItemObtained(itemId: Id): Unit = {
+    gameState.findItem(itemId) match {
+      case Some(item) => println("obtained: " + description.descriptionItem(item))
+      case None => uIEvents.itemIdNotFound(itemId)
+    }
   }
 
-  type Id = Long
-
-  UIEvents.itemObtained += {
-    (itemId: Long) =>
-      gameState.findItem(itemId) match {
-        case Some(item) => println("obtained: " + description.descriptionItem(item))
-        case None => UIEvents.itemIdNotFound(itemId)
-      }
+  def onCraftNotFound(ids: (Id, Id)): Unit = {
+    println("no matching craft recipe found")
   }
 
-  UIEvents.craftNotFound += {
-    (_: (Id, Id)) => println("no matching craft recipe found")
+  def onHunterRenamed(newName: String): Unit = {
+    println(s"new name: $newName")
   }
 
-  UIEvents.hunterRenamed += {
-    (newName: String) => println(s"new name: $newName")
+  def onItemEquipped(itemId: Id): Unit = {
+    println(s"item with id $itemId equipped")
   }
 
-  UIEvents.itemEquipped += {
-    (item: Item) => println(s"item with id ${item.getUniqueId} equipped")
+  def onItemNotEquipped(itemId: Id): Unit = {
+    println(s"item with id $itemId could not be equipped")
   }
 
-  UIEvents.itemNotEquipped += {
-    (item: Item) => println(s"item with id ${item.getUniqueId} could not be equipped")
+  def onListQuests(): Unit = {
+    for (q <- gameState.quests) {
+      println(description.descriptionQuest(q))
+    }
   }
 
-  UIEvents.listQuests += {
-    (_: Unit) =>
-      for (q <- gameState.getQuests) {
-        println(description.descriptionQuest(q))
-      }
+  def onListInventory(): Unit = {
+    println(description.descriptionInventory(gameState.hunter.inventory))
   }
 
-  UIEvents.listInventory += {
-    (_: Unit) => println(description.descriptionInventory(gameState.getHunter.getInventory))
+  def onShowQuest(questId: Id): Unit = {
+    gameState.findQuest(questId) match {
+      case Some(quest) => println(description.descriptionQuest(quest))
+      case None => uIEvents.questIdNotFound(questId)
+    }
   }
 
-  UIEvents.showQuest += {
-    (questId: Id) =>
-      gameState.findQuest(questId) match {
-        case Some(quest) => println(description.descriptionQuest(quest))
-        case None => UIEvents.questIdNotFound(questId)
-      }
-
+  def onQuestIdNotFound(questId: Id): Unit = {
+    println(s"quest with id $questId not found")
   }
 
-  UIEvents.questIdNotFound += {
-    (questId: Id) => println(s"quest with id $questId not found")
+  def onShowHunter(): Unit = {
+    println(description.descriptionHunter(gameState.hunter))
   }
 
-  UIEvents.showHunter += {
-    (_: Unit) => println(description.descriptionHunter(gameState.getHunter))
+  def onShowStat(): Unit = {
+    println(description.descriptionStatistics())
   }
 
-  UIEvents.showStat += {
-    (_: Unit) => println(description.descriptionStatistics())
+  def onShowCraft(itemId: Id): Unit = {
+    gameState.findItem(itemId) match {
+      case Some(item) => println(description.descriptionRecipesWith(item))
+      case None => uIEvents.itemIdNotFound(itemId)
+    }
   }
 
-  UIEvents.showCraft += {
-    (itemId: Id) =>
-      gameState.findItem(itemId) match {
-        case Some(item) => println(description.descriptionRecipesWith(item))
-        case None => UIEvents.itemIdNotFound(itemId)
-      }
+  def onShowItem(itemId: Id): Unit = {
+    gameState.findItem(itemId) match {
+      case Some(item) => println(description.descriptionItem(item))
+      case None => uIEvents.itemIdNotFound(itemId)
+    }
   }
 
-  UIEvents.showItem += {
-    (itemId: Id) =>
-      gameState.findItem(itemId) match {
-        case Some(item) => println(description.descriptionItem(item))
-        case None => UIEvents.itemIdNotFound(itemId)
-      }
+  def onQuestCompleted(questId: Id): Unit = {
+    gameState.findQuest(questId) match {
+      case Some(quest) => println(s"${quest.monster.name} was defeated! ($questId completed)")
+      case None => uIEvents.questIdNotFound(questId)
+    }
+  }
+
+  uIEvents.itemObtained += {
+    (itemId: Id) => onItemObtained(itemId)
+  }
+
+  uIEvents.craftNotFound += {
+    (ids: (Id, Id)) => onCraftNotFound(ids)
+  }
+
+  uIEvents.hunterRenamed += {
+    (newName: String) => onHunterRenamed(newName)
+  }
+
+  uIEvents.itemEquipped += {
+    (itemId: Id) => onItemEquipped(itemId)
+  }
+
+  uIEvents.itemNotEquipped += {
+    (itemId: Id) => onItemNotEquipped(itemId)
+  }
+
+  uIEvents.listQuests += {
+    (_: Unit) => onListQuests()
+  }
+
+  uIEvents.listInventory += {
+    (_: Unit) => onListInventory()
+  }
+
+  uIEvents.showQuest += {
+    (questId: Id) => onShowQuest(questId)
+  }
+
+  uIEvents.questIdNotFound += {
+    (questId: Id) => onQuestIdNotFound(questId)
+  }
+
+  uIEvents.showHunter += {
+    (_: Unit) => onShowHunter()
+  }
+
+  uIEvents.showStat += {
+    (_: Unit) => onShowStat()
+  }
+
+  uIEvents.showCraft += {
+    (itemId: Id) => onShowCraft(itemId)
+  }
+
+  uIEvents.showItem += {
+    (itemId: Id) => onShowItem(itemId)
+  }
+
+  uIEvents.questCompleted += {
+    (questId: Id) => onQuestCompleted(questId)
   }
 
 }

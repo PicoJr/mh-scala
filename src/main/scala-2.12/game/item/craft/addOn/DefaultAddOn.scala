@@ -1,14 +1,15 @@
 package game.item.craft.addOn
 
 import game.config.{DefaultGameConfig, GameConfig}
+import game.item.ItemType
 import game.util.Procedural
 
 /**
   * Created by nol on 21/12/17.
   */
-abstract class DefaultAddOn extends AddOn {
+abstract class DefaultAddOn[TItemType <: ItemType](addOnName: String, val gameConfig: GameConfig = DefaultGameConfig.getGameConfig) extends AddOn[TItemType] {
 
-  protected val gameConfig: GameConfig = DefaultGameConfig.getGameConfig
+  override val name: String = addOnName
 
   protected def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
 

@@ -1,21 +1,22 @@
 package game.gamestate
 
 import game.item.craft.Crafts
+import game.item.{Item, ItemType}
 import game.quest._
 import game.unit.Hunter
 
 /** Holds all game entities and states.
   * Created by nol on 11/11/17.
   */
-class DefaultGameState(hunter: Hunter, quests: Seq[Quest], crafts: Crafts) extends GameState {
+class DefaultGameState[TItem <: Item, TItemType <: ItemType](gameHunter: Hunter[TItem], gameQuests: Seq[Quest[TItemType]], gameCrafts: Crafts[TItemType]) extends GameState[TItem, TItemType] {
 
   private var questsCompletedIds: Set[Long] = Set.empty
 
-  override def getHunter: Hunter = hunter
+  override val hunter: Hunter[TItem] = gameHunter
 
-  override def getQuests: Seq[Quest] = quests
+  override val quests: Seq[Quest[TItemType]] = gameQuests
 
-  override def getCrafts: Crafts = crafts
+  override val crafts: Crafts[TItemType] = gameCrafts
 
   override def isCompletedQuest(questId: Long): Boolean = questsCompletedIds.contains(questId)
 

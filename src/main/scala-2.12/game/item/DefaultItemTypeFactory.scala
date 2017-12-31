@@ -6,7 +6,7 @@ import game.item.ArmorPart.ArmorPart
 /**
   * Created by nol on 17/12/17.
   */
-class DefaultItemTypeFactory(idSupplier: IdSupplier) extends AbstractItemTypeFactory {
+class DefaultItemTypeFactory(idSupplier: IdSupplier) extends AbstractItemTypeFactory[ItemType] {
   override def createWeapon(level: Int, damage: Int): ItemType = {
     Damage(Equipment(new DefaultItemType(level, idSupplier.getNextUniqueId), WEAPON_SLOT), damage)
   }
@@ -26,7 +26,7 @@ class DefaultItemTypeFactory(idSupplier: IdSupplier) extends AbstractItemTypeFac
 
 object DefaultItemTypeFactory {
   private final val idSupplier = new DefaultIdSupplier()
-  private final val itemTypeFactory: AbstractItemTypeFactory = new DefaultItemTypeFactory(idSupplier)
+  private final val itemTypeFactory = new DefaultItemTypeFactory(idSupplier)
 
-  def getDefaultItemFactory: AbstractItemTypeFactory = itemTypeFactory
+  def getDefaultItemFactory: AbstractItemTypeFactory[ItemType] = itemTypeFactory
 }

@@ -3,76 +3,60 @@ package game.item.craft
 import game.config.{DefaultGameConfig, GameConfig}
 import game.item._
 import game.item.craft.addOn._
-import game.item.craft.bonus.{BonusType, DAMAGE, PROTECTION}
-import game.item.craft.nature.{ARMOR, CHARM, NatureType, WEAPON}
+import game.item.craft.bonus.BonusType
+import game.item.craft.nature._
 import game.item.element._
-import game.item.status.{NEUTRAL, SLEEP, STUN, StatusType}
+import game.item.status.StatusType
 
 /** Default craft factory.
   * FIXME: not very Open-Close friendly.
   * Created by nol on 20/11/17.
   */
-class DefaultCraftFactory(bonusTypes: Seq[BonusType],
-                          elementTypes: Seq[ElementType],
-                          natureTypes: Seq[NatureType],
-                          statusTypes: Seq[StatusType],
-                          gameConfig: GameConfig
-                         ) {
+class DefaultCraftFactory[TItemType <: ItemType](bonusTypes: Seq[BonusType], elementTypes: Seq[ElementType], natureTypes: Seq[NatureType[TItemType]], statusTypes: Seq[StatusType], decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType], gameConfig: GameConfig = DefaultGameConfig.getGameConfig) {
 
-  def this() {
-    this(
-      Seq(DAMAGE, PROTECTION),
-      Seq(ELECTRIC, FIRE, NORMAL, WATER),
-      Seq(WEAPON, new ARMOR(ArmorPart.HEAD), new ARMOR(ArmorPart.BODY), new ARMOR(ArmorPart.ARMS), new ARMOR(ArmorPart.LEGS), CHARM),
-      Seq(NEUTRAL, SLEEP, STUN),
-      DefaultGameConfig.getGameConfig
-    )
-  }
-
-  case class CraftStep(itemTypeRoot: ItemType, categoryRoot: CategoryBuilder, crafts: Crafts, materialPool: MaterialPool)
+  private class CraftStep(val itemTypeRoot: TItemType, val categoryRoot: CategoryBuilder[TItemType], val crafts: Crafts[TItemType], val materialPool: MaterialPool[TItemType])
 
   private def craftItemType(craftStep: CraftStep): Unit = {
-    def craftWithAddOn(craftStep: CraftStep, addOn: AddOn): Unit = {
+    def craftWithAddOn(craftStep: CraftStep, addOn: AddOn[TItemType]): Unit = {
       val resultCategory = craftStep.categoryRoot.copy.withAddOn(addOn)
-      val result = resultCategory.createItemType(craftStep.itemTypeRoot.getLevel + 1)
+      val result = resultCategory.create(craftStep.itemTypeRoot.getLevel + 1)
       val resultDescription = resultCategory.createDescription
       result.setName(resultDescription.getDescription)
       val material = craftStep.materialPool.getMaterial(addOn, craftStep.itemTypeRoot.getLevel)
       craftStep.crafts.addRecipe(craftStep.itemTypeRoot, material, result)
-      craftItemType(CraftStep(result, resultCategory, craftStep.crafts, craftStep.materialPool))
+      craftItemType(new CraftStep(result, resultCategory, craftStep.crafts, craftStep.materialPool))
     }
 
     if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin) {
       for (element <- elementTypes) {
-        craftWithAddOn(craftStep, new ElementAddOn(element))
+        craftWithAddOn(craftStep, ElementAddOn(element, decorator))
       }
     } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 1) {
       for (status <- statusTypes) {
-        craftWithAddOn(craftStep, new StatusAddOn(status))
+        craftWithAddOn(craftStep, StatusAddOn(status, decorator))
       }
     } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 2) {
       for (bonus <- bonusTypes) {
-        craftWithAddOn(craftStep, new BonusAddOn(bonus))
+        craftWithAddOn(craftStep, BonusAddOn(bonus, decorator))
       }
     } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 3) {
       for (bonus <- bonusTypes) {
-        craftWithAddOn(craftStep, new BonusAddOn(bonus))
+        craftWithAddOn(craftStep, BonusAddOn(bonus, decorator))
       }
     }
   }
 
-  def generateCraft: Crafts = {
-    val crafts = new DefaultCrafts
-    val materialPool = new MaterialPool
+  def generateCraft(crafts: Crafts[TItemType]): Crafts[TItemType] = {
+    val materialPool = new MaterialPool(itemTypeFactory)
     for (natureCategory <- natureTypes) {
-      val categoryRoot = (new CategoryBuilder).withNature(natureCategory)
+      val categoryRoot = new CategoryBuilder[TItemType](natureCategory)
       natureCategory match {
-        case CHARM => // a charm should not have charm add-ons...
-        case _ => categoryRoot.withAddOn(CharmSlotAddOn)
+        case Charm(_) => // a charm should not have charm add-ons...
+        case _ => categoryRoot.withAddOn(CharmSlotAddOn[TItemType](decorator))
       }
-      val itemTypeRoot = categoryRoot.createItemType(gameConfig.getLevelMin)
+      val itemTypeRoot = categoryRoot.create(gameConfig.getLevelMin)
       itemTypeRoot.setName(categoryRoot.createDescription.getDescription)
-      craftItemType(CraftStep(itemTypeRoot, categoryRoot, crafts, materialPool))
+      craftItemType(new CraftStep(itemTypeRoot, categoryRoot, crafts, materialPool))
     }
     crafts
   }

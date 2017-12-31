@@ -6,21 +6,23 @@ import game.item.status.StatusType
 /**
   * Created by nol on 06/12/17.
   */
-case class DefaultMonster(name: String, uniqueId: Long, life: Int, armor: Int, damage: Int, attackStatusType: StatusType, attackElementType: ElementType, armorStatusTypes: Seq[StatusType], armorElementTypes: Seq[ElementType]) extends DefaultGameUnit(name) with Monster {
+case class DefaultMonster(monsterName: String, uniqueId: Long, monsterLife: Int, monsterArmor: Int, monsterDamage: Int, monsterAttackStatusType: StatusType, monsterAttackElementType: ElementType, monsterArmorStatusTypes: Seq[StatusType], monsterArmorElementTypes: Seq[ElementType]) extends Monster {
 
   override def getUniqueId: Long = uniqueId
 
-  override def getLife: Int = life
+  override var name: String = monsterName
 
-  override def getArmor: Int = armor
+  override def getLife: Int = monsterLife
 
-  override def getDamage: Int = damage
+  override def getArmor: Int = monsterArmor
 
-  override def getElementalResistances: Seq[ElementType] = armorElementTypes
+  override def getDamage: Int = monsterDamage
 
-  override def getAttackStatusType: StatusType = attackStatusType
+  override def getElementalResistances: Seq[ElementType] = monsterArmorElementTypes
 
-  override def getStatusResistances: Seq[StatusType] = armorStatusTypes
+  override def getAttackStatusType: StatusType = monsterAttackStatusType
 
-  override def getAttackElementType: ElementType = attackElementType
+  override def getStatusResistances: Seq[StatusType] = monsterArmorStatusTypes
+
+  override def getAttackElementType: ElementType = monsterAttackElementType
 }

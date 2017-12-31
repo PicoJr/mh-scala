@@ -1,14 +1,14 @@
 package game.item.craft.addOn
 
-import game.item.{CharmSlot, ItemType}
+import game.item.{AbstractDecorator, ItemType}
 
 /** Provides charm slot.
   * Created by nol on 21/12/17.
   */
-object CharmSlotAddOn extends DefaultAddOn {
+case class CharmSlotAddOn[TItemType <: ItemType](decorator: AbstractDecorator[TItemType]) extends DefaultAddOn[TItemType]("charmed") {
   override val name: String = "charmed"
 
-  override def createItemType(level: Int, itemType: ItemType): ItemType = {
-    CharmSlot(itemType, getRandomSlot)
+  override def decorate(level: Int, itemType: TItemType): TItemType = {
+    decorator.decorateWithCharmSlot(itemType, getRandomSlot)
   }
 }

@@ -5,9 +5,9 @@ import game.item.ItemType
 /** ItemType Nature.
   * Created by nol on 25/11/17.
   */
-trait NatureType {
+trait NatureType[TItemType <: ItemType] {
   /** user-friendly real-play description */
   val name: String
 
-  def createItemType(level: Int): ItemType
+  def create(level: Int): TItemType
 }

@@ -14,6 +14,7 @@
 2. try-out design patterns (decorator, abstract factory, builders...)
 3. tackle design challenges (S.O.L.I.D)
 4. try out reactive programming with `rescala`
+5. discover Scala generics (bounds & variance)
 
 
 * Single Responsibility Principle

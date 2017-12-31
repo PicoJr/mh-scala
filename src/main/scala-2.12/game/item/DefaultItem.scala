@@ -8,7 +8,7 @@ import game.item.status.StatusType
   */
 class DefaultItem(itemType: ItemType, itemId: Long) extends Item {
 
-  override def getItemType: ItemType = itemType
+  override def getItemTypeId: Id = itemType.getUniqueId
 
   override def getUniqueId: Long = itemId
 

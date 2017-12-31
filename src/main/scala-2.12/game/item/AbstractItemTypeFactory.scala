@@ -5,7 +5,7 @@ import game.item.ArmorPart.ArmorPart
 /**
   * Created by nol on 17/12/17.
   */
-trait AbstractItemTypeFactory {
+trait AbstractItemTypeFactory[TItemType <: ItemType] {
 
   /** Create weapon
     *
@@ -13,7 +13,7 @@ trait AbstractItemTypeFactory {
     * @param damage provided
     * @return weapon s.t. weapon.isWeapon
     */
-  def createWeapon(level: Int, damage: Int): ItemType
+  def createWeapon(level: Int, damage: Int): TItemType
 
   /** Create armor
     *
@@ -22,7 +22,7 @@ trait AbstractItemTypeFactory {
     * @param armorPart of armor
     * @return armor s.t. armor.isArmor
     */
-  def createArmor(level: Int, armor: Int, armorPart: ArmorPart): ItemType
+  def createArmor(level: Int, armor: Int, armorPart: ArmorPart): TItemType
 
   /** Create Charm
     *
@@ -30,7 +30,7 @@ trait AbstractItemTypeFactory {
     * @param slotsRequired by charm >= 1
     * @return charm s.t. charm.isCharm
     */
-  def createCharm(level: Int, slotsRequired: Int): ItemType
+  def createCharm(level: Int, slotsRequired: Int): TItemType
 
   /** Create Material
     *
@@ -38,5 +38,5 @@ trait AbstractItemTypeFactory {
     * @param level of material >= 0
     * @return material s.t. material.isMaterial
     */
-  def createMaterial(name: String, level: Int): ItemType
+  def createMaterial(name: String, level: Int): TItemType
 }

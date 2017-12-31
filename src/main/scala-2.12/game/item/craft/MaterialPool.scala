@@ -1,20 +1,16 @@
 package game.item.craft
 
 import game.item.craft.addOn.AddOn
-import game.item.{AbstractItemTypeFactory, DefaultItemTypeFactory, ItemType}
+import game.item.{AbstractItemTypeFactory, ItemType}
 
 /**
   * Created by nol on 29/11/17.
   */
-class MaterialPool(itemTypeFactory: AbstractItemTypeFactory) {
+class MaterialPool[TItemType <: ItemType](itemTypeFactory: AbstractItemTypeFactory[TItemType]) {
 
-  def this() {
-    this(DefaultItemTypeFactory.getDefaultItemFactory)
-  }
+  private var materials = Map.empty[(AddOn[TItemType], Int), TItemType]
 
-  private var materials = Map.empty[(AddOn, Int), ItemType]
-
-  def getMaterial(addOn: AddOn, level: Int): ItemType = {
+  def getMaterial(addOn: AddOn[TItemType], level: Int): TItemType = {
     materials.get(addOn, level) match {
       case Some(m) => m
       case None =>
@@ -24,8 +20,8 @@ class MaterialPool(itemTypeFactory: AbstractItemTypeFactory) {
     }
   }
 
-  private def createMaterialFromAddOn(addOn: AddOn, level: Int): ItemType = {
-    val descriptionBuilder = new DescriptionBuilder().addNature("material")
+  def createMaterialFromAddOn(addOn: AddOn[TItemType], level: Int): TItemType = {
+    val descriptionBuilder = new DescriptionBuilder("material")
     descriptionBuilder.addAdjective(addOn.name)
     itemTypeFactory.createMaterial(descriptionBuilder.getDescription, level)
   }

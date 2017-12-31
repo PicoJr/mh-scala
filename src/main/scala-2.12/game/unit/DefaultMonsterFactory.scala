@@ -9,21 +9,7 @@ import game.util.Procedural
 /**
   * Created by nol on 17/11/17.
   */
-class DefaultMonsterFactory(
-                             elementTypes: Seq[ElementType],
-                             statusTypes: Seq[StatusType],
-                             idSupplier: IdSupplier,
-                             gameConfig: GameConfig
-                           ) {
-
-  def this() {
-    this(
-      Seq(ELECTRIC, FIRE, NORMAL, WATER),
-      Seq(NEUTRAL, SLEEP, STUN),
-      new DefaultIdSupplier,
-      DefaultGameConfig.getGameConfig
-    )
-  }
+class DefaultMonsterFactory(elementTypes: Seq[ElementType] = Seq(ELECTRIC, FIRE, NORMAL, WATER), statusTypes: Seq[StatusType] = Seq(NEUTRAL, SLEEP, STUN), idSupplier: IdSupplier = new DefaultIdSupplier, gameConfig: GameConfig = DefaultGameConfig.getGameConfig) {
 
   private def getRandomValue(level: Int, base: Int): Int = Procedural.getRandomValue(level, base, gameConfig.getMonsterStatsGrowth, gameConfig.getPercentageVariation)
 
@@ -45,16 +31,7 @@ class DefaultMonsterFactory(
 
   private def getRandomArmorElementTypes(level: Int): Seq[ElementType] = {
     var armorElementTypes = Seq.empty[ElementType]
-    if (level >= gameConfig.getLevelMin) {
-      armorElementTypes = armorElementTypes :+ getRandomElementType
-    }
-    if (level >= gameConfig.getLevelMin + 1) {
-      armorElementTypes = armorElementTypes :+ getRandomElementType
-    }
-    if (level >= gameConfig.getLevelMin + 2) {
-      armorElementTypes = armorElementTypes :+ getRandomElementType
-    }
-    if (level >= gameConfig.getLevelMin + 3) {
+    for (_ <- gameConfig.getLevelMin to math.min(level, 3)) {
       armorElementTypes = armorElementTypes :+ getRandomElementType
     }
     armorElementTypes
