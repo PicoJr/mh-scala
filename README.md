@@ -13,8 +13,8 @@
 1. discover Scala concepts, syntax & ecosystem from scratch
 2. try-out design patterns (decorator, abstract factory, builders...)
 3. tackle design challenges (S.O.L.I.D)
-4. try out reactive programming with `rescala`
-5. discover Scala generics (bounds & variance)
+4. try out reactive programming with [rescala](https://github.com/guidosalva/REScala/)
+5. discover Scala generics ([bounds](https://docs.scala-lang.org/tour/upper-type-bounds.html) & [variances](https://docs.scala-lang.org/tour/variances.html))
 
 
 * Single Responsibility Principle
