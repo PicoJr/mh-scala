@@ -68,7 +68,7 @@ object DotGeneration extends App {
   private val crafts = new DefaultCraftFactory[ItemType](bonusTypes, elementTypes, natureTypes, statusTypes, new DefaultDecorator(), itemTypeFactory).generateCraft(new DefaultCrafts[ItemType])
   val formatter = (i: ItemType) => i.getName
   val dotGeneration = new DotGeneration[ItemType](crafts, formatter)
-  dotGeneration.saveDot((i1, i2, _) => i1.isWeapon || i2.isWeapon, "res/weapon.dot")
+  dotGeneration.saveDot((i1, i2, _) => i1.isWeapon || i2.isWeapon, "res/weapons.dot")
 }
 
 
