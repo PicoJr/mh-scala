@@ -15,11 +15,7 @@ class DefaultCrafts[TItemType <: ItemType] extends Crafts[TItemType] {
   override def getRecipes: Map[(TItemType, TItemType), TItemType] = recipes
 
   override def findCraftResult(id1: Id, id2: Id): Option[TItemType] = {
-    val p = (key: ((ItemType, ItemType), ItemType)) => key match {
-      case ((i1, i2), _) =>
-        (i1.getUniqueId == id1) && (i2.getUniqueId == id2)
-      case _ => false
-    }
+    val p = (key: ((ItemType, ItemType), ItemType)) => key._1._1.getUniqueId == id1 && key._1._2.getUniqueId == id2
     getRecipes.find(p) match {
       case Some(((_, _), result)) => Some(result)
       case _ => Option.empty
@@ -37,12 +33,9 @@ class DefaultCrafts[TItemType <: ItemType] extends Crafts[TItemType] {
   private def filterAll(p: TItemType => Boolean): Seq[TItemType] = {
     var matching = Seq.empty[TItemType]
     for (recipe <- getRecipes) {
-      recipe match {
-        case ((i1, i2), i3) =>
-          if (p(i1)) matching = matching :+ i1
-          if (p(i2)) matching = matching :+ i2
-          if (p(i3)) matching = matching :+ i3
-      }
+      if (p(recipe._1._1)) matching = matching :+ recipe._1._1
+      if (p(recipe._1._2)) matching = matching :+ recipe._1._2
+      if (p(recipe._2)) matching = matching :+ recipe._2
     }
     matching
   }
