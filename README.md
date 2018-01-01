@@ -4,7 +4,11 @@
 
 * monster hunter like command-line game
 * procedurally generated content (items, craft system, monsters & quests)
-* dot file generation from generated craft system
+* dot file generation from generated craft system (see below)
+
+![example](weapons.png)
+
+Note: icons from <http://game-icons.net/>
 
 ## Motivations
 
