@@ -46,6 +46,7 @@ class QuestEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameSt
 
   def onQuestSucceeded(questId: Id): Unit = {
     DefaultGameStatistics.questSucceededCount() = DefaultGameStatistics.questSucceededCount.now + 1
+    DefaultGameStatistics.questSucceeded() = DefaultGameStatistics.questSucceeded.now + questId
     gameStateEvents.questSucceeded(questId)
   }
 

@@ -56,7 +56,12 @@ class DefaultDescription(gameState: GameState[Item, ItemType]) extends Descripti
   override def descriptionStatistics(): String = {
     val desc = new StringBuilder()
     if (gameState.allQuestsCompleted) desc.append("All Quests Completed!\n")
-    desc.append("quests completed:").append(gameState.getCompletedQuests.size)
+    desc.append("quests completed: ")
+    for (questId <- DefaultGameStatistics.questSucceeded.now) {
+      desc.append(questId).append(" ")
+    }
+    desc.append("\n")
+    desc.append("quests completed: ").append(gameState.getCompletedQuests.size)
     desc.append("/").append(gameState.quests.size).append("\n")
     desc.append("quests failures: ").append(DefaultGameStatistics.questFailedCount.now).append("\n")
     desc.append("quests successes: ").append(DefaultGameStatistics.questSucceededCount.now).append("\n")
