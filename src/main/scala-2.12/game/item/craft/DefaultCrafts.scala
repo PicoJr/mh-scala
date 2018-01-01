@@ -9,6 +9,7 @@ class DefaultCrafts[TItemType <: ItemType] extends Crafts[TItemType] {
   private var recipes = Map.empty[(TItemType, TItemType), TItemType]
 
   override def addRecipe(i1: TItemType, material: TItemType, result: TItemType): Unit = {
+    assert(material.isMaterial)
     recipes += ((i1, material) -> result)
   }
 

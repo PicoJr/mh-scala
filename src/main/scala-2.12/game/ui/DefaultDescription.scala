@@ -18,12 +18,9 @@ class DefaultDescription(gameState: GameState[Item, ItemType]) extends Descripti
     val desc = new StringBuilder()
     val recipes = gameState.crafts.getRecipesWith(item.getItemTypeId)
     for (m <- recipes) {
-      m match {
-        case ((i1, i2), result) =>
-          desc.append(DefaultDescription.descriptionItemType(i1))
-          desc.append(" + ").append(DefaultDescription.descriptionItemType(i2))
-          desc.append(" -> ").append(DefaultDescription.descriptionItemType(result)).append("\n")
-      }
+      desc.append(DefaultDescription.descriptionItemType(m._1._1))
+      desc.append(" + ").append(DefaultDescription.descriptionItemType(m._1._2))
+      desc.append(" -> ").append(DefaultDescription.descriptionItemType(m._2)).append("\n")
     }
     desc.toString()
   }
@@ -127,10 +124,8 @@ object DefaultDescription {
 
   def descriptionGameUnit(gameUnit: GameUnit): String = {
     val desc = new StringBuilder()
-    desc.append(gameUnit.name)
-    desc.append("\n")
-    desc.append("life:  ").append(gameUnit.getLife)
-    desc.append("\n")
+    desc.append(gameUnit.name).append("\n")
+    desc.append("life:  ").append(gameUnit.getLife).append("\n")
     desc.append("dmg:   ").append(gameUnit.getDamage).append(" ")
     desc.append("{").append(descriptionElementType(gameUnit.getAttackElementType)).append("}")
     desc.append("<").append(descriptionStatusType(gameUnit.getAttackStatusType)).append(">")
@@ -159,10 +154,8 @@ object DefaultDescription {
   def descriptionQuest(quest: Quest[ItemType]): String = {
     val desc = new StringBuilder()
     desc.append("quest[").append(quest.getUniqueId).append("]")
-    desc.append(" level: ").append(quest.level)
-    desc.append("\n")
-    desc.append(descriptionMonster(quest.monster))
-    desc.append("\n")
+    desc.append(" level: ").append(quest.level).append("\n")
+    desc.append(descriptionMonster(quest.monster)).append("\n")
     desc.toString()
   }
 
