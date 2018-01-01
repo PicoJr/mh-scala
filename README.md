@@ -6,7 +6,7 @@
 * procedurally generated content (items, craft system, monsters & quests)
 * dot file generation from generated craft system (see below)
 
-![example](weapons.png)
+![example](craft-example.png)
 
 Note: icons from <http://game-icons.net/>
 
