@@ -29,13 +29,13 @@ trait Crafts[TItemType <: ItemType] {
     */
   def addRecipe(itemType: TItemType, material: TItemType, result: TItemType): Unit
 
-  /** Returns recipes with i as ingredient
+  /** Returns recipes with itemType id as ingredient
     *
-    * @param i item
+    * @param id itemType id
     * @return all recipes for which i is an ingredient (not a result)
     */
-  def getRecipesWith(i: TItemType): Map[(TItemType, TItemType), TItemType] = {
-    getRecipes.filterKeys { case (i1, i2) => i.getUniqueId == i1.getUniqueId || i.getUniqueId == i2.getUniqueId }
+  def getRecipesWith(id: Id): Map[(TItemType, TItemType), TItemType] = {
+    getRecipes.filterKeys { case (i1, i2) => id == i1.getUniqueId || id == i2.getUniqueId }
   }
 
   /** Get all materials from recipes with 'level' level

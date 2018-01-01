@@ -16,7 +16,7 @@ class DefaultDescription(gameState: GameState[Item, ItemType]) extends Descripti
 
   override def descriptionRecipesWith(item: Item): String = {
     val desc = new StringBuilder()
-    val recipes = gameState.crafts.getRecipesWith(item)
+    val recipes = gameState.crafts.getRecipesWith(item.getItemTypeId)
     for (m <- recipes) {
       m match {
         case ((i1, i2), result) =>
