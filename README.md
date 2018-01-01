@@ -40,7 +40,6 @@ see `game-mechanics.md`
 * docopt (command line parsing, included as sources <https://github.com/docopt/docopt.java>)
 * scalatest (scala unit tests, <http://www.scalatest.org/>)
 * typesafe (config file parsing, <https://github.com/lightbend/config>)
-* org.scala-graph (dot generation for craft tree, <http://scala-graph.org/>)
 * rescala (reactive scala, <https://github.com/guidosalva/REScala/>)
 
 ## Notes
