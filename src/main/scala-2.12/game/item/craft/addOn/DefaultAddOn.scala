@@ -7,7 +7,7 @@ import game.util.Procedural
 /**
   * Created by nol on 21/12/17.
   */
-abstract class DefaultAddOn[TItemType <: ItemType](addOnName: String, val gameConfig: GameConfig = DefaultGameConfig.getGameConfig) extends AddOn[TItemType] {
+abstract class DefaultAddOn[TItemType <: ItemType](addOnName: String, val gameConfig: GameConfig = DefaultGameConfig.getInstance) extends AddOn[TItemType] {
 
   override val name: String = addOnName
 

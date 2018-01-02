@@ -9,7 +9,7 @@ import game.item.status.StatusType
 /**
   * Created by nol on 06/12/17.
   */
-case class DefaultHunter[TItem <: Item](hunterName: String, hunterInventory: Inventory[TItem], hunterLife: Int = DefaultGameConfig.getGameConfig.getHunterLifeMax) extends Hunter[TItem] {
+case class DefaultHunter[TItem <: Item](hunterName: String, hunterInventory: Inventory[TItem], hunterLife: Int = DefaultGameConfig.getInstance.getHunterLifeMax) extends Hunter[TItem] {
 
   override val inventory: Inventory[TItem] = hunterInventory
 

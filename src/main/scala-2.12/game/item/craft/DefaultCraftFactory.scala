@@ -12,7 +12,7 @@ import game.item.status.StatusType
   * FIXME: not very Open-Close friendly.
   * Created by nol on 20/11/17.
   */
-class DefaultCraftFactory[TItemType <: ItemType](bonusTypes: Seq[BonusType], elementTypes: Seq[ElementType], natureTypes: Seq[NatureType[TItemType]], statusTypes: Seq[StatusType], decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType], gameConfig: GameConfig = DefaultGameConfig.getGameConfig) {
+class DefaultCraftFactory[TItemType <: ItemType](bonusTypes: Seq[BonusType], elementTypes: Seq[ElementType], natureTypes: Seq[NatureType[TItemType]], statusTypes: Seq[StatusType], decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType], gameConfig: GameConfig = DefaultGameConfig.getInstance) {
 
   private class CraftStep(val itemTypeRoot: TItemType, val categoryRoot: CategoryBuilder[TItemType], val crafts: Crafts[TItemType], val materialPool: MaterialPool[TItemType])
 

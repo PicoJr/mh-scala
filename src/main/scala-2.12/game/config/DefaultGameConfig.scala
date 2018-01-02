@@ -56,7 +56,10 @@ private class DefaultGameConfig(conf: Config) extends GameConfig {
 }
 
 object DefaultGameConfig {
-  private final val gameConfig: GameConfig = new DefaultGameConfig(ConfigFactory.load())
+  private lazy val instance: GameConfig = {
+    new DefaultGameConfig(ConfigFactory.load())
+  } // yummy Scala
 
-  def getGameConfig: GameConfig = gameConfig
+  def getInstance: GameConfig = instance
+
 }

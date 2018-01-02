@@ -12,7 +12,7 @@ import game.unit.GameUnit
 /**
   * Created by nol on 19/12/17.
   */
-class QuestEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameState[TItem, TItemType], questEvents: QuestEvents, gameStateEvents: GameStateEvents, itemFactory: AbstractItemFactory[TItem, TItemType], eEResolver: EEResolver = new DefaultEEResolver(), gameConfig: GameConfig = DefaultGameConfig.getGameConfig) {
+class QuestEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameState[TItem, TItemType], questEvents: QuestEvents, gameStateEvents: GameStateEvents, itemFactory: AbstractItemFactory[TItem, TItemType], eEResolver: EEResolver = new DefaultEEResolver(), gameConfig: GameConfig = DefaultGameConfig.getInstance) {
 
   type Id = Identifiable.Id
 

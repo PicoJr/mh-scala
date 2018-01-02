@@ -12,7 +12,7 @@ import game.util.DefaultLoopingRandomPool
 /**
   * Created by nol on 06/12/17.
   */
-class DefaultGameStateFactory(crafts: Crafts[ItemType], itemFactory: AbstractItemFactory[Item, ItemType], gameConfig: GameConfig = DefaultGameConfig.getGameConfig) {
+class DefaultGameStateFactory(crafts: Crafts[ItemType], itemFactory: AbstractItemFactory[Item, ItemType], gameConfig: GameConfig = DefaultGameConfig.getInstance) {
 
   def createGameState: GameState[Item, ItemType] = {
     val hunter = createDefaultHunter(crafts)
