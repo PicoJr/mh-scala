@@ -1,6 +1,6 @@
 package game.item.craft.nature
 
-import game.item.{AbstractDecorator, AbstractItemTypeFactory, ItemType}
+import game.item.{AbstractDecorator, AbstractItemTypeFactory, CHARM_SLOT, ItemType}
 import game.util.Procedural
 
 /**
@@ -10,7 +10,10 @@ case class Charm[TItemType <: ItemType](decorator: AbstractDecorator[TItemType],
   override val name = "charm"
 
   override def create(level: Int): TItemType = {
-    decorator.decorateWithCharmSlot(itemTypeFactory.createItemType(level), Procedural.pickRandom(1, 2, 3).get)
+    decorator.decorateWithEquipment(
+      itemTypeFactory.createItemType(level),
+      CHARM_SLOT(Procedural.pickRandom(1, 2, 3).get)
+    )
   }
 }
 
