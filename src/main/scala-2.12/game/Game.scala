@@ -20,25 +20,26 @@ import game.uiEvents.{UIEvents, UIEventsHandler}
   */
 object Game extends App {
   /* Factories */
-  val itemTypeFactory = new DefaultItemTypeFactory(new DefaultIdSupplier)
-  val itemFactory = new DefaultItemFactory(new DefaultIdSupplier)
+  private val decorator = new DefaultDecorator()
+  private val itemTypeFactory = new DefaultItemTypeFactory(new DefaultIdSupplier)
+  private val itemFactory = new DefaultItemFactory(new DefaultIdSupplier)
   /* Game state */
-  val natureTypes = Seq(Weapon[ItemType](itemTypeFactory), Charm[ItemType](itemTypeFactory), Armor[ItemType](ArmorPart.HEAD, itemTypeFactory), Armor[ItemType](ArmorPart.BODY, itemTypeFactory), Armor[ItemType](ArmorPart.ARMS, itemTypeFactory), Armor[ItemType](ArmorPart.LEGS, itemTypeFactory))
-  val elementTypes = Seq(FIRE, WATER, ELECTRIC, NORMAL)
-  val statusTypes = Seq(STUN, SLEEP, NEUTRAL)
-  val bonusTypes = Seq(DamageBonus, ProtectionBonus)
-  val crafts = new DefaultCraftFactory[ItemType](bonusTypes, elementTypes, natureTypes, statusTypes, new DefaultDecorator(), itemTypeFactory).generateCraft(new DefaultCrafts[ItemType])
-  val gameState = new DefaultGameStateFactory(crafts, itemFactory).createGameState
+  private val natureTypes = Seq(Weapon[ItemType](decorator, itemTypeFactory), Charm[ItemType](decorator, itemTypeFactory), Armor[ItemType](ArmorPart.HEAD, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.BODY, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.ARMS, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.LEGS, decorator, itemTypeFactory))
+  private val elementTypes = Seq(FIRE, WATER, ELECTRIC, NORMAL)
+  private val statusTypes = Seq(STUN, SLEEP, NEUTRAL)
+  private val bonusTypes = Seq(DamageBonus, ProtectionBonus)
+  private val crafts = new DefaultCraftFactory[ItemType](bonusTypes, elementTypes, natureTypes, statusTypes, new DefaultDecorator(), itemTypeFactory).generateCraft(new DefaultCrafts[ItemType])
+  private val gameState = new DefaultGameStateFactory(crafts, itemFactory).createGameState
   /* events */
-  val commandEvents = new CommandEvents()
-  val gameStateEvents = new GameStateEvents()
-  val uIEvents = new UIEvents()
-  val questEvents = new QuestEvents()
+  private val commandEvents = new CommandEvents()
+  private val gameStateEvents = new GameStateEvents()
+  private val uIEvents = new UIEvents()
+  private val questEvents = new QuestEvents()
   new CommandEventsHandler(commandEvents, uIEvents, gameStateEvents)
   new QuestEventsHandler(gameState, questEvents, gameStateEvents, itemFactory)
   new GameStateEventsHandler(gameState, gameStateEvents, questEvents, uIEvents, itemFactory)
   new UIEventsHandler(gameState, uIEvents, new DefaultDescription(gameState))
-  val commandParser = new CommandParser(commandEvents)
+  private val commandParser = new CommandParser(commandEvents)
   var quit: Boolean = false
   println("Game started")
   while (!quit) {

@@ -63,13 +63,14 @@ class Formatter[TItemType <: ItemType](icons: Seq[String]) {
 
 object DotGeneration extends App {
   /* Factories */
+  private val decorator = new DefaultDecorator()
   private val itemTypeFactory = new DefaultItemTypeFactory(new DefaultIdSupplier)
   /* Game state */
-  private val natureTypes = Seq(Weapon[ItemType](itemTypeFactory), Charm[ItemType](itemTypeFactory), Armor[ItemType](ArmorPart.HEAD, itemTypeFactory), Armor[ItemType](ArmorPart.BODY, itemTypeFactory), Armor[ItemType](ArmorPart.ARMS, itemTypeFactory), Armor[ItemType](ArmorPart.LEGS, itemTypeFactory))
+  private val natureTypes = Seq(Weapon[ItemType](decorator, itemTypeFactory), Charm[ItemType](decorator, itemTypeFactory), Armor[ItemType](ArmorPart.HEAD, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.BODY, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.ARMS, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.LEGS, decorator, itemTypeFactory))
   private val elementTypes = Seq(FIRE, WATER, ELECTRIC, NORMAL)
   private val statusTypes = Seq(STUN, SLEEP, NEUTRAL)
   private val bonusTypes = Seq(DamageBonus, ProtectionBonus)
-  private val crafts = new DefaultCraftFactory[ItemType](bonusTypes, elementTypes, natureTypes, statusTypes, new DefaultDecorator(), itemTypeFactory).generateCraft(new DefaultCrafts[ItemType])
+  private val crafts = new DefaultCraftFactory[ItemType](bonusTypes, elementTypes, natureTypes, statusTypes, decorator, itemTypeFactory).generateCraft(new DefaultCrafts[ItemType])
   /* weapons */
   val iconFiles = new java.io.File("res/icons").listFiles.filter(_.getName.endsWith(".png"))
   val formatter = new Formatter[ItemType](iconFiles.map(f => f.getName))

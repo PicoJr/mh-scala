@@ -1,15 +1,16 @@
 package game.item.craft.nature
 
-import game.item.{AbstractItemTypeFactory, ItemType}
+import game.item.{AbstractDecorator, AbstractItemTypeFactory, ItemType}
+import game.util.Procedural
 
 /**
   * Created by nol on 21/12/17.
   */
-case class Charm[TItemType <: ItemType](itemTypeFactory: AbstractItemTypeFactory[TItemType]) extends DefaultNatureType[TItemType] {
+case class Charm[TItemType <: ItemType](decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType]) extends DefaultNatureType[TItemType] {
   override val name = "charm"
 
   override def create(level: Int): TItemType = {
-    itemTypeFactory.createCharm(level, getRandomSlot)
+    decorator.decorateWithCharmSlot(itemTypeFactory.createItemType(level), Procedural.pickRandom(1, 2, 3).get)
   }
 }
 

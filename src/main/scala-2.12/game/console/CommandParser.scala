@@ -17,7 +17,7 @@ class CommandParser(commandEvents: CommandEvents) {
       |  mh item ls
       |  mh item (equip | unequip) <itemId>...
       |  mh item show <itemId>...
-      |  mh quest (ls | start <questId>...)
+      |  mh quest (ls | show <questId>... | start <questId>...)
       |  mh craft show <itemId>...
       |  mh craft new <materialId> <itemId>...
       |  mh stat
@@ -80,6 +80,11 @@ class CommandParser(commandEvents: CommandEvents) {
         }
         if (simpleOpts.asBoolean("ls")) {
           commandEvents.listQuests(Unit)
+        }
+        if (simpleOpts.asBoolean("show")) {
+          for (questId <- simpleOpts.asSeq("<questId>")) {
+            commandEvents.showQuest(questId.toString.toLong)
+          }
         }
       }
       else if (simpleOpts.asBoolean("stat")) {

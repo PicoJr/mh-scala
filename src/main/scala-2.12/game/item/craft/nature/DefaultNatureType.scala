@@ -9,8 +9,6 @@ import game.util.Procedural
   */
 abstract class DefaultNatureType[TItemType <: ItemType](val gameConfig: GameConfig = DefaultGameConfig.getGameConfig) extends NatureType[TItemType] {
 
-  protected def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
-
   protected def getRandomValue(level: Int, base: Int): Int = {
     Procedural.getRandomValue(level, base, gameConfig.getHunterStatsGrowth, gameConfig.getPercentageVariation)
   }

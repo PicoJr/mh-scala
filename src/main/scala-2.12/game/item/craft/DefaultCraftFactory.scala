@@ -47,11 +47,11 @@ class DefaultCraftFactory[TItemType <: ItemType](bonusTypes: Seq[BonusType], ele
   }
 
   def generateCraft(crafts: Crafts[TItemType]): Crafts[TItemType] = {
-    val materialPool = new MaterialPool(itemTypeFactory)
+    val materialPool = new MaterialPool(decorator, itemTypeFactory)
     for (natureCategory <- natureTypes) {
       val categoryRoot = new CategoryBuilder[TItemType](natureCategory)
       natureCategory match {
-        case Charm(_) => // a charm should not have charm add-ons...
+        case Charm(_, _) => // a charm should not have charm add-ons...
         case _ => categoryRoot.withAddOn(CharmSlotAddOn[TItemType](decorator))
       }
       val itemTypeRoot = categoryRoot.create(gameConfig.getLevelMin)
