@@ -3,6 +3,9 @@
 ## What's inside?
 
 * monster hunter like command-line game
+
+[![asciicast](https://asciinema.org/a/VZ78UenCIeZeHf3QnRhIoDucC.png)](https://asciinema.org/a/VZ78UenCIeZeHf3QnRhIoDucC)
+
 * procedurally generated content (items, craft system, monsters & quests)
 * dot file generation from generated craft system (see below)
 
@@ -59,7 +62,7 @@ see `src/main/resources/application.conf`
 
 - [ ] take status into account inside quest logic
 - [x] add game stats
-- [ ] make craft generation more configurable/hackable
+- [x] make craft generation more configurable/hackable
 - [ ] add feasibility check (check at least 1st quest can be completed with provided equipment)
 
 ## FixMe
