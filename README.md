@@ -41,7 +41,7 @@ see `game-mechanics.md`
 
 ## Dependencies
 
-* docopt (command line parsing, included as sources <https://github.com/docopt/docopt.java>)
+* docopt (command line parsing, included as jar <https://github.com/docopt/docopt.java>)
 * scalatest (scala unit tests, <http://www.scalatest.org/>)
 * typesafe (config file parsing, <https://github.com/lightbend/config>)
 * rescala (reactive scala, <https://github.com/guidosalva/REScala/>)
