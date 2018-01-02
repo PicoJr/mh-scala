@@ -4,13 +4,9 @@ import game.commandEvents.{CommandEvents, CommandEventsHandler}
 import game.console.CommandParser
 import game.gameStateEvents.{GameStateEvents, GameStateEventsHandler}
 import game.gamestate.DefaultGameStateFactory
-import game.id.DefaultIdSupplier
 import game.item._
-import game.item.craft.bonus.{DamageBonus, ProtectionBonus}
-import game.item.craft.nature.{Armor, Charm, Weapon}
+import game.item.craft.addOn.{BonusAddOn, ElementAddOn, StatusAddOn}
 import game.item.craft.{DefaultCraftFactory, DefaultCrafts}
-import game.item.element.{ELECTRIC, FIRE, NORMAL, WATER}
-import game.item.status.{NEUTRAL, SLEEP, STUN}
 import game.questEvents.{QuestEvents, QuestEventsHandler}
 import game.ui.DefaultDescription
 import game.uiEvents.{UIEvents, UIEventsHandler}
@@ -19,27 +15,36 @@ import game.uiEvents.{UIEvents, UIEventsHandler}
   * Created by nol on 04/11/17.
   */
 object Game extends App {
-  /* Factories */
-  private val decorator = new DefaultDecorator()
-  private val itemTypeFactory = new DefaultItemTypeFactory(new DefaultIdSupplier)
-  private val itemFactory = new DefaultItemFactory(new DefaultIdSupplier)
-  /* Game state */
-  private val natureTypes = Seq(Weapon[ItemType](decorator, itemTypeFactory), Charm[ItemType](decorator, itemTypeFactory), Armor[ItemType](ArmorPart.HEAD, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.BODY, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.ARMS, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.LEGS, decorator, itemTypeFactory))
-  private val elementTypes = Seq(FIRE, WATER, ELECTRIC, NORMAL)
-  private val statusTypes = Seq(STUN, SLEEP, NEUTRAL)
-  private val bonusTypes = Seq(DamageBonus, ProtectionBonus)
-  private val crafts = new DefaultCraftFactory[ItemType](bonusTypes, elementTypes, natureTypes, statusTypes, new DefaultDecorator(), itemTypeFactory).generateCraft(new DefaultCrafts[ItemType])
-  private val gameState = new DefaultGameStateFactory(crafts, itemFactory).createGameState
+  /* crafts */
+  private val craftFactory = new DefaultCraftFactory[ItemType](GameDefaults.natureTypes, GameDefaults.decorator, GameDefaults.itemTypeFactory)
+  /* level 1 */
+  for (element <- GameDefaults.elementTypes) {
+    craftFactory.withAddOn(1, new ElementAddOn[ItemType](element, GameDefaults.decorator))
+  }
+  /* level 2 */
+  for (status <- GameDefaults.statusTypes) {
+    craftFactory.withAddOn(2, new StatusAddOn[ItemType](status, GameDefaults.decorator))
+  }
+  /* level 3 */
+  for (bonus <- GameDefaults.bonusTypes) {
+    craftFactory.withAddOn(3, new BonusAddOn[ItemType](bonus, GameDefaults.decorator))
+  }
+  /* level 4 */
+  for (bonus <- GameDefaults.bonusTypes) {
+    craftFactory.withAddOn(4, new BonusAddOn[ItemType](bonus, GameDefaults.decorator))
+  }
+  val crafts = craftFactory.generateCraft(new DefaultCrafts[ItemType])
+  val gameState = new DefaultGameStateFactory(crafts, GameDefaults.itemFactory).createGameState
   /* events */
-  private val commandEvents = new CommandEvents()
-  private val gameStateEvents = new GameStateEvents()
-  private val uIEvents = new UIEvents()
-  private val questEvents = new QuestEvents()
+  val commandEvents = new CommandEvents()
+  val gameStateEvents = new GameStateEvents()
+  val uIEvents = new UIEvents()
+  val questEvents = new QuestEvents()
   new CommandEventsHandler(commandEvents, uIEvents, gameStateEvents)
-  new QuestEventsHandler(gameState, questEvents, gameStateEvents, itemFactory)
-  new GameStateEventsHandler(gameState, gameStateEvents, questEvents, uIEvents, itemFactory)
+  new QuestEventsHandler(gameState, questEvents, gameStateEvents, GameDefaults.itemFactory)
+  new GameStateEventsHandler(gameState, gameStateEvents, questEvents, uIEvents, GameDefaults.itemFactory)
   new UIEventsHandler(gameState, uIEvents, new DefaultDescription(gameState))
-  private val commandParser = new CommandParser(commandEvents)
+  val commandParser = new CommandParser(commandEvents)
   var quit: Boolean = false
   println("Game started")
   while (!quit) {

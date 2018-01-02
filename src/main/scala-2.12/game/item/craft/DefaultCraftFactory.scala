@@ -3,16 +3,21 @@ package game.item.craft
 import game.config.{DefaultGameConfig, GameConfig}
 import game.item._
 import game.item.craft.addOn._
-import game.item.craft.bonus.BonusType
 import game.item.craft.nature._
-import game.item.element._
-import game.item.status.StatusType
+
+import scala.collection.mutable
 
 /** Default craft factory.
   * FIXME: not very Open-Close friendly.
   * Created by nol on 20/11/17.
   */
-class DefaultCraftFactory[TItemType <: ItemType](bonusTypes: Seq[BonusType], elementTypes: Seq[ElementType], natureTypes: Seq[NatureType[TItemType]], statusTypes: Seq[StatusType], decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType], gameConfig: GameConfig = DefaultGameConfig.getInstance) {
+class DefaultCraftFactory[TItemType <: ItemType](natureTypes: Seq[NatureType[TItemType]], decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType], gameConfig: GameConfig = DefaultGameConfig.getInstance) {
+
+  private var craftAddOns = mutable.Map.empty[Int, Seq[AddOn[TItemType]]]
+
+  def withAddOn(level: Int, addOnsAtLevel: AddOn[TItemType]*): Unit = {
+    craftAddOns += (level -> (craftAddOns.getOrElse(level, Seq.empty[AddOn[TItemType]]) ++ addOnsAtLevel))
+  }
 
   private class CraftStep(val itemTypeRoot: TItemType, val categoryRoot: CategoryBuilder[TItemType], val crafts: Crafts[TItemType], val materialPool: MaterialPool[TItemType])
 
@@ -27,22 +32,12 @@ class DefaultCraftFactory[TItemType <: ItemType](bonusTypes: Seq[BonusType], ele
       craftItemType(new CraftStep(result, resultCategory, craftStep.crafts, craftStep.materialPool))
     }
 
-    if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin) {
-      for (element <- elementTypes) {
-        craftWithAddOn(craftStep, ElementAddOn(element, decorator))
-      }
-    } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 1) {
-      for (status <- statusTypes) {
-        craftWithAddOn(craftStep, StatusAddOn(status, decorator))
-      }
-    } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 2) {
-      for (bonus <- bonusTypes) {
-        craftWithAddOn(craftStep, BonusAddOn(bonus, decorator))
-      }
-    } else if (craftStep.itemTypeRoot.getLevel == gameConfig.getLevelMin + 3) {
-      for (bonus <- bonusTypes) {
-        craftWithAddOn(craftStep, BonusAddOn(bonus, decorator))
-      }
+    craftAddOns.get(craftStep.itemTypeRoot.getLevel) match {
+      case Some(addOns) =>
+        for (addon <- addOns) {
+          craftWithAddOn(craftStep, addon)
+        }
+      case None => // nothing to add
     }
   }
 

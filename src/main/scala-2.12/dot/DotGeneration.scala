@@ -3,13 +3,10 @@ package dot
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
-import game.id.DefaultIdSupplier
+import game.GameDefaults
 import game.item._
-import game.item.craft.bonus.{DamageBonus, ProtectionBonus}
-import game.item.craft.nature.{Armor, Charm, Weapon}
+import game.item.craft.addOn.{BonusAddOn, ElementAddOn, StatusAddOn}
 import game.item.craft.{Crafts, DefaultCraftFactory, DefaultCrafts}
-import game.item.element.{ELECTRIC, FIRE, NORMAL, WATER}
-import game.item.status.{NEUTRAL, SLEEP, STUN}
 import game.util.DefaultLoopingRandomPool
 
 
@@ -62,15 +59,25 @@ class Formatter[TItemType <: ItemType](icons: Seq[String]) {
 }
 
 object DotGeneration extends App {
-  /* Factories */
-  private val decorator = new DefaultDecorator()
-  private val itemTypeFactory = new DefaultItemTypeFactory(new DefaultIdSupplier)
-  /* Game state */
-  private val natureTypes = Seq(Weapon[ItemType](decorator, itemTypeFactory), Charm[ItemType](decorator, itemTypeFactory), Armor[ItemType](ArmorPart.HEAD, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.BODY, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.ARMS, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.LEGS, decorator, itemTypeFactory))
-  private val elementTypes = Seq(FIRE, WATER, ELECTRIC, NORMAL)
-  private val statusTypes = Seq(STUN, SLEEP, NEUTRAL)
-  private val bonusTypes = Seq(DamageBonus, ProtectionBonus)
-  private val crafts = new DefaultCraftFactory[ItemType](bonusTypes, elementTypes, natureTypes, statusTypes, decorator, itemTypeFactory).generateCraft(new DefaultCrafts[ItemType])
+  /* crafts */
+  private val craftFactory = new DefaultCraftFactory[ItemType](GameDefaults.natureTypes, GameDefaults.decorator, GameDefaults.itemTypeFactory)
+  /* level 1 */
+  for (element <- GameDefaults.elementTypes) {
+    craftFactory.withAddOn(1, new ElementAddOn[ItemType](element, GameDefaults.decorator))
+  }
+  /* level 2 */
+  for (status <- GameDefaults.statusTypes) {
+    craftFactory.withAddOn(2, new StatusAddOn[ItemType](status, GameDefaults.decorator))
+  }
+  /* level 3 */
+  for (bonus <- GameDefaults.bonusTypes) {
+    craftFactory.withAddOn(3, new BonusAddOn[ItemType](bonus, GameDefaults.decorator))
+  }
+  /* level 4 */
+  for (bonus <- GameDefaults.bonusTypes) {
+    craftFactory.withAddOn(4, new BonusAddOn[ItemType](bonus, GameDefaults.decorator))
+  }
+  val crafts = craftFactory.generateCraft(new DefaultCrafts[ItemType])
   /* weapons */
   val iconFiles = new java.io.File("res/icons").listFiles.filter(_.getName.endsWith(".png"))
   val formatter = new Formatter[ItemType](iconFiles.map(f => f.getName))
