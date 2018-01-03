@@ -41,7 +41,7 @@ object Game extends App {
   val uIEvents = new UIEvents()
   val questEvents = new QuestEvents()
   new CommandEventsHandler(commandEvents, uIEvents, gameStateEvents)
-  new QuestEventsHandler(gameState, questEvents, gameStateEvents, GameDefaults.itemFactory)
+  new QuestEventsHandler(gameState, questEvents, gameStateEvents, GameDefaults.itemFactory, GameDefaults.eEResolver)
   new GameStateEventsHandler(gameState, gameStateEvents, questEvents, uIEvents, GameDefaults.itemFactory)
   new UIEventsHandler(gameState, uIEvents, new DefaultDescription(gameState))
   val commandParser = new CommandParser(commandEvents)
