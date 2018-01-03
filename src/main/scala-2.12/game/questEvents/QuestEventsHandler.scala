@@ -52,6 +52,7 @@ class QuestEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameSt
 
   def onQuestFailed(questId: Id): Unit = {
     DefaultGameStatistics.questFailedCount() = DefaultGameStatistics.questFailedCount.now + 1
+    gameStateEvents.questFailed(questId)
   }
 
   questEvents.questStarted += {

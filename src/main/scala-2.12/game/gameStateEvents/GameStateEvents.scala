@@ -21,6 +21,8 @@ class GameStateEvents {
 
   val questSucceeded: rescala.Evt[Id] = Evt[Id]()
 
+  val questFailed: rescala.Evt[Id] = Evt[Id]()
+
   val questCompleted: rescala.Evt[Id] = Evt[Id]()
 
   val equipItem: rescala.Evt[Id] = Evt[Id]()

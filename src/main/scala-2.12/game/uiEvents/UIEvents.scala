@@ -39,4 +39,6 @@ class UIEvents {
   val showItem: rescala.Evt[Id] = Evt[Id]()
 
   val questCompleted: rescala.Evt[Id] = Evt[Id]()
+
+  val questFailed: rescala.Evt[Id] = Evt[Id]()
 }

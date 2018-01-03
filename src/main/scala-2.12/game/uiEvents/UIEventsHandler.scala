@@ -85,6 +85,13 @@ class UIEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameState
     }
   }
 
+  def onQuestFailed(questId: Id): Unit = {
+    gameState.findQuest(questId) match {
+      case Some(_) => println(s"quest $questId failed!")
+      case None => uIEvents.questIdNotFound(questId)
+    }
+  }
+
   uIEvents.itemObtained += {
     (itemId: Id) => onItemObtained(itemId)
   }
@@ -139,6 +146,10 @@ class UIEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameState
 
   uIEvents.questCompleted += {
     (questId: Id) => onQuestCompleted(questId)
+  }
+
+  uIEvents.questFailed += {
+    (questId: Id) => onQuestFailed(questId)
   }
 
 }

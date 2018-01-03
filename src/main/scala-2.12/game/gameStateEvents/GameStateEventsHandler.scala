@@ -49,6 +49,10 @@ class GameStateEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: Ga
     if (!gameState.isCompletedQuest(questId)) gameStateEvents.questCompleted(questId)
   }
 
+  def onQuestFailed(questId: Id): Unit = {
+    uIEvents.questFailed(questId)
+  }
+
   def onEquipItem(itemId: Id): Unit = {
     gameState.findItem(itemId) match {
       case Some(i) =>
@@ -116,6 +120,10 @@ class GameStateEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: Ga
 
   gameStateEvents.questSucceeded += {
     (questId: Id) => onQuestSucceeded(questId)
+  }
+
+  gameStateEvents.questFailed += {
+    (questId: Id) => onQuestFailed(questId)
   }
 
   gameStateEvents.equipItem += {
