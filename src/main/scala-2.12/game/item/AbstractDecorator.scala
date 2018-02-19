@@ -6,18 +6,18 @@ import game.item.status.StatusType
 /**
   * Created by nol on 28/12/17.
   */
-trait AbstractDecorator[T <: ItemType] {
-  def decorateWithCharmSlot(wrapped: T, slots: Int): T
+trait AbstractDecorator {
+  def decorateWithCharmSlot(wrapped: ItemType, slots: Int): ItemType
 
-  def decorateWithDamage(wrapped: T, damage: Int): T
+  def decorateWithDamage(wrapped: ItemType, damage: Int): ItemType
 
-  def decorateWithElement(wrapped: T, elementType: ElementType): T
+  def decorateWithElement(wrapped: ItemType, elementType: ElementType): ItemType
 
-  def decorateWithEquipment(wrapped: T, slotTypeRequirements: SlotTypeRequirements): T
+  def decorateWithEquipment(wrapped: ItemType, slotTypeRequirements: SlotTypeRequirements): ItemType
 
-  def decorateWithMaterial(wrapped: T): T
+  def decorateWithMaterial(wrapped: ItemType): ItemType
 
-  def decorateWithProtection(wrapped: T, armor: Int): T
+  def decorateWithProtection(wrapped: ItemType, armor: Int): ItemType
 
-  def decorateWithStatus(wrapped: T, statusType: StatusType): T
+  def decorateWithStatus(wrapped: ItemType, statusType: StatusType): ItemType
 }

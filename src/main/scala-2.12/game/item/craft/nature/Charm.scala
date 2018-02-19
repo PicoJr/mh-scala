@@ -6,10 +6,10 @@ import game.util.Procedural
 /**
   * Created by nol on 21/12/17.
   */
-case class Charm[TItemType <: ItemType](decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType]) extends DefaultNatureType[TItemType] {
+case class Charm(decorator: AbstractDecorator, itemTypeFactory: AbstractItemTypeFactory) extends DefaultNatureType {
   override val name = "charm"
 
-  override def create(level: Int): TItemType = {
+  override def create(level: Int): ItemType = {
     decorator.decorateWithEquipment(
       itemTypeFactory.createItemType(level),
       CHARM_SLOT(Procedural.pickRandom(1, 2, 3).get)

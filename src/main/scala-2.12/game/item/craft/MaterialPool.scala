@@ -6,11 +6,11 @@ import game.item.{AbstractDecorator, AbstractItemTypeFactory, ItemType}
 /**
   * Created by nol on 29/11/17.
   */
-class MaterialPool[TItemType <: ItemType](decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType]) {
+class MaterialPool(decorator: AbstractDecorator, itemTypeFactory: AbstractItemTypeFactory) {
 
-  private var materials = Map.empty[(AddOn[TItemType], Int), TItemType]
+  private var materials = Map.empty[(AddOn, Int), ItemType]
 
-  def getMaterial(addOn: AddOn[TItemType], level: Int): TItemType = {
+  def getMaterial(addOn: AddOn, level: Int): ItemType = {
     materials.get(addOn, level) match {
       case Some(m) => m
       case None =>
@@ -20,7 +20,7 @@ class MaterialPool[TItemType <: ItemType](decorator: AbstractDecorator[TItemType
     }
   }
 
-  def createMaterialFromAddOn(addOn: AddOn[TItemType], level: Int): TItemType = {
+  def createMaterialFromAddOn(addOn: AddOn, level: Int): ItemType = {
     val descriptionBuilder = new DescriptionBuilder("material").addAdjective(addOn.name)
     val material = decorator.decorateWithMaterial(itemTypeFactory.createItemType(level))
     material.setName(descriptionBuilder.getDescription)

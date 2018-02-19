@@ -7,9 +7,9 @@ import game.item.{AbstractDecorator, ItemType}
   *
   * @param elementType added
   */
-case class ElementAddOn[TItemType <: ItemType](elementType: ElementType, decorator: AbstractDecorator[TItemType]) extends DefaultAddOn[TItemType](elementType.name) {
+case class ElementAddOn(elementType: ElementType, decorator: AbstractDecorator) extends DefaultAddOn(elementType.name) {
 
-  override def decorate(level: Int, itemType: TItemType): TItemType = {
+  override def decorate(level: Int, itemType: ItemType): ItemType = {
     decorator.decorateWithElement(itemType, elementType)
   }
 }

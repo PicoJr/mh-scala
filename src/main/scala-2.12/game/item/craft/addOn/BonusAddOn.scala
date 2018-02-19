@@ -7,9 +7,9 @@ import game.item.{AbstractDecorator, ItemType}
   * Created by nol on 21/12/17.
   */
 
-case class BonusAddOn[TItemType <: ItemType](bonusType: BonusType, decorator: AbstractDecorator[TItemType]) extends DefaultAddOn[TItemType](bonusType.name) {
+case class BonusAddOn(bonusType: BonusType, decorator: AbstractDecorator) extends DefaultAddOn(bonusType.name) {
 
-  override def decorate(level: Int, itemType: TItemType): TItemType = bonusType match {
+  override def decorate(level: Int, itemType: ItemType): ItemType = bonusType match {
     case DamageBonus => decorator.decorateWithDamage(itemType, getRandomValue(level, gameConfig.getDamageBonusBase))
     case _ => decorator.decorateWithProtection(itemType, getRandomValue(level, gameConfig.getArmorBonusBase))
   }

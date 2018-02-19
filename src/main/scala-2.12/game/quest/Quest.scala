@@ -7,7 +7,7 @@ import game.unit.Monster
 /** Rewards hunter with loot when monster is slain
   * Created by nol on 22/11/17.
   */
-trait Quest[TItemType <: ItemType] extends Identifiable {
+trait Quest extends Identifiable {
 
   /** monster to hunt during quest */
   val monster: Monster
@@ -16,6 +16,6 @@ trait Quest[TItemType <: ItemType] extends Identifiable {
   val level: Int
 
   /** <b>item types</b> obtained from quest if success */
-  val loot: Seq[TItemType]
+  val loot: Seq[ItemType]
 
 }

@@ -9,7 +9,7 @@ import game.item.status.{NEUTRAL, StatusType}
 /**
   * Created by nol on 21/11/17.
   */
-trait Inventory[TItem <: Item] {
+trait Inventory {
 
   type Id = Identifiable.Id
 
@@ -18,7 +18,7 @@ trait Inventory[TItem <: Item] {
     * @param item from inventory
     * @return item is equipped (false if not equipped or not in inventory)
     */
-  def isEquipped(item: TItem): Boolean = {
+  def isEquipped(item: Item): Boolean = {
     isEquipped(item.getUniqueId)
   }
 
@@ -33,14 +33,14 @@ trait Inventory[TItem <: Item] {
     *
     * @return items from inventory
     */
-  def getItems: Seq[TItem]
+  def getItems: Seq[Item]
 
   /** Find item with id itemId from inventory
     *
     * @param itemId of item
     * @return item with itemId if found else None
     */
-  def findItem(itemId: Id): Option[TItem]
+  def findItem(itemId: Id): Option[Item]
 
   /** Charm slots provided by equipped items
     *
@@ -62,7 +62,7 @@ trait Inventory[TItem <: Item] {
     *
     * @return weapon equipped if any else None
     */
-  def getWeaponEquipped: Option[TItem] = {
+  def getWeaponEquipped: Option[Item] = {
     getItemsEquipped.find(i => i.isWeapon && isEquipped(i))
   }
 
@@ -71,7 +71,7 @@ trait Inventory[TItem <: Item] {
     * @param armorPart checked
     * @return armor using armor part slot if any else None
     */
-  def getArmorEquipped(armorPart: ArmorPart): Option[TItem] = {
+  def getArmorEquipped(armorPart: ArmorPart): Option[Item] = {
     getItemsEquipped.find(i => i.isArmorPartRequired(armorPart))
   }
 
@@ -79,7 +79,7 @@ trait Inventory[TItem <: Item] {
     *
     * @return charms equipped
     */
-  def getCharmsEquipped: Seq[TItem] = {
+  def getCharmsEquipped: Seq[Item] = {
     getItemsEquipped.filter(i => i.isCharm)
   }
 
@@ -87,7 +87,7 @@ trait Inventory[TItem <: Item] {
     *
     * @return items equipped
     */
-  def getItemsEquipped: Seq[TItem] = {
+  def getItemsEquipped: Seq[Item] = {
     getItems.filter(i => isEquipped(i))
   }
 
@@ -175,7 +175,7 @@ trait Inventory[TItem <: Item] {
     *
     * @param items to add
     */
-  def addItems(items: TItem*): Unit
+  def addItems(items: Item*): Unit
 
   /** Equip item with id itemId from inventory if any and possible
     *
@@ -202,5 +202,5 @@ trait Inventory[TItem <: Item] {
     * @param item to check
     * @return item can be equipped
     */
-  def canBeEquipped(item: TItem): Boolean
+  def canBeEquipped(item: Item): Boolean
 }

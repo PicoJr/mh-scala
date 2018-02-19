@@ -7,7 +7,7 @@ import game.item._
   * Created by nol on 21/12/17.
   */
 
-case class Armor[TItemType <: ItemType](armorPart: ArmorPart, decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType]) extends DefaultNatureType[TItemType] {
+case class Armor(armorPart: ArmorPart, decorator: AbstractDecorator, itemTypeFactory: AbstractItemTypeFactory) extends DefaultNatureType {
   override val name: String = armorPart match {
     case ArmorPart.HEAD => "helmet"
     case ArmorPart.BODY => "plastron"
@@ -15,7 +15,7 @@ case class Armor[TItemType <: ItemType](armorPart: ArmorPart, decorator: Abstrac
     case ArmorPart.LEGS => "legs"
   }
 
-  override def create(level: Int): TItemType = {
+  override def create(level: Int): ItemType = {
     decorator.decorateWithEquipment(
       decorator.decorateWithProtection(
         itemTypeFactory.createItemType(level), getRandomValue(level, gameConfig.getArmorBase)

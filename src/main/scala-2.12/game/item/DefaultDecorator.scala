@@ -6,7 +6,7 @@ import game.item.status.StatusType
 /**
   * Created by nol on 28/12/17.
   */
-class DefaultDecorator extends AbstractDecorator[ItemType] {
+class DefaultDecorator extends AbstractDecorator {
 
   override def decorateWithCharmSlot(wrapped: ItemType, charmSlotsProvided: Int): ItemType = CharmSlot(wrapped, charmSlotsProvided)
 

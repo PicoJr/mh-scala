@@ -7,25 +7,25 @@ import game.item.craft.nature.NatureType
 /**
   * Created by nol on 29/11/17.
   */
-class CategoryBuilder[TItemType <: ItemType](natureType: NatureType[TItemType]) {
+class CategoryBuilder(natureType: NatureType) {
 
-  private var addOns: Seq[AddOn[TItemType]] = Seq.empty
+  private var addOns: Seq[AddOn] = Seq.empty
 
-  def getNature: NatureType[TItemType] = natureType
+  def getNature: NatureType = natureType
 
-  def getAddOns: Seq[AddOn[TItemType]] = addOns
+  def getAddOns: Seq[AddOn] = addOns
 
-  def withAddOn(addOn: AddOn[TItemType]): CategoryBuilder[TItemType] = {
+  def withAddOn(addOn: AddOn): CategoryBuilder = {
     addOns = addOns :+ addOn
     this
   }
 
-  def withAddOns(addOns: AddOn[TItemType]*): CategoryBuilder[TItemType] = {
+  def withAddOns(addOns: AddOn*): CategoryBuilder = {
     this.addOns = this.addOns ++ Seq(addOns: _*)
     this
   }
 
-  def copy: CategoryBuilder[TItemType] = {
+  def copy: CategoryBuilder = {
     new CategoryBuilder(natureType).withAddOns(addOns: _*)
   }
 
@@ -40,7 +40,7 @@ class CategoryBuilder[TItemType <: ItemType](natureType: NatureType[TItemType]) 
     descriptionBuilder
   }
 
-  def create(level: Int): TItemType = {
+  def create(level: Int): ItemType = {
     var itemType = getNature.create(level)
     for (addOn <- getAddOns) {
       itemType = addOn.decorate(level, itemType)

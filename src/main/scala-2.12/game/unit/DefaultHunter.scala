@@ -1,7 +1,6 @@
 package game.unit
 
 import game.config.DefaultGameConfig
-import game.item.Item
 import game.item.element.ElementType
 import game.item.inventory.Inventory
 import game.item.status.StatusType
@@ -9,9 +8,9 @@ import game.item.status.StatusType
 /**
   * Created by nol on 06/12/17.
   */
-case class DefaultHunter[TItem <: Item](hunterName: String, hunterInventory: Inventory[TItem], hunterLife: Int = DefaultGameConfig.getInstance.getHunterLifeMax) extends Hunter[TItem] {
+case class DefaultHunter(hunterName: String, hunterInventory: Inventory, hunterLife: Int = DefaultGameConfig.getInstance.getHunterLifeMax) extends Hunter {
 
-  override val inventory: Inventory[TItem] = hunterInventory
+  override val inventory: Inventory = hunterInventory
 
   override var name: String = hunterName
 

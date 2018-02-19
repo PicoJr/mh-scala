@@ -11,18 +11,18 @@ import scala.collection.mutable
   * FIXME: not very Open-Close friendly.
   * Created by nol on 20/11/17.
   */
-class DefaultCraftFactory[TItemType <: ItemType](natureTypes: Seq[NatureType[TItemType]], decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType], gameConfig: GameConfig = DefaultGameConfig.getInstance) {
+class DefaultCraftFactory(natureTypes: Seq[NatureType], decorator: AbstractDecorator, itemTypeFactory: AbstractItemTypeFactory, gameConfig: GameConfig = DefaultGameConfig.getInstance) {
 
-  private var craftAddOns = mutable.Map.empty[Int, Seq[AddOn[TItemType]]]
+  private var craftAddOns = mutable.Map.empty[Int, Seq[AddOn]]
 
-  def withAddOn(level: Int, addOnsAtLevel: AddOn[TItemType]*): Unit = {
-    craftAddOns += (level -> (craftAddOns.getOrElse(level, Seq.empty[AddOn[TItemType]]) ++ addOnsAtLevel))
+  def withAddOn(level: Int, addOnsAtLevel: AddOn*): Unit = {
+    craftAddOns += (level -> (craftAddOns.getOrElse(level, Seq.empty[AddOn]) ++ addOnsAtLevel))
   }
 
-  private class CraftStep(val itemTypeRoot: TItemType, val categoryRoot: CategoryBuilder[TItemType], val crafts: Crafts[TItemType], val materialPool: MaterialPool[TItemType])
+  private class CraftStep(val itemTypeRoot: ItemType, val categoryRoot: CategoryBuilder, val crafts: Crafts, val materialPool: MaterialPool)
 
   private def craftItemType(craftStep: CraftStep): Unit = {
-    def craftWithAddOn(craftStep: CraftStep, addOn: AddOn[TItemType]): Unit = {
+    def craftWithAddOn(craftStep: CraftStep, addOn: AddOn): Unit = {
       val resultCategory = craftStep.categoryRoot.copy.withAddOn(addOn)
       val result = resultCategory.create(craftStep.itemTypeRoot.getLevel + 1)
       val resultDescription = resultCategory.createDescription
@@ -41,13 +41,13 @@ class DefaultCraftFactory[TItemType <: ItemType](natureTypes: Seq[NatureType[TIt
     }
   }
 
-  def generateCraft(crafts: Crafts[TItemType]): Crafts[TItemType] = {
+  def generateCraft(crafts: Crafts): Crafts = {
     val materialPool = new MaterialPool(decorator, itemTypeFactory)
     for (natureCategory <- natureTypes) {
-      val categoryRoot = new CategoryBuilder[TItemType](natureCategory)
+      val categoryRoot = new CategoryBuilder(natureCategory)
       natureCategory match {
         case Charm(_, _) => // a charm should not have charm add-ons...
-        case _ => categoryRoot.withAddOn(CharmSlotAddOn[TItemType](decorator))
+        case _ => categoryRoot.withAddOn(CharmSlotAddOn(decorator))
       }
       val itemTypeRoot = categoryRoot.create(gameConfig.getLevelMin)
       itemTypeRoot.setName(categoryRoot.createDescription.getDescription)

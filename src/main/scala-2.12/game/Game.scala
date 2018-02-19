@@ -4,7 +4,6 @@ import game.commandEvents.{CommandEvents, CommandEventsHandler}
 import game.console.CommandParser
 import game.gameStateEvents.{GameStateEvents, GameStateEventsHandler}
 import game.gamestate.DefaultGameStateFactory
-import game.item._
 import game.item.craft.addOn.{BonusAddOn, ElementAddOn, StatusAddOn}
 import game.item.craft.{DefaultCraftFactory, DefaultCrafts}
 import game.questEvents.{QuestEvents, QuestEventsHandler}
@@ -16,24 +15,24 @@ import game.uiEvents.{UIEvents, UIEventsHandler}
   */
 object Game extends App {
   /* crafts */
-  private val craftFactory = new DefaultCraftFactory[ItemType](GameDefaults.natureTypes, GameDefaults.decorator, GameDefaults.itemTypeFactory)
+  private val craftFactory = new DefaultCraftFactory(GameDefaults.natureTypes, GameDefaults.decorator, GameDefaults.itemTypeFactory)
   /* level 1 */
   for (element <- GameDefaults.elementTypes) {
-    craftFactory.withAddOn(1, new ElementAddOn[ItemType](element, GameDefaults.decorator))
+    craftFactory.withAddOn(1, ElementAddOn(element, GameDefaults.decorator))
   }
   /* level 2 */
   for (status <- GameDefaults.statusTypes) {
-    craftFactory.withAddOn(2, new StatusAddOn[ItemType](status, GameDefaults.decorator))
+    craftFactory.withAddOn(2, StatusAddOn(status, GameDefaults.decorator))
   }
   /* level 3 */
   for (bonus <- GameDefaults.bonusTypes) {
-    craftFactory.withAddOn(3, new BonusAddOn[ItemType](bonus, GameDefaults.decorator))
+    craftFactory.withAddOn(3, BonusAddOn(bonus, GameDefaults.decorator))
   }
   /* level 4 */
   for (bonus <- GameDefaults.bonusTypes) {
-    craftFactory.withAddOn(4, new BonusAddOn[ItemType](bonus, GameDefaults.decorator))
+    craftFactory.withAddOn(4, BonusAddOn(bonus, GameDefaults.decorator))
   }
-  val crafts = craftFactory.generateCraft(new DefaultCrafts[ItemType])
+  val crafts = craftFactory.generateCraft(new DefaultCrafts)
   val gameState = new DefaultGameStateFactory(crafts, GameDefaults.itemFactory).createGameState
   /* events */
   val commandEvents = new CommandEvents()

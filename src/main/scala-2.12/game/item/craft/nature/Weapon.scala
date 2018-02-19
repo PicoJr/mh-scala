@@ -5,10 +5,10 @@ import game.item.{AbstractDecorator, AbstractItemTypeFactory, ItemType, WEAPON_S
 /**
   * Created by nol on 21/12/17.
   */
-case class Weapon[TItemType <: ItemType](decorator: AbstractDecorator[TItemType], itemTypeFactory: AbstractItemTypeFactory[TItemType]) extends DefaultNatureType[TItemType] {
+case class Weapon(decorator: AbstractDecorator, itemTypeFactory: AbstractItemTypeFactory) extends DefaultNatureType {
   override val name = "sword"
 
-  override def create(level: Int): TItemType = {
+  override def create(level: Int): ItemType = {
     decorator.decorateWithEquipment(
       decorator.decorateWithDamage(
         itemTypeFactory.createItemType(level), getRandomValue(level, gameConfig.getDamageBase)

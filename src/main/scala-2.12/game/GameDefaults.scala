@@ -18,7 +18,7 @@ object GameDefaults {
   val elementTypes = Seq(FIRE, WATER, ELECTRIC, NORMAL)
   val statusTypes = Seq(STUN, SLEEP, NEUTRAL)
   val bonusTypes = Seq(DamageBonus, ProtectionBonus)
-  val natureTypes = Seq(Weapon[ItemType](decorator, itemTypeFactory), Charm[ItemType](decorator, itemTypeFactory), Armor[ItemType](ArmorPart.HEAD, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.BODY, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.ARMS, decorator, itemTypeFactory), Armor[ItemType](ArmorPart.LEGS, decorator, itemTypeFactory))
+  val natureTypes = Seq(Weapon(decorator, itemTypeFactory), Charm(decorator, itemTypeFactory), Armor(ArmorPart.HEAD, decorator, itemTypeFactory), Armor(ArmorPart.BODY, decorator, itemTypeFactory), Armor(ArmorPart.ARMS, decorator, itemTypeFactory), Armor(ArmorPart.LEGS, decorator, itemTypeFactory))
   val eEResolver: EEResolver =
     new DefaultEEResolverBuilder()
       .withEE(WATER, FIRE, Effectiveness.EFFECTIVE)

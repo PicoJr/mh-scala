@@ -13,15 +13,15 @@ import game.util.DefaultLoopingRandomPool
 /** Generates dot files for items categories from crafts
   * Created by nol on 19/11/17.
   */
-class DotGeneration[TItemType <: ItemType](crafts: Crafts[TItemType]) {
+class DotGeneration(crafts: Crafts) {
 
 
-  def saveDot(p: (TItemType, TItemType, TItemType) => Boolean, path: String, formatter: Formatter[TItemType]): Unit = {
+  def saveDot(p: (ItemType, ItemType, ItemType) => Boolean, path: String, formatter: Formatter): Unit = {
     val dot = generateDot(p, crafts, formatter)
     Files.write(Paths.get(path), dot.getBytes(StandardCharsets.UTF_8))
   }
 
-  private def generateDot(p: (TItemType, TItemType, TItemType) => Boolean, crafts: Crafts[TItemType], formatter: Formatter[TItemType]): String = {
+  private def generateDot(p: (ItemType, ItemType, ItemType) => Boolean, crafts: Crafts, formatter: Formatter): String = {
     val dot = new StringBuilder("digraph Crafts {\n")
     for (recipe <- crafts.getRecipes) {
       recipe match {
@@ -41,47 +41,47 @@ class DotGeneration[TItemType <: ItemType](crafts: Crafts[TItemType]) {
   }
 }
 
-class Formatter[TItemType <: ItemType](icons: Seq[String]) {
+class Formatter(icons: Seq[String]) {
 
   val iconPool = new DefaultLoopingRandomPool[String](icons)
 
-  def format(i: TItemType): String = "\"" + i.getName + "\""
+  def format(i: ItemType): String = "\"" + i.getName + "\""
 
-  def getImage(i: TItemType): String = {
+  def getImage(i: ItemType): String = {
     val image = new StringBuilder
     image.append("width=0.4 height=0.4 fixedsize=true image = ").append("\"icons/").append(iconPool.next).append("\"").append(", label = \"\"")
     image.toString()
   }
 
-  def getLabel(material: TItemType): String = {
+  def getLabel(material: ItemType): String = {
     "label = \"" + material.getName + "\""
   }
 }
 
 object DotGeneration extends App {
   /* crafts */
-  private val craftFactory = new DefaultCraftFactory[ItemType](GameDefaults.natureTypes, GameDefaults.decorator, GameDefaults.itemTypeFactory)
+  private val craftFactory = new DefaultCraftFactory(GameDefaults.natureTypes, GameDefaults.decorator, GameDefaults.itemTypeFactory)
   /* level 1 */
   for (element <- GameDefaults.elementTypes) {
-    craftFactory.withAddOn(1, new ElementAddOn[ItemType](element, GameDefaults.decorator))
+    craftFactory.withAddOn(1, ElementAddOn(element, GameDefaults.decorator))
   }
   /* level 2 */
   for (status <- GameDefaults.statusTypes) {
-    craftFactory.withAddOn(2, new StatusAddOn[ItemType](status, GameDefaults.decorator))
+    craftFactory.withAddOn(2, StatusAddOn(status, GameDefaults.decorator))
   }
   /* level 3 */
   for (bonus <- GameDefaults.bonusTypes) {
-    craftFactory.withAddOn(3, new BonusAddOn[ItemType](bonus, GameDefaults.decorator))
+    craftFactory.withAddOn(3, BonusAddOn(bonus, GameDefaults.decorator))
   }
   /* level 4 */
   for (bonus <- GameDefaults.bonusTypes) {
-    craftFactory.withAddOn(4, new BonusAddOn[ItemType](bonus, GameDefaults.decorator))
+    craftFactory.withAddOn(4, BonusAddOn(bonus, GameDefaults.decorator))
   }
-  val crafts = craftFactory.generateCraft(new DefaultCrafts[ItemType])
+  val crafts = craftFactory.generateCraft(new DefaultCrafts)
   /* weapons */
   val iconFiles = new java.io.File("res/icons").listFiles.filter(_.getName.endsWith(".png"))
-  val formatter = new Formatter[ItemType](iconFiles.map(f => f.getName))
-  val dotGeneration = new DotGeneration[ItemType](crafts)
+  val formatter = new Formatter(iconFiles.map(f => f.getName))
+  val dotGeneration = new DotGeneration(crafts)
   dotGeneration.saveDot((i1, i2, _) => i1.isWeapon || i2.isWeapon, "res/weapons.dot", formatter)
 }
 

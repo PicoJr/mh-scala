@@ -1,13 +1,12 @@
 package game.item.craft.addOn
 
 import game.config.{DefaultGameConfig, GameConfig}
-import game.item.ItemType
 import game.util.Procedural
 
 /**
   * Created by nol on 21/12/17.
   */
-abstract class DefaultAddOn[TItemType <: ItemType](addOnName: String, val gameConfig: GameConfig = DefaultGameConfig.getInstance) extends AddOn[TItemType] {
+abstract class DefaultAddOn(addOnName: String, val gameConfig: GameConfig = DefaultGameConfig.getInstance) extends AddOn {
 
   override val name: String = addOnName
 

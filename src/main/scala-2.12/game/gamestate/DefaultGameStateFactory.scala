@@ -4,7 +4,7 @@ import game.config.{DefaultGameConfig, GameConfig}
 import game.id.DefaultIdSupplier
 import game.item.craft.Crafts
 import game.item.inventory.DefaultInventory
-import game.item.{AbstractItemFactory, Item, ItemType}
+import game.item.{AbstractItemFactory, ItemType}
 import game.quest._
 import game.unit.{DefaultHunter, DefaultMonsterFactory, Hunter}
 import game.util.DefaultLoopingRandomPool
@@ -12,16 +12,16 @@ import game.util.DefaultLoopingRandomPool
 /**
   * Created by nol on 06/12/17.
   */
-class DefaultGameStateFactory(crafts: Crafts[ItemType], itemFactory: AbstractItemFactory[Item, ItemType], gameConfig: GameConfig = DefaultGameConfig.getInstance) {
+class DefaultGameStateFactory(crafts: Crafts, itemFactory: AbstractItemFactory, gameConfig: GameConfig = DefaultGameConfig.getInstance) {
 
-  def createGameState: GameState[Item, ItemType] = {
+  def createGameState: GameState = {
     val hunter = createDefaultHunter(crafts)
     val quests = createQuests(crafts)
     new DefaultGameState(hunter, quests, crafts)
   }
 
-  private def createDefaultHunter(crafts: Crafts[ItemType]): Hunter[Item] = {
-    val hunter = new DefaultHunter[Item](gameConfig.getHunterName, new DefaultInventory[Item])
+  private def createDefaultHunter(crafts: Crafts): Hunter = {
+    val hunter = DefaultHunter(gameConfig.getHunterName, new DefaultInventory)
     val itemTypesFirstLevel = crafts.getNonMaterials(gameConfig.getLevelMin).distinct
     val items = itemTypesFirstLevel.map(i => itemFactory.createItem(i))
     hunter.inventory.addItems(items: _*)
@@ -31,11 +31,11 @@ class DefaultGameStateFactory(crafts: Crafts[ItemType], itemFactory: AbstractIte
     hunter
   }
 
-  private def createQuests(crafts: Crafts[ItemType]): Seq[Quest[ItemType]] = {
+  private def createQuests(crafts: Crafts): Seq[Quest] = {
     val monsterNamePool = new DefaultLoopingRandomPool(gameConfig.getMonsters)
     val idSupplier = new DefaultIdSupplier()
     val monsterFactory = new DefaultMonsterFactory()
-    var quests = Seq.empty[Quest[ItemType]]
+    var quests = Seq.empty[Quest]
     for (level <- gameConfig.getLevelMin until gameConfig.getLevelMax) {
       val lootAtLevel = crafts.getMaterials(level).distinct
       val lootPool = new DefaultLoopingRandomPool[ItemType](lootAtLevel)

@@ -2,13 +2,12 @@ package game.uiEvents
 
 import game.gamestate.GameState
 import game.id.Identifiable
-import game.item.{Item, ItemType}
 import game.ui.Description
 
 /**
   * Created by nol on 19/12/17.
   */
-class UIEventsHandler[TItem <: Item, TItemType <: ItemType](gameState: GameState[TItem, TItemType], uIEvents: UIEvents, description: Description[TItem, TItemType]) {
+class UIEventsHandler(gameState: GameState, uIEvents: UIEvents, description: Description) {
 
   type Id = Identifiable.Id
 
