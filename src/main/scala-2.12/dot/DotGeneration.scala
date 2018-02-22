@@ -60,22 +60,22 @@ class Formatter(icons: Seq[String]) {
 
 object DotGeneration extends App {
   /* crafts */
-  private val craftFactory = new DefaultCraftFactory(GameDefaults.natureTypes, GameDefaults.decorator, GameDefaults.itemTypeFactory)
+  private val craftFactory = new DefaultCraftFactory(GameDefaults.natureTypes)
   /* level 1 */
   for (element <- GameDefaults.elementTypes) {
-    craftFactory.withAddOn(1, ElementAddOn(element, GameDefaults.decorator))
+    craftFactory.withAddOn(1, ElementAddOn(element))
   }
   /* level 2 */
   for (status <- GameDefaults.statusTypes) {
-    craftFactory.withAddOn(2, StatusAddOn(status, GameDefaults.decorator))
+    craftFactory.withAddOn(2, StatusAddOn(status))
   }
   /* level 3 */
   for (bonus <- GameDefaults.bonusTypes) {
-    craftFactory.withAddOn(3, BonusAddOn(bonus, GameDefaults.decorator))
+    craftFactory.withAddOn(3, BonusAddOn(bonus))
   }
   /* level 4 */
   for (bonus <- GameDefaults.bonusTypes) {
-    craftFactory.withAddOn(4, BonusAddOn(bonus, GameDefaults.decorator))
+    craftFactory.withAddOn(4, BonusAddOn(bonus))
   }
   val crafts = craftFactory.generateCraft(new DefaultCrafts)
   /* weapons */

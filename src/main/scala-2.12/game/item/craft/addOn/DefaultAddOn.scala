@@ -10,8 +10,6 @@ abstract class DefaultAddOn(addOnName: String, val gameConfig: GameConfig = Defa
 
   override val name: String = addOnName
 
-  protected def getRandomSlot: Int = Procedural.pickRandom(1, 2, 3).get
-
   protected def getRandomValue(level: Int, base: Int): Int = {
     Procedural.getRandomValue(level, base, gameConfig.getHunterStatsGrowth, gameConfig.getPercentageVariation)
   }

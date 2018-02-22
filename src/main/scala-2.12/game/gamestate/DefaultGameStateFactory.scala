@@ -4,7 +4,7 @@ import game.config.{DefaultGameConfig, GameConfig}
 import game.id.DefaultIdSupplier
 import game.item.craft.Crafts
 import game.item.inventory.DefaultInventory
-import game.item.{AbstractItemFactory, ItemType}
+import game.item.{AbstractItemFactory, DefaultItemFactory, ItemType}
 import game.quest._
 import game.unit.{DefaultHunter, DefaultMonsterFactory, Hunter}
 import game.util.DefaultLoopingRandomPool
@@ -12,7 +12,7 @@ import game.util.DefaultLoopingRandomPool
 /**
   * Created by nol on 06/12/17.
   */
-class DefaultGameStateFactory(crafts: Crafts, itemFactory: AbstractItemFactory, gameConfig: GameConfig = DefaultGameConfig.getInstance) {
+class DefaultGameStateFactory(crafts: Crafts, itemFactory: AbstractItemFactory = DefaultItemFactory.getInstance, gameConfig: GameConfig = DefaultGameConfig.getInstance) {
 
   def createGameState: GameState = {
     val hunter = createDefaultHunter(crafts)

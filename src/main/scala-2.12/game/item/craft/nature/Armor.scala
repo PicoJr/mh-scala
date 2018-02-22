@@ -7,7 +7,7 @@ import game.item._
   * Created by nol on 21/12/17.
   */
 
-case class Armor(armorPart: ArmorPart, decorator: AbstractDecorator, itemTypeFactory: AbstractItemTypeFactory) extends DefaultNatureType {
+case class Armor(armorPart: ArmorPart, decorator: AbstractDecorator = DefaultDecorator.getInstance, itemTypeFactory: AbstractItemTypeFactory = DefaultItemTypeFactory.getInstance) extends DefaultNatureType {
   override val name: String = armorPart match {
     case ArmorPart.HEAD => "helmet"
     case ArmorPart.BODY => "plastron"

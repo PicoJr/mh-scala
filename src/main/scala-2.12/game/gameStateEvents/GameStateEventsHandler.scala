@@ -3,14 +3,14 @@ package game.gameStateEvents
 import game.gameStatistics.DefaultGameStatistics
 import game.gamestate.GameState
 import game.id.Identifiable
-import game.item.AbstractItemFactory
+import game.item.{AbstractItemFactory, DefaultItemFactory}
 import game.questEvents.QuestEvents
 import game.uiEvents.UIEvents
 
 /**
   * Created by nol on 19/12/17.
   */
-class GameStateEventsHandler(gameState: GameState, gameStateEvents: GameStateEvents, questEvents: QuestEvents, uIEvents: UIEvents, abstractItemFactory: AbstractItemFactory) {
+class GameStateEventsHandler(gameState: GameState, gameStateEvents: GameStateEvents, questEvents: QuestEvents, uIEvents: UIEvents, abstractItemFactory: AbstractItemFactory = DefaultItemFactory.getInstance) {
 
   type Id = Identifiable.Id
 

@@ -11,7 +11,7 @@ import scala.collection.mutable
   * FIXME: not very Open-Close friendly.
   * Created by nol on 20/11/17.
   */
-class DefaultCraftFactory(natureTypes: Seq[NatureType], decorator: AbstractDecorator, itemTypeFactory: AbstractItemTypeFactory, gameConfig: GameConfig = DefaultGameConfig.getInstance) {
+class DefaultCraftFactory(natureTypes: Seq[NatureType], decorator: AbstractDecorator = DefaultDecorator.getInstance, itemTypeFactory: AbstractItemTypeFactory = DefaultItemTypeFactory.getInstance, gameConfig: GameConfig = DefaultGameConfig.getInstance) {
 
   private var craftAddOns = mutable.Map.empty[Int, Seq[AddOn]]
 
@@ -41,7 +41,7 @@ class DefaultCraftFactory(natureTypes: Seq[NatureType], decorator: AbstractDecor
     }
   }
 
-  def generateCraft(crafts: Crafts): Crafts = {
+  def generateCraft(crafts: Crafts = new DefaultCrafts): Crafts = {
     val materialPool = new MaterialPool(decorator, itemTypeFactory)
     for (natureCategory <- natureTypes) {
       val categoryRoot = new CategoryBuilder(natureCategory)

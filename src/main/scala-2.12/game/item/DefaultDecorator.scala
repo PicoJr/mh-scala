@@ -22,3 +22,11 @@ class DefaultDecorator extends AbstractDecorator {
 
   override def decorateWithStatus(wrapped: ItemType, statusType: StatusType): ItemType = Status(wrapped, statusType)
 }
+
+object DefaultDecorator {
+  private lazy val instance: AbstractDecorator = {
+    new DefaultDecorator
+  }
+
+  def getInstance: AbstractDecorator = instance
+}

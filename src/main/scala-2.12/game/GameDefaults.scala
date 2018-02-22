@@ -1,6 +1,5 @@
 package game
 
-import game.id.DefaultIdSupplier
 import game.item._
 import game.item.craft.bonus.{DamageBonus, ProtectionBonus}
 import game.item.craft.nature.{Armor, Charm, Weapon}
@@ -13,12 +12,10 @@ import game.item.status.{NEUTRAL, SLEEP, STUN}
 object GameDefaults {
 
   val decorator = new DefaultDecorator()
-  val itemTypeFactory = new DefaultItemTypeFactory(new DefaultIdSupplier)
-  val itemFactory = new DefaultItemFactory(new DefaultIdSupplier)
   val elementTypes = Seq(FIRE, WATER, ELECTRIC, NORMAL)
   val statusTypes = Seq(STUN, SLEEP, NEUTRAL)
   val bonusTypes = Seq(DamageBonus, ProtectionBonus)
-  val natureTypes = Seq(Weapon(decorator, itemTypeFactory), Charm(decorator, itemTypeFactory), Armor(ArmorPart.HEAD, decorator, itemTypeFactory), Armor(ArmorPart.BODY, decorator, itemTypeFactory), Armor(ArmorPart.ARMS, decorator, itemTypeFactory), Armor(ArmorPart.LEGS, decorator, itemTypeFactory))
+  val natureTypes = Seq(Weapon(), Charm(), Armor(ArmorPart.HEAD), Armor(ArmorPart.BODY), Armor(ArmorPart.ARMS), Armor(ArmorPart.LEGS))
   val eEResolver: EEResolver =
     new DefaultEEResolverBuilder()
       .withEE(WATER, FIRE, Effectiveness.EFFECTIVE)

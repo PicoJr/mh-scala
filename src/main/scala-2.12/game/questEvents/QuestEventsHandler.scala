@@ -5,14 +5,14 @@ import game.gameStateEvents.GameStateEvents
 import game.gameStatistics.DefaultGameStatistics
 import game.gamestate.GameState
 import game.id.Identifiable
-import game.item.AbstractItemFactory
 import game.item.element.EEResolver
+import game.item.{AbstractItemFactory, DefaultItemFactory}
 import game.unit.GameUnit
 
 /**
   * Created by nol on 19/12/17.
   */
-class QuestEventsHandler(gameState: GameState, questEvents: QuestEvents, gameStateEvents: GameStateEvents, itemFactory: AbstractItemFactory, eEResolver: EEResolver, gameConfig: GameConfig = DefaultGameConfig.getInstance) {
+class QuestEventsHandler(gameState: GameState, questEvents: QuestEvents, gameStateEvents: GameStateEvents, eEResolver: EEResolver, itemFactory: AbstractItemFactory = DefaultItemFactory.getInstance, gameConfig: GameConfig = DefaultGameConfig.getInstance) {
 
   type Id = Identifiable.Id
 
