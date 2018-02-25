@@ -41,7 +41,8 @@ class DefaultCraftFactory(natureTypes: Seq[NatureType], decorator: AbstractDecor
     }
   }
 
-  def generateCraft(crafts: Crafts = new DefaultCrafts): Crafts = {
+  def generateCraft(): Crafts = {
+    val crafts: Crafts = new DefaultCrafts
     val materialPool = new MaterialPool(decorator, itemTypeFactory)
     for (natureCategory <- natureTypes) {
       val categoryRoot = new CategoryBuilder(natureCategory)

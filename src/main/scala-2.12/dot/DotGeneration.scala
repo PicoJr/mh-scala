@@ -6,7 +6,7 @@ import java.nio.file.{Files, Paths}
 import game.GameDefaults
 import game.item._
 import game.item.craft.addOn.{BonusAddOn, ElementAddOn, StatusAddOn}
-import game.item.craft.{Crafts, DefaultCraftFactory, DefaultCrafts}
+import game.item.craft.{Crafts, DefaultCraftFactory}
 import game.util.DefaultLoopingRandomPool
 
 
@@ -77,7 +77,7 @@ object DotGeneration extends App {
   for (bonus <- GameDefaults.bonusTypes) {
     craftFactory.withAddOn(4, BonusAddOn(bonus))
   }
-  val crafts = craftFactory.generateCraft(new DefaultCrafts)
+  val crafts = craftFactory.generateCraft()
   /* weapons */
   val iconFiles = new java.io.File("res/icons").listFiles.filter(_.getName.endsWith(".png"))
   val formatter = new Formatter(iconFiles.map(f => f.getName))
