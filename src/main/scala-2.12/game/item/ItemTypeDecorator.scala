@@ -26,7 +26,7 @@ abstract class ItemTypeDecorator(i: ItemType) extends DefaultItemType(i.getName,
 }
 
 case class Damage(wrapped: ItemType, damage: Int) extends ItemTypeDecorator(wrapped) {
-  override def getDamage: Int = super.getDamage + damage
+  override def getDamage: Int = super.getDamage + damage // damage stacks up
 }
 
 case class Status(wrapped: ItemType, statusType: StatusType) extends ItemTypeDecorator(wrapped) {
@@ -34,7 +34,7 @@ case class Status(wrapped: ItemType, statusType: StatusType) extends ItemTypeDec
 }
 
 case class Protection(wrapped: ItemType, armor: Int) extends ItemTypeDecorator(wrapped) {
-  override def getArmor: Int = super.getArmor + armor
+  override def getArmor: Int = super.getArmor + armor // armor stacks up
 }
 
 case class Equipment(wrapped: ItemType, slotTypeRequirement: SlotTypeRequirements) extends ItemTypeDecorator(wrapped) {
